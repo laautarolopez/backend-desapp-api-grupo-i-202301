@@ -14,18 +14,20 @@ class ModelTest {
 
     @BeforeEach
     fun setup() {
-        anyUser = User("name", "lastName", "email", "adress 123", "password")
+        anyUser = User("name", "lastName", "email", "adress 123", "password", "1234567890123456789012", "12345678")
     }
 
     @Test
     fun `se crea un usuario y al preguntar los datos, se devuelve los datos cargados al crearlo`() {
-        var nuevoUsuario = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123")
+        var nuevoUsuario = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123", "1111111111111111111111", "22222222")
 
         assertEquals("Juan", nuevoUsuario.name)
         assertEquals("Gomez", nuevoUsuario.lastName)
         assertEquals("juangomez@gmail.com", nuevoUsuario.email)
         assertEquals("calle falsa 123", nuevoUsuario.adress)
         assertEquals("juan123", nuevoUsuario.password)
+        assertEquals("1111111111111111111111", nuevoUsuario.cvuMercadoPago)
+        assertEquals("22222222", nuevoUsuario.walletAdress)
     }
 
     @Test
@@ -121,5 +123,39 @@ class ModelTest {
         anyUser.changePassword("password123")
 
         assertEquals("password123", anyUser.password)
+    }
+
+    @Test
+    fun `se cambia el cvu a un usuario ya existente`() {
+        anyUser.changeCVUMercadoPago("2222222222222222222222")
+
+        assertEquals("2222222222222222222222", anyUser.cvuMercadoPago)
+    }
+
+    @Test
+    fun `se levanta una excepción al cambiar el cvu de un usuario que no tenga 22 digitos`() {
+        try {
+            anyUser.changeCVUMercadoPago("123456789012345678901")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "El CVU debe tener 22 dígitos.")
+        }
+    }
+
+    @Test
+    fun `se cambia la direccion de la billetera a un usuario ya existente`() {
+        anyUser.changeWalletAdress("00000000")
+
+        assertEquals("00000000", anyUser.walletAdress)
+    }
+
+    @Test
+    fun `se levanta una excepción al cambiar la dirección de la billetera de un usuario que no tenga 8 digitos`() {
+        try {
+            anyUser.changeWalletAdress("1234567")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "La dirección de la billetera debe tener 8 dígitos.")
+        }
     }
 }
