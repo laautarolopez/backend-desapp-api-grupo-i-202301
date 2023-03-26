@@ -26,17 +26,18 @@ class User() {
     var adress: String? = null
     @Size(min = 10, message = "{validation.password.size.too_short}")
     var password: String? = null
-    // Se debe validar que sean 22 digitos
-    var cvuMercadoPago: Long? = null
+    var cvuMercadoPago: String? = null
     // Se debe validar que sean 8 digitos
-    var walletAdress: Long? = null
+    var walletAdress: String? = null
 
-    constructor(name: String, lastName: String, email: String, adress: String, password: String):this() {
+    constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
         changeName(name)
         changeLastName(lastName)
         changeEmail(email)
         changeAdress(adress)
         changePassword(password)
+        changeCVUMercadoPago(cvu)
+        changeWalletAdress(walletAdress)
     }
 
     fun changeName(name: String) {
@@ -70,6 +71,24 @@ class User() {
         // TODO al menos 1 minuscula, 1 mayuscula, 1 carac especial y min 6
 
         this.password = password
+    }
+
+    fun changeCVUMercadoPago(cvu: String) {
+        // TODO se debe validar que sean digitos
+        if(cvu.length != 22) {
+            throw RuntimeException("El CVU debe tener 22 dígitos.")
+        }
+
+        this.cvuMercadoPago = cvu
+    }
+
+    fun changeWalletAdress(walletAdress: String) {
+        // TODO se debe validar que sean digitos
+        if(walletAdress.length != 8) {
+            throw RuntimeException("La dirección de la billetera debe tener 8 dígitos.")
+        }
+
+        this.walletAdress = walletAdress
     }
 
     override fun equals(other: Any?): Boolean {
