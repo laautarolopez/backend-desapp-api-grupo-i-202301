@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.Size
+import java.lang.RuntimeException
 
 @Entity
 class User() {
@@ -30,11 +31,44 @@ class User() {
     // Se debe validar que sean 8 digitos
     var walletAdress: Long? = null
 
-    constructor(name: String, lastName: String, email: String, direction: String, password: String):this() {
+    constructor(name: String, lastName: String, email: String, adress: String, password: String):this() {
+        changeName(name)
+        changeLastName(lastName)
+        changeEmail(email)
+        changeAdress(adress)
+        changePassword(password)
+    }
+
+    fun changeName(name: String) {
+        if(name.length < 3 || name.length > 30) {
+            throw RuntimeException("El nombre debe tener entre 3 y 30 caracteres.")
+        }
         this.name = name
+    }
+
+    fun changeLastName(lastName: String) {
+        if(lastName.length < 3 || lastName.length > 30) {
+            throw RuntimeException("El apellido debe tener entre 3 y 30 caracteres.")
+        }
         this.lastName = lastName
+    }
+
+    fun changeEmail(email: String) {
+        // TODO se debe verificar que tenga formato de email
+
         this.email = email
-        this.adress = direction
+    }
+
+    fun changeAdress(adress: String) {
+        if(adress.length < 10 || adress.length > 30) {
+            throw RuntimeException("La dirección debe tener entre 10 y 30 caracteres.")
+        }
+        this.adress = adress
+    }
+
+    fun changePassword(password: String) {
+        // TODO al menos 1 minuscula, 1 mayuscula, 1 carac especial y min 6
+
         this.password = password
     }
 
