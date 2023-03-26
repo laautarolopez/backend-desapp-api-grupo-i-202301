@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size
 @Entity
 class User() {
 
+    // "https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280-580x580.jpg"
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -14,7 +15,7 @@ class User() {
     var name: String? = null
     @Size(min = 3, message = "{validation.lastName.size.too_short}")
     @Size(max = 200, message = "{validation.lastName.size.too_long}")
-    var lastName: String? = "https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280-580x580.jpg"
+    var lastName: String? = null
     @Column(unique = true)
     var email: String? = null
     @Size(min = 10, message = "{validation.direction.size.too_short}")
