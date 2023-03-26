@@ -22,16 +22,19 @@ class User() {
     var email: String? = null
     @Size(min = 10, message = "{validation.direction.size.too_short}")
     @Size(max = 30, message = "{validation.direction.size.too_long}")
-    var direction: String? = null
+    var adress: String? = null
     @Size(min = 10, message = "{validation.password.size.too_short}")
     var password: String? = null
-    var CVUPaymentMarket: Long? = null
+    // Se debe validar que sean 22 digitos
+    var cvuMercadoPago: Long? = null
+    // Se debe validar que sean 8 digitos
+    var walletAdress: Long? = null
 
     constructor(name: String, lastName: String, email: String, direction: String, password: String):this() {
         this.name = name
         this.lastName = lastName
         this.email = email
-        this.direction = direction
+        this.adress = direction
         this.password = password
     }
 
@@ -45,9 +48,10 @@ class User() {
         if (name != other.name) return false
         if (lastName != other.lastName) return false
         if (email != other.email) return false
-        if (direction != other.direction) return false
+        if (adress != other.adress) return false
         if (password != other.password) return false
-        if (CVUPaymentMarket != other.CVUPaymentMarket) return false
+        if (cvuMercadoPago != other.cvuMercadoPago) return false
+        if (walletAdress != other.walletAdress) return false
 
         return true
     }
