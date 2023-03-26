@@ -22,7 +22,7 @@ class ModelTest {
         assertEquals("Juan", nuevoUsuario.name)
         assertEquals("Gomez", nuevoUsuario.lastName)
         assertEquals("juangomez@gmail.com", nuevoUsuario.email)
-        assertEquals("calle falsa 123", nuevoUsuario.direction)
+        assertEquals("calle falsa 123", nuevoUsuario.adress)
         assertEquals("juan123", nuevoUsuario.password)
     }
 
@@ -49,9 +49,9 @@ class ModelTest {
 
     @Test
     fun `se cambia la direccion a un usuario ya existente`() {
-        anyUser.direction = "calle 14 num 1111"
+        anyUser.adress = "calle 14 num 1111"
 
-        assertEquals("calle 14 num 1111", anyUser.direction)
+        assertEquals("calle 14 num 1111", anyUser.adress)
     }
 
     @Test
