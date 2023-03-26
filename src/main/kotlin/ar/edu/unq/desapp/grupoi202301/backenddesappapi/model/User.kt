@@ -19,12 +19,12 @@ class User() {
     var email: String? = null
     @Size(min = 10, message = "{validation.direction.size.too_short}")
     @Size(max = 30, message = "{validation.direction.size.too_long}")
-    var direction: Long? = null
+    var direction: String? = null
     @Size(min = 10, message = "{validation.password.size.too_short}")
     var password: String? = null
     var CVUPaymentMarket: Long? = null
 
-    constructor(name: String, lastName: String, email: String, direction: Long, password: String):this() {
+    constructor(name: String, lastName: String, email: String, direction: String, password: String):this() {
         this.name = name
         this.lastName = lastName
         this.email = email
