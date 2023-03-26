@@ -27,16 +27,37 @@ class ModelTest {
     }
 
     @Test
-    fun `se cambia de nombre a un usuario ya existente`() {
+    fun `se cambia el nombre a un usuario ya existente`() {
         anyUser.name = "nuevoNombre"
 
         assertEquals("nuevoNombre", anyUser.name)
     }
 
     @Test
-    fun `a`() {
-        anyUser.name = "ha"
+    fun `se cambia el apellido a un usuario ya existente`() {
+        anyUser.lastName = "nuevoApellido"
 
-        assertEquals("ha", anyUser.name)
+        assertEquals("nuevoApellido", anyUser.lastName)
+    }
+
+    @Test
+    fun `se cambia el email a un usuario ya existente`() {
+        anyUser.email = "nuevoemail@gmail.com"
+
+        assertEquals("nuevoemail@gmail.com", anyUser.email)
+    }
+
+    @Test
+    fun `se cambia la direccion a un usuario ya existente`() {
+        anyUser.direction = "calle 14 num 1111"
+
+        assertEquals("calle 14 num 1111", anyUser.direction)
+    }
+
+    @Test
+    fun `se cambia la clave a un usuario ya existente`() {
+        anyUser.password = "password123"
+
+        assertEquals("password123", anyUser.password)
     }
 }
