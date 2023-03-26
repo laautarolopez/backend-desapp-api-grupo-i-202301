@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 import jakarta.persistence.*
+import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.Size
 
 @Entity
@@ -17,6 +18,7 @@ class User() {
     @Size(max = 200, message = "{validation.lastName.size.too_long}")
     var lastName: String? = null
     @Column(unique = true)
+    @Email
     var email: String? = null
     @Size(min = 10, message = "{validation.direction.size.too_short}")
     @Size(max = 30, message = "{validation.direction.size.too_long}")
