@@ -27,7 +27,6 @@ class User() {
     @Size(min = 10, message = "{validation.password.size.too_short}")
     var password: String? = null
     var cvuMercadoPago: String? = null
-    // Se debe validar que sean 8 digitos
     var walletAdress: String? = null
 
     constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
