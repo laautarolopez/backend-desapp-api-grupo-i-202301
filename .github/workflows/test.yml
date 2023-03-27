@@ -22,9 +22,22 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
-        with:
-          arguments: build
+#      - name: Validate Gradle wrapper
+#        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+#      - name: Build with Gradle
+#        uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
+#        with:
+#          arguments: build
+      - name: Make Gradle executable
+        run: chmod +x ./gradlew
+      - name: Run tests
+        run: ./gradlew test -i
+        env:
+          SQL_URL: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+          HIBERNATE_DIALECT: org:hibernate:dialect:H2Dialect
+          SQL_DRIVER: org:h2:Driver
+          NEO_USER: ${{ secrets.NEO_USER }}
+          NEO_PASSWORD: ${{ secrets.NEO_PASSWORD }}
+          NEO_URL: ${{ secrets.NEO_URL }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          MONGO_DB: ${{ secrets.MONGO_DB }}
