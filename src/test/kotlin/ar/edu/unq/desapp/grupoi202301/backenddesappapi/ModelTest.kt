@@ -152,7 +152,7 @@ class ModelTest {
     @Test
     fun `se levanta una excepción al cambiar la dirección de la billetera de un usuario que no tenga 8 digitos`() {
         try {
-            anyUser.changeWalletAdress("1234567")
+            anyUser.changeWalletAdress("12345678")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
             assertEquals(e.message, "La dirección de la billetera debe tener 8 dígitos.")
