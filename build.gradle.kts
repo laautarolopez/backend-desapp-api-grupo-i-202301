@@ -7,6 +7,8 @@ plugins {
 	kotlin("jvm") version "1.7.22"
 	kotlin("plugin.spring") version "1.7.22"
 	kotlin("plugin.jpa") version "1.7.22"
+	id ("jacoco")
+	id ("org.sonarqube") version "3.5.0.2730"
 }
 
 group = "ar.edu.unq.desapp.grupo-i-202301"
@@ -40,4 +42,9 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+tasks.jacocoTestReport {
+	reports {
+		xml.setEnabled(true)
+	}
 }
