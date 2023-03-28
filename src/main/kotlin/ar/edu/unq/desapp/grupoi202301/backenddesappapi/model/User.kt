@@ -9,22 +9,11 @@ class User() {
 
     // "https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280-580x580.jpg"
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-    @Column(nullable = false, length = 500)
-    @Size(min = 3, message = "{validation.name.size.too_short}")
-    @Size(max = 30, message = "{validation.name.size.too_long}")
     var name: String? = null
-    @Size(min = 3, message = "{validation.lastName.size.too_short}")
-    @Size(max = 200, message = "{validation.lastName.size.too_long}")
     var lastName: String? = null
-    @Column(unique = true)
-    @Email
     var email: String? = null
-    @Size(min = 10, message = "{validation.direction.size.too_short}")
-    @Size(max = 30, message = "{validation.direction.size.too_long}")
     var adress: String? = null
-    @Size(min = 10, message = "{validation.password.size.too_short}")
     var password: String? = null
     var cvuMercadoPago: String? = null
     var walletAdress: String? = null
@@ -41,14 +30,14 @@ class User() {
 
     fun changeName(name: String) {
         if(name.length < 3 || name.length > 30) {
-            throw RuntimeException("El nombre debe tener entre 3 y 30 caracteres.")
+            throw RuntimeException("The name must be between 3 and 30 characters long.")
         }
         this.name = name
     }
 
     fun changeLastName(lastName: String) {
         if(lastName.length < 3 || lastName.length > 30) {
-            throw RuntimeException("El apellido debe tener entre 3 y 30 caracteres.")
+            throw RuntimeException("The last name must be between 3 and 30 characters long.")
         }
         this.lastName = lastName
     }
@@ -61,32 +50,38 @@ class User() {
 
     fun changeAdress(adress: String) {
         if(adress.length < 10 || adress.length > 30) {
-            throw RuntimeException("La dirección debe tener entre 10 y 30 caracteres.")
+            throw RuntimeException("The address must be between 10 and 30 characters long.")
         }
         this.adress = adress
     }
 
     fun changePassword(password: String) {
         // TODO al menos 1 minuscula, 1 mayuscula, 1 carac especial y min 6
-
         this.password = password
     }
 
+    fun isNumeric(s: String): Boolean {
+        return s.chars().allMatch { Character.isDigit(it) }
+    }
+
     fun changeCVUMercadoPago(cvu: String) {
-        // TODO se debe validar que sean digitos
-        if(cvu.length != 22) {
-            throw RuntimeException("El CVU debe tener 22 dígitos.")
+        if(!isNumeric(cvu)) {
+            throw RuntimeException("The CVU must only have digits.")
+        }
+        else if(cvu.length != 22) {
+            throw RuntimeException("The CVU must have 22 digits.")
         }
 
         this.cvuMercadoPago = cvu
     }
 
     fun changeWalletAdress(walletAdress: String) {
-        // TODO se debe validar que sean digitos
-        if(walletAdress.length != 8) {
-            throw RuntimeException("La dirección de la billetera debe tener 8 dígitos.")
+        if(!isNumeric(walletAdress)) {
+            throw RuntimeException("The wallet adress must only have digits.")
         }
-
+        else if(walletAdress.length != 8) {
+            throw RuntimeException("The wallet address must be 8 digits long.")
+        }
         this.walletAdress = walletAdress
     }
 
