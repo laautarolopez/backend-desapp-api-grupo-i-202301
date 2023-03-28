@@ -18,144 +18,169 @@ class ModelTest {
     }
 
     @Test
-    fun `se crea un usuario y al preguntar los datos, se devuelve los datos cargados al crearlo`() {
-        var nuevoUsuario = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123", "1111111111111111111111", "22222222")
+    fun `a user is successfully created and when prompted for data, the data loaded on creation is returned`() {
+        var newUser = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123", "1111111111111111111111", "22222222")
 
-        assertEquals("Juan", nuevoUsuario.name)
-        assertEquals("Gomez", nuevoUsuario.lastName)
-        assertEquals("juangomez@gmail.com", nuevoUsuario.email)
-        assertEquals("calle falsa 123", nuevoUsuario.adress)
-        assertEquals("juan123", nuevoUsuario.password)
-        assertEquals("1111111111111111111111", nuevoUsuario.cvuMercadoPago)
-        assertEquals("22222222", nuevoUsuario.walletAdress)
+        assertEquals("Juan", newUser.name)
+        assertEquals("Gomez", newUser.lastName)
+        assertEquals("juangomez@gmail.com", newUser.email)
+        assertEquals("calle falsa 123", newUser.adress)
+        assertEquals("juan123", newUser.password)
+        assertEquals("1111111111111111111111", newUser.cvuMercadoPago)
+        assertEquals("22222222", newUser.walletAdress)
     }
 
     @Test
-    fun `se cambia el nombre a un usuario ya existente`() {
-        anyUser.changeName("nuevoNombre")
-
-        assertEquals("nuevoNombre", anyUser.name)
+    fun `an existing user is renamed`() {
+        anyUser.changeName("newName")
+        assertEquals("newName", anyUser.name)
     }
 
     @Test
-    fun `se levanta una excepción al cambiar el nombre de un usuario con menos de 3 caracteres`() {
+    fun `an exception is raised when changing the name of a user with less than 3 characters`() {
         try {
             anyUser.changeName("Gi")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "El nombre debe tener entre 3 y 30 caracteres.")
+            assertEquals(e.message, "The name must be between 3 and 30 characters long.")
         }
     }
 
     @Test
-    fun `se levanta una excepción al cambiar el nombre de un usuario con mas de 30 caracteres`() {
+    fun `an exception is raised when changing the name of a user with more than 30 characters`() {
         try {
             anyUser.changeName("Juan Alberto Ramon Luis Gerardo")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "El nombre debe tener entre 3 y 30 caracteres.")
+            assertEquals(e.message, "The name must be between 3 and 30 characters long.")
         }
     }
 
     @Test
-    fun `se cambia el apellido a un usuario ya existente`() {
-        anyUser.changeLastName("nuevoApellido")
+    fun `change the last name of an existing user`() {
+        anyUser.changeLastName("newLastName")
 
-        assertEquals("nuevoApellido", anyUser.lastName)
+        assertEquals("newLastName", anyUser.lastName)
     }
 
     @Test
-    fun `se levanta una excepción al cambiar el apellido de un usuario con menos de 3 caracteres`() {
+    fun `an exception is raised when changing a user's last name with fewer than 3 characters`() {
         try {
             anyUser.changeLastName("As")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "El apellido debe tener entre 3 y 30 caracteres.")
+            assertEquals(e.message, "The last name must be between 3 and 30 characters long.")
         }
     }
 
     @Test
-    fun `se levanta una excepción al cambiar el apellido de un usuario con mas de 30 caracteres`() {
+    fun `an exception is raised when changing the last name of a user with more than 30 characters`() {
         try {
             anyUser.changeLastName("Taboada Gomez Lopez Perez Gimenez")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "El apellido debe tener entre 3 y 30 caracteres.")
+            assertEquals(e.message, "The last name must be between 3 and 30 characters long.")
         }
     }
 
     @Test
-    fun `se cambia el email a un usuario ya existente`() {
+    fun `change the email address of an existing user`() {
         anyUser.changeEmail("nuevoemail@gmail.com")
-
         assertEquals("nuevoemail@gmail.com", anyUser.email)
     }
 
     @Test
-    fun `se cambia la direccion a un usuario ya existente`() {
+    fun `the address is changed to an existing user`() {
         anyUser.changeAdress("calle 14 num 1111")
 
         assertEquals("calle 14 num 1111", anyUser.adress)
     }
 
     @Test
-    fun `se levanta una excepción al cambiar la direccion de un usuario con menos de 10 caracteres`() {
+    fun `an exception is raised when changing the address of a user with less than 10 characters`() {
         try {
             anyUser.changeAdress("st")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "La dirección debe tener entre 10 y 30 caracteres.")
+            assertEquals(e.message, "The address must be between 10 and 30 characters long.")
         }
     }
 
     @Test
-    fun `se levanta una excepción al cambiar la direccion de un usuario con mas de 30 caracteres`() {
+    fun `an exception is raised when changing a user address longer than 30 characters`() {
         try {
             anyUser.changeAdress("Calle falsa entre rivera y sarmiento num 1111")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "La dirección debe tener entre 10 y 30 caracteres.")
+            assertEquals(e.message, "The address must be between 10 and 30 characters long.")
         }
     }
 
     @Test
-    fun `se cambia la clave a un usuario ya existente`() {
+    fun `the password is changed to an existing user`() {
         anyUser.changePassword("password123")
-
         assertEquals("password123", anyUser.password)
     }
 
     @Test
-    fun `se cambia el cvu a un usuario ya existente`() {
+    fun `change the cvu to an existing user`() {
         anyUser.changeCVUMercadoPago("2222222222222222222222")
-
         assertEquals("2222222222222222222222", anyUser.cvuMercadoPago)
     }
 
     @Test
-    fun `se levanta una excepción al cambiar el cvu de un usuario que no tenga 22 digitos`() {
+    fun `an exception is raised when changing the cvu of a user who does not have only digits`() {
         try {
-            anyUser.changeCVUMercadoPago("123456789012345678901")
+            anyUser.changeCVUMercadoPago("12345678901234567890z")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "El CVU debe tener 22 dígitos.")
+            assertEquals(e.message, "The CVU must only have digits.")
         }
     }
 
     @Test
-    fun `se cambia la direccion de la billetera a un usuario ya existente`() {
-        anyUser.changeWalletAdress("00000000")
+    fun `an exception is raised when changing the cvu of a user that does not have 22 digits`() {
+        try {
+            anyUser.changeCVUMercadoPago("123456789012345678901")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "The CVU must have 22 digits.")
+        }
+    }
 
+    @Test
+    fun `change the wallet address of an existing user`() {
+        anyUser.changeWalletAdress("00000000")
         assertEquals("00000000", anyUser.walletAdress)
     }
 
     @Test
-    fun `se levanta una excepción al cambiar la dirección de la billetera de un usuario que no tenga 8 digitos`() {
+    fun `an exception is raised when changing a user's wallet address that does not have only digits`() {
+        try {
+            anyUser.changeWalletAdress("1234567f")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "The wallet adress must only have digits.")
+        }
+    }
+
+    @Test
+    fun `an exception is raised when changing a user's wallet address that is less than 8 digits long`() {
         try {
             anyUser.changeWalletAdress("1234567")
             fail("Expected a RuntimeException to be thrown")
         } catch (e: RuntimeException) {
-            assertEquals(e.message, "La dirección de la billetera debe tener 8 dígitos.")
+            assertEquals(e.message, "The wallet address must be 8 digits long.")
+        }
+    }
+
+    @Test
+    fun `an exception is raised when changing a user's wallet address that is longer than 8 digits`() {
+        try {
+            anyUser.changeWalletAdress("123456789")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "The wallet address must be 8 digits long.")
         }
     }
 }
