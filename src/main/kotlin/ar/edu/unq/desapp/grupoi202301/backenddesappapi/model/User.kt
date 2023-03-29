@@ -44,7 +44,9 @@ class User() {
 
     fun changeEmail(email: String) {
         // TODO se debe verificar que tenga formato de email
-
+        if(!email!!.contains("@")) {
+            throw RuntimeException("A valid email address must be used.")
+        }
         this.email = email
     }
 

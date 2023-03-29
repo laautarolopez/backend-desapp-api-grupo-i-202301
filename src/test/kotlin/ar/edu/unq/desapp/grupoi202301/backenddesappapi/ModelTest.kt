@@ -14,7 +14,7 @@ class ModelTest {
 
     @BeforeEach
     fun setup() {
-        anyUser = User("name", "lastName", "email", "adress 123", "password", "1234567890123456789012", "12345678")
+        anyUser = User("name", "lastName", "email@gmail.com", "adress 123", "password", "1234567890123456789012", "12345678")
     }
 
     @Test
@@ -87,6 +87,16 @@ class ModelTest {
     fun `change the email address of an existing user`() {
         anyUser.changeEmail("nuevoemail@gmail.com")
         assertEquals("nuevoemail@gmail.com", anyUser.email)
+    }
+
+    @Test
+    fun `an exception occurs when changing the email to an invalid one`() {
+        try {
+            anyUser.changeEmail("nuevoemail")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "A valid email address must be used.")
+        }
     }
 
     @Test
