@@ -24,10 +24,10 @@ class ModelTest {
         assertEquals("Juan", newUser.name())
         assertEquals("Gomez", newUser.lastName())
         assertEquals("juangomez@gmail.com", newUser.email())
-        assertEquals("calle falsa 123", newUser.adress)
-        assertEquals("juan123", newUser.password)
-        assertEquals("1111111111111111111111", newUser.cvuMercadoPago)
-        assertEquals("22222222", newUser.walletAdress)
+        assertEquals("calle falsa 123", newUser.adress())
+        assertEquals("juan123", newUser.password())
+        assertEquals("1111111111111111111111", newUser.cvuMercadoPago())
+        assertEquals("22222222", newUser.walletAdress())
     }
 
     @Test
@@ -103,7 +103,7 @@ class ModelTest {
     fun `the address is changed to an existing user`() {
         anyUser.changeAdress("calle 14 num 1111")
 
-        assertEquals("calle 14 num 1111", anyUser.adress)
+        assertEquals("calle 14 num 1111", anyUser.adress())
     }
 
     @Test
@@ -129,13 +129,13 @@ class ModelTest {
     @Test
     fun `the password is changed to an existing user`() {
         anyUser.changePassword("password123")
-        assertEquals("password123", anyUser.password)
+        assertEquals("password123", anyUser.password())
     }
 
     @Test
     fun `change the cvu to an existing user`() {
         anyUser.changeCVUMercadoPago("2222222222222222222222")
-        assertEquals("2222222222222222222222", anyUser.cvuMercadoPago)
+        assertEquals("2222222222222222222222", anyUser.cvuMercadoPago())
     }
 
     @Test
@@ -161,7 +161,7 @@ class ModelTest {
     @Test
     fun `change the wallet address of an existing user`() {
         anyUser.changeWalletAdress("00000000")
-        assertEquals("00000000", anyUser.walletAdress)
+        assertEquals("00000000", anyUser.walletAdress())
     }
 
     @Test
