@@ -21,9 +21,9 @@ class ModelTest {
     fun `a user is successfully created and when prompted for data, the data loaded on creation is returned`() {
         var newUser = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123", "1111111111111111111111", "22222222")
 
-        assertEquals("Juan", newUser.name)
-        assertEquals("Gomez", newUser.lastName)
-        assertEquals("juangomez@gmail.com", newUser.email)
+        assertEquals("Juan", newUser.name())
+        assertEquals("Gomez", newUser.lastName())
+        assertEquals("juangomez@gmail.com", newUser.email())
         assertEquals("calle falsa 123", newUser.adress)
         assertEquals("juan123", newUser.password)
         assertEquals("1111111111111111111111", newUser.cvuMercadoPago)
@@ -33,7 +33,7 @@ class ModelTest {
     @Test
     fun `an existing user is renamed`() {
         anyUser.changeName("newName")
-        assertEquals("newName", anyUser.name)
+        assertEquals("newName", anyUser.name())
     }
 
     @Test
@@ -60,7 +60,7 @@ class ModelTest {
     fun `change the last name of an existing user`() {
         anyUser.changeLastName("newLastName")
 
-        assertEquals("newLastName", anyUser.lastName)
+        assertEquals("newLastName", anyUser.lastName())
     }
 
     @Test
@@ -86,7 +86,7 @@ class ModelTest {
     @Test
     fun `change the email address of an existing user`() {
         anyUser.changeEmail("nuevoemail@gmail.com")
-        assertEquals("nuevoemail@gmail.com", anyUser.email)
+        assertEquals("nuevoemail@gmail.com", anyUser.email())
     }
 
     @Test

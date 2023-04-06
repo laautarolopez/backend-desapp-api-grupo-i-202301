@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
+
 import jakarta.persistence.*
-import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Size
 import java.lang.RuntimeException
 
 @Entity
@@ -9,45 +8,45 @@ class User() {
 
     // "https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280-580x580.jpg"
     @Id
-    var id: Long? = null
-    var name: String? = null
-    var lastName: String? = null
-    var email: String? = null
+    private var id: Long? = null
+    @OneToOne
+    private var name: Name? = null
+    @OneToOne
+    private var lastName: LastName? = null
+    @OneToOne
+    private var email: Email? = null
     var adress: String? = null
     var password: String? = null
     var cvuMercadoPago: String? = null
     var walletAdress: String? = null
 
     constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
-        changeName(name)
-        changeLastName(lastName)
-        changeEmail(email)
+        this.name = Name(name)
+        this.lastName = LastName(lastName)
+        this.email = Email(email)
         changeAdress(adress)
         changePassword(password)
         changeCVUMercadoPago(cvu)
         changeWalletAdress(walletAdress)
     }
 
+    fun name(): String = this.name!!.name()
+
     fun changeName(name: String) {
-        if(name.length < 3 || name.length > 30) {
-            throw RuntimeException("The name must be between 3 and 30 characters long.")
-        }
-        this.name = name
+        this.name!!.changeName(name)
     }
 
+    fun lastName(): String = this.lastName!!.lastName()
+
     fun changeLastName(lastName: String) {
-        if(lastName.length < 3 || lastName.length > 30) {
-            throw RuntimeException("The last name must be between 3 and 30 characters long.")
-        }
-        this.lastName = lastName
+        this.lastName!!.changeLastName(lastName)
     }
+
+    fun email(): String = this.email!!.email()
 
     fun changeEmail(email: String) {
         // TODO se debe verificar que tenga formato de email
-        if(!email!!.contains("@")) {
-            throw RuntimeException("A valid email address must be used.")
-        }
-        this.email = email
+        this.email!!.changeEmail(email)
     }
 
     fun changeAdress(adress: String) {
