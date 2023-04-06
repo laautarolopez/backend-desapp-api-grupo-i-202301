@@ -17,13 +17,13 @@ class Name() {
     fun name(): String = this.name!!
 
     fun changeName(newName: String) {
-        if(esMenorA(newName, 3) || esMayorA(newName, 30)) {
+        if(isLessThan(newName, 3) || isGreaterThan(newName, 30)) {
             throw RuntimeException("The name must be between 3 and 30 characters long.")
         }
         this.name = newName
     }
 
-    private fun esMenorA(newName: String, cantidad: Int) : Boolean = newName.length < cantidad
+    private fun isLessThan(newName: String, cantidad: Int) : Boolean = newName.length < cantidad
 
-    private fun esMayorA(newName: String, cantidad: Int) : Boolean = newName.length > cantidad
+    private fun isGreaterThan(newName: String, cantidad: Int) : Boolean = newName.length > cantidad
 }

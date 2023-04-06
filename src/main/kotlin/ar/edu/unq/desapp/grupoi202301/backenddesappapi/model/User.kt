@@ -1,12 +1,11 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
-import java.lang.RuntimeException
+import jakarta.validation.constraints.Pattern
 
 @Entity
 class User() {
 
-    // "https://objetivoligar.com/wp-content/uploads/2017/03/blank-profile-picture-973460_1280-580x580.jpg"
     @Id
     private var id: Long? = null
     @OneToOne
@@ -15,75 +14,68 @@ class User() {
     private var lastName: LastName? = null
     @OneToOne
     private var email: Email? = null
-    var adress: String? = null
-    var password: String? = null
-    var cvuMercadoPago: String? = null
-    var walletAdress: String? = null
+    @OneToOne
+    var adress: Adress? = null
+    @OneToOne
+    @Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*().,<>{}[\\]<>?_=+\\-|;:\\'\\\"\\/]])(?!.*\\s).{8,20}$")
+    var password: Password? = null
+    @OneToOne
+    var cvuMercadoPago: CVUMercadoPago? = null
+    @OneToOne
+    var walletAdress: WalletAdress? = null
 
     constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
         this.name = Name(name)
         this.lastName = LastName(lastName)
         this.email = Email(email)
-        changeAdress(adress)
-        changePassword(password)
-        changeCVUMercadoPago(cvu)
-        changeWalletAdress(walletAdress)
+        this.adress = Adress(adress)
+        this.password = Password(password)
+        this.cvuMercadoPago = CVUMercadoPago(cvu)
+        this.walletAdress = WalletAdress(walletAdress)
     }
 
     fun name(): String = this.name!!.name()
 
-    fun changeName(name: String) {
-        this.name!!.changeName(name)
+    fun changeName(newName: String) {
+        this.name!!.changeName(newName)
     }
 
     fun lastName(): String = this.lastName!!.lastName()
 
-    fun changeLastName(lastName: String) {
-        this.lastName!!.changeLastName(lastName)
+    fun changeLastName(newLastName: String) {
+        this.lastName!!.changeLastName(newLastName)
     }
 
     fun email(): String = this.email!!.email()
 
-    fun changeEmail(email: String) {
+    fun changeEmail(newEmail: String) {
         // TODO se debe verificar que tenga formato de email
-        this.email!!.changeEmail(email)
+        this.email!!.changeEmail(newEmail)
     }
 
-    fun changeAdress(adress: String) {
-        if(adress.length < 10 || adress.length > 30) {
-            throw RuntimeException("The address must be between 10 and 30 characters long.")
-        }
-        this.adress = adress
+    fun adress(): String = this.adress!!.adress()
+
+    fun changeAdress(newAdress: String) {
+        this.adress!!.changeAdress(newAdress)
     }
 
-    fun changePassword(password: String) {
-        // TODO al menos 1 minuscula, 1 mayuscula, 1 carac especial y min 6
-        this.password = password
+    fun password(): String = this.password!!.password()
+
+    fun changePassword(newPassword: String) {
+        // TODO al menos 1 minuscula, 1 mayuscula, 1 caracter especial y minimo 6
+        this.password!!.changePassword(newPassword)
     }
 
-    fun isNumeric(s: String): Boolean {
-        return s.chars().allMatch { Character.isDigit(it) }
+    fun cvuMercadoPago(): String = this.cvuMercadoPago!!.cvuMercadoPago()
+
+    fun changeCVUMercadoPago(newCVU: String) {
+        this.cvuMercadoPago!!.changeCVUMercadoPago(newCVU)
     }
 
-    fun changeCVUMercadoPago(cvu: String) {
-        if(!isNumeric(cvu)) {
-            throw RuntimeException("The CVU must only have digits.")
-        }
-        else if(cvu.length != 22) {
-            throw RuntimeException("The CVU must have 22 digits.")
-        }
+    fun walletAdress(): String = this.walletAdress!!.walletAdress()
 
-        this.cvuMercadoPago = cvu
-    }
-
-    fun changeWalletAdress(walletAdress: String) {
-        if(!isNumeric(walletAdress)) {
-            throw RuntimeException("The wallet adress must only have digits.")
-        }
-        else if(walletAdress.length != 8) {
-            throw RuntimeException("The wallet address must be 8 digits long.")
-        }
-        this.walletAdress = walletAdress
+    fun changeWalletAdress(newWalletAdress: String) {
+        this.walletAdress!!.changeWalletAdress(newWalletAdress)
     }
 
     override fun equals(other: Any?): Boolean {
