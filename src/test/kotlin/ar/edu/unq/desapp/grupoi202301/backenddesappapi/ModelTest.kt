@@ -22,7 +22,7 @@ class ModelTest {
         var newUser = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123", "1111111111111111111111", "22222222")
 
         assertEquals("Juan", newUser.name())
-        assertEquals("Gomez", newUser.name())
+        assertEquals("Gomez", newUser.lastName())
         assertEquals("juangomez@gmail.com", newUser.email())
         assertEquals("calle falsa 123", newUser.adress)
         assertEquals("juan123", newUser.password)
