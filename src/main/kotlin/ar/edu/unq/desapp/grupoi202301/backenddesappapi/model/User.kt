@@ -95,4 +95,16 @@ class User() {
 
         return true
     }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (lastName?.hashCode() ?: 0)
+        result = 31 * result + (email?.hashCode() ?: 0)
+        result = 31 * result + (adress?.hashCode() ?: 0)
+        result = 31 * result + (password?.hashCode() ?: 0)
+        result = 31 * result + (cvuMercadoPago?.hashCode() ?: 0)
+        result = 31 * result + (walletAdress?.hashCode() ?: 0)
+        return result
+    }
 }
