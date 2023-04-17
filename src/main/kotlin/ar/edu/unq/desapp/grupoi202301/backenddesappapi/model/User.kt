@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern
 class User() {
 
     @Id
-    private var id: Long? = null
+    var id: Long? = null
     @OneToOne
     private var name: Name? = null
     @OneToOne
@@ -36,47 +36,31 @@ class User() {
 
     fun name(): String = this.name!!.name()
 
-    fun changeName(newName: String) {
-        this.name!!.changeName(newName)
-    }
+    fun changeName(newName: String) = this.name!!.changeName(newName)
 
     fun lastName(): String = this.lastName!!.lastName()
 
-    fun changeLastName(newLastName: String) {
-        this.lastName!!.changeLastName(newLastName)
-    }
+    fun changeLastName(newLastName: String) = this.lastName!!.changeLastName(newLastName)
 
     fun email(): String = this.email!!.email()
 
-    fun changeEmail(newEmail: String) {
-        // TODO se debe verificar que tenga formato de email
-        this.email!!.changeEmail(newEmail)
-    }
+    fun changeEmail(newEmail: String) = this.email!!.changeEmail(newEmail)
 
     fun adress(): String = this.adress!!.adress()
 
-    fun changeAdress(newAdress: String) {
-        this.adress!!.changeAdress(newAdress)
-    }
+    fun changeAdress(newAdress: String) = this.adress!!.changeAdress(newAdress)
 
     fun password(): String = this.password!!.password()
 
-    fun changePassword(newPassword: String) {
-        // TODO al menos 1 minuscula, 1 mayuscula, 1 caracter especial y minimo 6
-        this.password!!.changePassword(newPassword)
-    }
+    fun changePassword(newPassword: String) = this.password!!.changePassword(newPassword)
 
     fun cvuMercadoPago(): String = this.cvuMercadoPago!!.cvuMercadoPago()
 
-    fun changeCVUMercadoPago(newCVU: String) {
-        this.cvuMercadoPago!!.changeCVUMercadoPago(newCVU)
-    }
+    fun changeCVUMercadoPago(newCVU: String) = this.cvuMercadoPago!!.changeCVUMercadoPago(newCVU)
 
     fun walletAdress(): String = this.walletAdress!!.walletAdress()
 
-    fun changeWalletAdress(newWalletAdress: String) {
-        this.walletAdress!!.changeWalletAdress(newWalletAdress)
-    }
+    fun changeWalletAdress(newWalletAdress: String) = this.walletAdress!!.changeWalletAdress(newWalletAdress)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
