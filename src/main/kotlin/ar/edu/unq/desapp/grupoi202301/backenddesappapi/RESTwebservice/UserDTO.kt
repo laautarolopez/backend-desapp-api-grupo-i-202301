@@ -12,6 +12,19 @@ class UserDTO(
     val cvuMercadoPago:String?,
     val walletAdress:String?,
     ) {
+    
+    fun toModel(): User {
+        val user = User()
+        user.id = this.id
+        user.changeName(this.name!!)
+        user.changeLastName(this.lastName!!)
+        user.changeEmail(this.email!!)
+        user.changeAdress(this.adress!!)
+        user.changePassword(this.password!!)
+        user.changeCVUMercadoPago(this.cvuMercadoPago!!)
+        user.changeWalletAdress(this.walletAdress!!)
+        return user
+    }
 
     companion object {
         fun fromModel(user: User) =
@@ -23,13 +36,7 @@ class UserDTO(
                 adress = user.adress(),
                 password = user.password(),
                 cvuMercadoPago = user.cvuMercadoPago(),
-                walletAdress = user.walletAdress(),
+                walletAdress = user.walletAdress()
             )
-    }
-
-    fun toModel(): User {
-        val user = User()
-        TODO("Not yet implemented")
-        return user
     }
 }
