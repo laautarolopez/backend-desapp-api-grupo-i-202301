@@ -31,6 +31,7 @@ dependencies {
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation("org.springdoc:springdoc-openapi-ui:1.7.0")
 }
 
 tasks.withType<KotlinCompile> {
