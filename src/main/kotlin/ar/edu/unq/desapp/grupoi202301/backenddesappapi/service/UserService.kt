@@ -1,8 +1,8 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 
-@Service
-class UserService {
+interface UserService {
+
+    fun create(user: User): User
 }

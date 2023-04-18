@@ -23,14 +23,16 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+//	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
 }
 
 tasks.withType<KotlinCompile> {
@@ -43,6 +45,7 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
 tasks.jacocoTestReport {
 	reports {
 		xml.setEnabled(true)

@@ -1,110 +1,48 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
-import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.*
+import jakarta.validation.constraints.Email
 
-@Entity
-class User() {
+@Entity(name = "users")
+class User {
 
     @Id
-    private var id: Long? = null
-    @OneToOne
-    private var name: Name? = null
-    @OneToOne
-    private var lastName: LastName? = null
-    @OneToOne
-    private var email: Email? = null
-    @OneToOne
-    var adress: Adress? = null
-    @OneToOne
-    @Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*().,<>{}[\\]<>?_=+\\-|;:\\'\\\"\\/]])(?!.*\\s).{8,20}$")
-    var password: Password? = null
-    @OneToOne
-    var cvuMercadoPago: CVUMercadoPago? = null
-    @OneToOne
-    var walletAdress: WalletAdress? = null
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id: Long? = null
 
-    constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
-        this.name = Name(name)
-        this.lastName = LastName(lastName)
-        this.email = Email(email)
-        this.adress = Adress(adress)
-        this.password = Password(password)
-        this.cvuMercadoPago = CVUMercadoPago(cvu)
-        this.walletAdress = WalletAdress(walletAdress)
-    }
+    @Column(nullable = false)
+    @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters long.")
+    var name: String? = null
 
-    fun name(): String = this.name!!.name()
+    @Column(nullable = false)
+    @Size(min = 3, max = 30, message = "The last name must be between 3 and 30 characters long.")
+    var lastName: String? = null
 
-    fun changeName(newName: String) {
-        this.name!!.changeName(newName)
-    }
+    @Column(nullable = false)
+    @NotBlank(message = "The email address cannot be blank.")
+    @Email(message = "A valid email address must be used.")
+    var email: String? = null
 
-    fun lastName(): String = this.lastName!!.lastName()
+    @Column(nullable = false)
+    @Size(min = 10, max = 30, message = "The address must be between 10 and 30 characters long.")
+    var address: String? = null
 
-    fun changeLastName(newLastName: String) {
-        this.lastName!!.changeLastName(newLastName)
-    }
+    @Column(nullable = false)
+    @Size(min = 6, message = "The password must be at least 6 characters long.")
+    @Pattern(
+        regexp = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[-+_!@#\$%^&*.,? ])[a-zA-Z0-9-+_!@#\$%^&*.,? ]{0,}$",
+        message = "The password must contain at least 1 lower case, 1 upper case and 1 special character."
+    )
+    var password: String? = null
 
-    fun email(): String = this.email!!.email()
+    @Column(nullable = false)
+    @Size(min = 22, max = 22, message = "The CVU must have 22 digits.")
+    @Pattern(regexp = "[0-9]+", message = "The CVU must only have digits.")
+    var cvuMercadoPago: String? = null
 
-    fun changeEmail(newEmail: String) {
-        // TODO se debe verificar que tenga formato de email
-        this.email!!.changeEmail(newEmail)
-    }
-
-    fun adress(): String = this.adress!!.adress()
-
-    fun changeAdress(newAdress: String) {
-        this.adress!!.changeAdress(newAdress)
-    }
-
-    fun password(): String = this.password!!.password()
-
-    fun changePassword(newPassword: String) {
-        // TODO al menos 1 minuscula, 1 mayuscula, 1 caracter especial y minimo 6
-        this.password!!.changePassword(newPassword)
-    }
-
-    fun cvuMercadoPago(): String = this.cvuMercadoPago!!.cvuMercadoPago()
-
-    fun changeCVUMercadoPago(newCVU: String) {
-        this.cvuMercadoPago!!.changeCVUMercadoPago(newCVU)
-    }
-
-    fun walletAdress(): String = this.walletAdress!!.walletAdress()
-
-    fun changeWalletAdress(newWalletAdress: String) {
-        this.walletAdress!!.changeWalletAdress(newWalletAdress)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as User
-
-        if (id != other.id) return false
-        if (name != other.name) return false
-        if (lastName != other.lastName) return false
-        if (email != other.email) return false
-        if (adress != other.adress) return false
-        if (password != other.password) return false
-        if (cvuMercadoPago != other.cvuMercadoPago) return false
-        if (walletAdress != other.walletAdress) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
-        result = 31 * result + (name?.hashCode() ?: 0)
-        result = 31 * result + (lastName?.hashCode() ?: 0)
-        result = 31 * result + (email?.hashCode() ?: 0)
-        result = 31 * result + (adress?.hashCode() ?: 0)
-        result = 31 * result + (password?.hashCode() ?: 0)
-        result = 31 * result + (cvuMercadoPago?.hashCode() ?: 0)
-        result = 31 * result + (walletAdress?.hashCode() ?: 0)
-        return result
-    }
+    @Column(nullable = false)
+    @Size(min = 8, max = 8, message = "The wallet address must have 8 digits.")
+    @Pattern(regexp = "[0-9]+", message = "The wallet address must only have digits.")
+    var walletAddress: String? = null
 }
