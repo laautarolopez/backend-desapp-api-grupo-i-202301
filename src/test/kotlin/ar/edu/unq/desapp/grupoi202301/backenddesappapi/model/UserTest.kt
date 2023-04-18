@@ -26,7 +26,7 @@ class UserTest {
     }
 
     @Test
-    fun `a user is successfully created and when it has correct data`() {
+    fun `a user is successfully created when it has correct data`() {
         assertDoesNotThrow { anyUser().build() }
     }
 
