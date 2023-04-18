@@ -25,12 +25,7 @@ class UserController(private val userService: UserService) {
             ApiResponse(
                 responseCode = "200",
                 description = "success",
-                content = [
-                    Content(
-                        mediaType = "application/json",
-                        schema = Schema(implementation = User::class),
-                    )
-                ]
+                content = [Content(mediaType = "application/json")]
             )
         ]
     )
