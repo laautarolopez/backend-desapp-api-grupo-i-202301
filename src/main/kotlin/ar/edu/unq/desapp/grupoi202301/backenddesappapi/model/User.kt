@@ -1,113 +1,54 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
-import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.*
+import jakarta.validation.constraints.Email
 
-@Entity
+@Entity(name = "users")
 class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty
+    @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
-    @OneToOne
-    @JsonProperty
-    private var name: Name? = null
-    @OneToOne
-    @JsonProperty
-    private var lastName: LastName? = null
-    @OneToOne
-    @JsonProperty
-    private var email: Email? = null
-    @OneToOne
-    @JsonProperty
-    var adress: Adress? = null
-    @OneToOne
-    @JsonProperty
-    var password: Password? = null
-    @OneToOne
-    @JsonProperty
-    var cvuMercadoPago: CVUMercadoPago? = null
-    @OneToOne
-    @JsonProperty
-    var walletAdress: WalletAdress? = null
 
-    constructor() {
-        this.name = Name()
-        this.lastName = LastName()
-        this.email = Email()
-        this.adress = Adress()
-        this.password = Password()
-        this.cvuMercadoPago = CVUMercadoPago()
-        this.walletAdress = WalletAdress()
-    }
+    @Column(nullable = false)
+    @NotBlank(message = "The name cannot be blank.")
+    @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters long.")
+    var name: String? = null
 
-    constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
-        this.name = Name(name)
-        this.lastName = LastName(lastName)
-        this.email = Email(email)
-        this.adress = Adress(adress)
-        this.password = Password(password)
-        this.cvuMercadoPago = CVUMercadoPago(cvu)
-        this.walletAdress = WalletAdress(walletAdress)
-    }
+    @Column(nullable = false)
+    @NotBlank(message = "The last name cannot be blank.")
+    @Size(min = 3, max = 30, message = "The last name must be between 3 and 30 characters long.")
+    var lastName: String? = null
 
-    fun name(): String = this.name!!.name()
+    @Column(nullable = false)
+    @NotBlank(message = "The email address cannot be blank.")
+    @Email(message = "A valid email address must be used.")
+    var email: String? = null
 
-    fun changeName(newName: String) = this.name!!.changeName(newName)
+    @Column(nullable = false)
+    @NotBlank(message = "The address cannot be blank.")
+    @Size(min = 10, max = 30, message = "The address must be between 10 and 30 characters long.")
+    var address: String? = null
 
-    fun lastName(): String = this.lastName!!.lastName()
+    @Column(nullable = false)
+    @NotBlank(message = "The password cannot be blank.")
+    @Size(min = 6, message = "The password must be at least 6 characters long.")
+    @Pattern(
+        regexp = "^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[-+_!@#\$%^&*.,? ])[a-zA-Z0-9-+_!@#\$%^&*.,? ]{6,}$",
+        message = "The password must contain at least 1 lower case, 1 upper case and 1 special character."
+    )
+    var password: String? = null
 
-    fun changeLastName(newLastName: String) = this.lastName!!.changeLastName(newLastName)
+    @Column(nullable = false)
+    @NotBlank(message = "The CVU cannot be blank.")
+    @Size(min = 22, max = 22, message = "The CVU must have 22 digits.")
+    @Pattern(regexp = "[0-9]+", message = "The CVU must only have digits.")
+    var cvuMercadoPago: String? = null
 
-    fun email(): String = this.email!!.email()
-
-    fun changeEmail(newEmail: String) = this.email!!.changeEmail(newEmail)
-
-    fun adress(): String = this.adress!!.adress()
-
-    fun changeAdress(newAdress: String) = this.adress!!.changeAdress(newAdress)
-
-    fun password(): String = this.password!!.password()
-
-    fun changePassword(newPassword: String) = this.password!!.changePassword(newPassword)
-
-    fun cvuMercadoPago(): String = this.cvuMercadoPago!!.cvuMercadoPago()
-
-    fun changeCVUMercadoPago(newCVU: String) = this.cvuMercadoPago!!.changeCVUMercadoPago(newCVU)
-
-    fun walletAdress(): String = this.walletAdress!!.walletAdress()
-
-    fun changeWalletAdress(newWalletAdress: String) = this.walletAdress!!.changeWalletAdress(newWalletAdress)
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as User
-
-        if (id != other.id) return false
-        if (name != other.name) return false
-        if (lastName != other.lastName) return false
-        if (email != other.email) return false
-        if (adress != other.adress) return false
-        if (password != other.password) return false
-        if (cvuMercadoPago != other.cvuMercadoPago) return false
-        if (walletAdress != other.walletAdress) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
-        result = 31 * result + (name?.hashCode() ?: 0)
-        result = 31 * result + (lastName?.hashCode() ?: 0)
-        result = 31 * result + (email?.hashCode() ?: 0)
-        result = 31 * result + (adress?.hashCode() ?: 0)
-        result = 31 * result + (password?.hashCode() ?: 0)
-        result = 31 * result + (cvuMercadoPago?.hashCode() ?: 0)
-        result = 31 * result + (walletAdress?.hashCode() ?: 0)
-        return result
-    }
+    @Column(nullable = false)
+    @NotNull(message = "The wallet address cannot be blank.")
+    @Size(min = 8, max = 8, message = "The wallet address must have 8 digits.")
+    @Pattern(regexp = "[0-9]+", message = "The wallet address must only have digits.")
+    var walletAddress: String? = null
 }
