@@ -1,28 +1,47 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.*
 import jakarta.validation.constraints.Pattern
 
 @Entity
-class User() {
+class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     var id: Long? = null
     @OneToOne
+    @JsonProperty
     private var name: Name? = null
     @OneToOne
+    @JsonProperty
     private var lastName: LastName? = null
     @OneToOne
+    @JsonProperty
     private var email: Email? = null
     @OneToOne
+    @JsonProperty
     var adress: Adress? = null
     @OneToOne
+    @JsonProperty
     var password: Password? = null
     @OneToOne
+    @JsonProperty
     var cvuMercadoPago: CVUMercadoPago? = null
     @OneToOne
+    @JsonProperty
     var walletAdress: WalletAdress? = null
+
+    constructor() {
+        this.name = Name()
+        this.lastName = LastName()
+        this.email = Email()
+        this.adress = Adress()
+        this.password = Password()
+        this.cvuMercadoPago = CVUMercadoPago()
+        this.walletAdress = WalletAdress()
+    }
 
     constructor(name: String, lastName: String, email: String, adress: String, password: String, cvu: String, walletAdress: String):this() {
         this.name = Name(name)
