@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
-enum class CryptoQuoteEnum {
+enum class CryptoName {
     ALICEUSDT,
     MATICUSDT,
     AXSUSDT,
