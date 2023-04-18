@@ -16,3 +16,14 @@ enum class CryptoQuoteEnum {
     TRXUSDT,
     AUDIOUSDT
 }
+
+enum class OperationType {
+    BUY,
+    SALE
+}
+
+enum class ActionTransaction {
+    MAKE,
+    CONFIRM,
+    CANCEL
+}
