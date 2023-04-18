@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.DTO.UserCreateDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import io.swagger.v3.oas.annotations.Operation
@@ -24,8 +25,22 @@ class UserController(private val userService: UserService) {
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "success",
-                content = [Content(mediaType = "application/json")]
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = User::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
+                    )
+                ]
             )
         ]
     )
@@ -35,6 +50,21 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok().body(user)
     }
 
+    @ApiResponses(value = [
+        ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
+        ApiResponse(responseCode = "404", description = "Customer not found"),
+        ApiResponse(
+            responseCode = "500",
+            description = "Internal server error",
+            content =  [
+                Content(
+                    mediaType = "application/json",
+                    schema = Schema(implementation = ErrorResponseDTO::class)
+                )
+            ]
+        )
+        ]
+    )
     @GetMapping
     fun obtener() = "hola"
 }
