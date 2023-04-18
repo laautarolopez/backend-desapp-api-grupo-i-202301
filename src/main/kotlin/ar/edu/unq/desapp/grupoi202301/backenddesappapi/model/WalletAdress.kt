@@ -1,12 +1,15 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.lang.RuntimeException
 
 @Entity
 class WalletAdress() {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private var id: Long? = null
     private var walletAdress: String? = null
 

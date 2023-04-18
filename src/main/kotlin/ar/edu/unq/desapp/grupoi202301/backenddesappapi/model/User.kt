@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern
 class User() {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     var id: Long? = null
     @OneToOne
     private var name: Name? = null
