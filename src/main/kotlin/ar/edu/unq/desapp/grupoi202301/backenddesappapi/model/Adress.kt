@@ -23,7 +23,7 @@ class Adress() {
         this.adress = newAdress
     }
 
-    private fun isLessThan(adress: String, cantidad: Int) : Boolean = adress.length < cantidad
+    private fun isLessThan(adress: String, amount: Int) : Boolean = adress.length < amount
 
-    private fun isGreaterThan(adress: String, cantidad: Int) : Boolean = adress.length > cantidad
+    private fun isGreaterThan(adress: String, amount: Int) : Boolean = adress.length > amount
 }

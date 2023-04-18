@@ -30,5 +30,5 @@ class WalletAdress() {
         return s.chars().allMatch { Character.isDigit(it) }
     }
 
-    private fun isDifferentFrom(cvu: String, cantidad: Int) : Boolean = cvu.length != cantidad
+    private fun isDifferentFrom(cvu: String, amount: Int) : Boolean = cvu.length != amount
 }

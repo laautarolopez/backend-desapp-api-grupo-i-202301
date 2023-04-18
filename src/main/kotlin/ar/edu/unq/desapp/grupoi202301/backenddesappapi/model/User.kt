@@ -17,7 +17,6 @@ class User() {
     @OneToOne
     var adress: Adress? = null
     @OneToOne
-    @Pattern(regexp="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*().,<>{}[\\]<>?_=+\\-|;:\\'\\\"\\/]])(?!.*\\s).{8,20}$")
     var password: Password? = null
     @OneToOne
     var cvuMercadoPago: CVUMercadoPago? = null

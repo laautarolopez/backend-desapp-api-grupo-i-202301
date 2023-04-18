@@ -14,18 +14,18 @@ class ModelTest {
 
     @BeforeEach
     fun setup() {
-        anyUser = User("name", "lastName", "email@gmail.com", "adress 123", "password", "1234567890123456789012", "12345678")
+        anyUser = User("name", "lastName", "email@gmail.com", "adress 123", "Password@1234", "1234567890123456789012", "12345678")
     }
 
     @Test
     fun `a user is successfully created and when prompted for data, the data loaded on creation is returned`() {
-        var newUser = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "juan123", "1111111111111111111111", "22222222")
+        var newUser = User("Juan", "Gomez", "juangomez@gmail.com", "calle falsa 123", "Juan_123", "1111111111111111111111", "22222222")
 
         assertEquals("Juan", newUser.name())
         assertEquals("Gomez", newUser.lastName())
         assertEquals("juangomez@gmail.com", newUser.email())
         assertEquals("calle falsa 123", newUser.adress())
-        assertEquals("juan123", newUser.password())
+        assertEquals("Juan_123", newUser.password())
         assertEquals("1111111111111111111111", newUser.cvuMercadoPago())
         assertEquals("22222222", newUser.walletAdress())
     }
@@ -83,6 +83,8 @@ class ModelTest {
         }
     }
 
+
+
     @Test
     fun `change the email address of an existing user`() {
         anyUser.changeEmail("nuevoemail@gmail.com")
@@ -128,8 +130,48 @@ class ModelTest {
 
     @Test
     fun `the password is changed to an existing user`() {
-        anyUser.changePassword("password123")
-        assertEquals("password123", anyUser.password())
+        anyUser.changePassword("12345.Password")
+        assertEquals("12345.Password", anyUser.password())
+    }
+
+    @Test
+    fun `an exception occurs when changing a password that does not contain at least one uppercase letter`() {
+        try {
+            anyUser.changePassword("12345.password")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "Must contain at least 1 lower case, 1 upper case, 1 special character and at least 6 digits.")
+        }
+    }
+
+    @Test
+    fun `an exception occurs when changing a password that does not contain at least one lowercase letter`() {
+        try {
+            anyUser.changePassword("12345.PASSWORD")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "Must contain at least 1 lower case, 1 upper case, 1 special character and at least 6 digits.")
+        }
+    }
+
+    @Test
+    fun `an exception occurs when changing a password that does not contain at least one special character`() {
+        try {
+            anyUser.changePassword("12345Password")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "Must contain at least 1 lower case, 1 upper case, 1 special character and at least 6 digits.")
+        }
+    }
+
+    @Test
+    fun `an exception occurs when changing a password that does not contain at least 6 digits`() {
+        try {
+            anyUser.changePassword("12.Pa")
+            fail("Expected a RuntimeException to be thrown")
+        } catch (e: RuntimeException) {
+            assertEquals(e.message, "Must contain at least 1 lower case, 1 upper case, 1 special character and at least 6 digits.")
+        }
     }
 
     @Test

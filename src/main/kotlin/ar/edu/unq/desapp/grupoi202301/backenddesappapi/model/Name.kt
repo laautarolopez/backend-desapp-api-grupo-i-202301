@@ -23,7 +23,7 @@ class Name() {
         this.name = newName
     }
 
-    private fun isLessThan(newName: String, cantidad: Int) : Boolean = newName.length < cantidad
+    private fun isLessThan(newName: String, amount: Int) : Boolean = newName.length < amount
 
-    private fun isGreaterThan(newName: String, cantidad: Int) : Boolean = newName.length > cantidad
+    private fun isGreaterThan(newName: String, amount: Int) : Boolean = newName.length > amount
 }
