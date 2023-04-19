@@ -3,12 +3,14 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.ActionTransaction
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 
 class TransactionBuilder {
     var crypto: CryptoName? = null
     var quantity: Double? = null
     var quotationCrypto: Double? = null
     var amountOperation: Double? = null
+    var user: User? = null
     var userName: String? = null
     var userLastName: String? = null
     var numberOperations: Int? = null
@@ -22,6 +24,7 @@ class TransactionBuilder {
         transaction.quantity = this.quantity
         transaction.quotationCrypto = this.quotationCrypto
         transaction.amountOperation = this.amountOperation
+        transaction.user = this.user
         transaction.userName = this.userName
         transaction.userLastName = this.userLastName
         transaction.numberOperations = this.numberOperations
@@ -48,6 +51,11 @@ class TransactionBuilder {
 
     fun withAmountOperation(amountOperation: Double?): TransactionBuilder {
         this.amountOperation = amountOperation
+        return this
+    }
+
+    fun withUser(user: User?): TransactionBuilder {
+        this.user = user
         return this
     }
 

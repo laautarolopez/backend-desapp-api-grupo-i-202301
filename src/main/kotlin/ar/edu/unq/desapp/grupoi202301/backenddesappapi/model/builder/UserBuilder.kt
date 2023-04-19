@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
+import jakarta.persistence.Column
 
 class UserBuilder {
     private var name: String? = null
@@ -10,6 +11,8 @@ class UserBuilder {
     private var password: String? = null
     private var cvuMercadoPago: String? = null
     private var walletAddress: String? = null
+    private var reputation: Int? = 0
+    private var operations: Int? = 0
 
     fun build(): User {
         var user = User()
@@ -20,6 +23,8 @@ class UserBuilder {
         user.password = this.password
         user.cvuMercadoPago = this.cvuMercadoPago
         user.walletAddress = this.walletAddress
+        user.reputation = this.reputation
+        user.operations = this.operations
         return user
     }
 
@@ -56,6 +61,16 @@ class UserBuilder {
 
     fun withWalletAddress(walletAddress: String?): UserBuilder {
         this.walletAddress = walletAddress
+        return this
+    }
+
+    fun withReputation(reputation: Int?) : UserBuilder {
+        this.reputation = reputation
+        return this
+    }
+
+    fun withOperations(operations: Int?) : UserBuilder {
+        this.operations = operations
         return this
     }
 }
