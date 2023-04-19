@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
@@ -25,7 +26,10 @@ class Transaction {
     @NotNull(message = "The amount of operation cannot be null.")
     var amountOperation: Double? = null
 
-    //@ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "The user cannot be null.")
+    var user: User? = null
+
     @Column(nullable = false)
     @NotNull(message = "The username cannot be null.")
     @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters long.")
