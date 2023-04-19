@@ -6,13 +6,13 @@ import java.time.LocalDateTime
 
 class CryptoBuilder {
     var name: CryptoName? = null
-    //var time: LocalDateTime? = null
+    var time: LocalDateTime? = null
     var price: Double? = null
 
     fun build(): Crypto {
         var crypto = Crypto()
         crypto.name = this.name
-        //crypto.time = this.time
+        crypto.time = this.time
         crypto.price = this.price
         return crypto
     }
@@ -22,11 +22,10 @@ class CryptoBuilder {
         return this
     }
 
-    /*
     fun withTime(time: LocalDateTime?): CryptoBuilder {
         this.time = time
         return this
-    }*/
+    }
 
     fun withPrice(price: Double?): CryptoBuilder {
         this.price = price

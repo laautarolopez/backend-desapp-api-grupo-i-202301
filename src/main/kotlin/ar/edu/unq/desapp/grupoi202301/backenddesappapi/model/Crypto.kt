@@ -18,10 +18,10 @@ class Crypto {
     @NotNull(message = "The crypto name cannot be null.")
     var name: CryptoName? = null
 
-    //@Column(nullable = false)
-    //@NotNull(message = "The time cannot be null.")
-    //@DateTimeFormat
-    //var time: LocalDateTime? = null
+    @Column(nullable = false)
+    @NotNull(message = "The time cannot be null.")
+    @DateTimeFormat
+    var time: LocalDateTime? = null
 
     @Column(nullable = false)
     @NotNull(message = "The price cannot be null.")

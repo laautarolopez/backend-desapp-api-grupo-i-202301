@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 class CryptoTest {
@@ -19,7 +20,7 @@ class CryptoTest {
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(btcusdt)
-            //.withTime("2023-05-14 12:30")
+            .withTime(LocalDateTime.now())
             .withPrice(300.50)
     }
 
@@ -29,7 +30,7 @@ class CryptoTest {
     }
 
     @Test
-    fun `change the name of an crypto`() {
+    fun `change the name of a crypto`() {
         val crypto = anyCrypto().withName(aaveusdt).build()
 
         val violations = validator.validate(crypto)
@@ -38,7 +39,7 @@ class CryptoTest {
     }
 
     @Test
-    fun `a violation to change the name of a crypto for something empty`() {
+    fun `a violation occurs when change the name of a crypto for null`() {
         val crypto = anyCrypto().withName(null).build()
 
         val violations = validator.validate(crypto)
@@ -47,7 +48,27 @@ class CryptoTest {
     }
 
     @Test
-    fun `change the price of an crypto`() {
+    fun `change the time of a crypto`() {
+        val oldTime = anyCrypto().time
+        val crypto = anyCrypto().withTime(LocalDateTime.now()).build()
+
+        val violations = validator.validate(crypto)
+
+        Assertions.assertTrue(violations.isEmpty())
+        Assertions.assertTrue(oldTime != crypto.time)
+    }
+
+    @Test
+    fun `a violation occurs when change the time of a crypto for null`() {
+        val crypto = anyCrypto().withTime(null).build()
+
+        val violations = validator.validate(crypto)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The time cannot be null." })
+    }
+
+    @Test
+    fun `change the price of a crypto`() {
         val crypto = anyCrypto().withPrice(120.84).build()
 
         val violations = validator.validate(crypto)
@@ -56,7 +77,7 @@ class CryptoTest {
     }
 
     @Test
-    fun `a violation to change the price of a crypto for something empty`() {
+    fun `a violation occurs when change the price of a crypto for null`() {
         val crypto = anyCrypto().withPrice(null).build()
 
         val violations = validator.validate(crypto)
