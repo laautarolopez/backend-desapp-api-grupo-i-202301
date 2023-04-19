@@ -9,7 +9,8 @@ class TransactionBuilder {
     var quantity: Double? = null
     var quotationCrypto: Double? = null
     var amountOperation: Double? = null
-    var user: String? = null
+    var userName: String? = null
+    var userLastName: String? = null
     var numberOperations: Int? = null
     var reputation: Int? = null
     var shippingAddress: String? = null
@@ -21,7 +22,8 @@ class TransactionBuilder {
         transaction.quantity = this.quantity
         transaction.quotationCrypto = this.quotationCrypto
         transaction.amountOperation = this.amountOperation
-        transaction.user = this.user
+        transaction.userName = this.userName
+        transaction.userLastName = this.userLastName
         transaction.numberOperations = this.numberOperations
         transaction.reputation = this.reputation
         transaction.shippingAddress = this.shippingAddress
@@ -49,8 +51,13 @@ class TransactionBuilder {
         return this
     }
 
-    fun withUser(user: String?): TransactionBuilder {
-        this.user = user
+    fun withUserName(userName: String?): TransactionBuilder {
+        this.userName = userName
+        return this
+    }
+
+    fun withUserLastName(userLastName: String?): TransactionBuilder {
+        this.userLastName = userLastName
         return this
     }
 

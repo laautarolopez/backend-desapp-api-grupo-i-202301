@@ -27,9 +27,14 @@ class Transaction {
 
     //@ManyToOne(fetch = FetchType.LAZY)
     @Column(nullable = false)
-    @NotNull(message = "The user cannot be null.")
+    @NotNull(message = "The username cannot be null.")
     @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters long.")
-    var user: String? = null
+    var userName: String? = null
+
+    @Column(nullable = false)
+    @NotNull(message = "The user lastname cannot be null.")
+    @Size(min = 3, max = 30, message = "The last name must be between 3 and 30 characters long.")
+    var userLastName: String? = null
 
     @Column(nullable = false)
     @NotNull(message = "The numbers of operations cannot be null.")
