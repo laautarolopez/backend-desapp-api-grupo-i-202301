@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -18,12 +19,24 @@ class TransactionTest {
     var confirm : ActionTransaction = ActionTransaction.CONFIRM
     var make : ActionTransaction = ActionTransaction.MAKE
 
+    val anyUser: User =
+                UserBuilder()
+                .withName("Jorge")
+                .withLastName("Sanchez")
+                .withEmail("jorgesanchez@gmail.com")
+                .withAddress("calle falsa 123")
+                .withPassword("Password@1234")
+                .withCVU("1234567890123456789012")
+                .withWalletAddress("12345678")
+                .build()
+
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
             .withCrypto(aaveusdt)
             .withQuantity(300.10)
             .withQuotationCrypto(15.4)
             .withAmountOperation(200.4)
+            .withUser(anyUser)
             .withUserName("Jorge")
             .withUserLastName("Sanchez")
             .withNumberOperations(5)
