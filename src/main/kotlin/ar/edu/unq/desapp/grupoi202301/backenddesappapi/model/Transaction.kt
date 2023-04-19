@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
+import jakarta.validation.constraints.Size
 
 class Transaction {
     @Id
@@ -10,7 +11,7 @@ class Transaction {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "The crypto cannot be null.")
-    var crypto: Crypto? = null
+    var crypto: CryptoName? = null
 
     @Column(nullable = false)
     @NotNull(message = "The quantity cannot be null.")
@@ -24,9 +25,11 @@ class Transaction {
     @NotNull(message = "The amount of operation cannot be null.")
     var amountOperation: Double? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    //@ManyToOne(fetch = FetchType.LAZY)
+    @Column(nullable = false)
     @NotNull(message = "The user cannot be null.")
-    var user: User? = null
+    @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters long.")
+    var user: String? = null
 
     @Column(nullable = false)
     @NotNull(message = "The numbers of operations cannot be null.")
@@ -39,6 +42,7 @@ class Transaction {
     @Column(nullable = false)
     @NotNull(message = "The shipping address cannot be null.")
     var shippingAddress: String? = null
+    //verificar bien cantidad de digitos
 
     @Column(nullable = false)
     @NotNull(message = "The action cannot be null.")
