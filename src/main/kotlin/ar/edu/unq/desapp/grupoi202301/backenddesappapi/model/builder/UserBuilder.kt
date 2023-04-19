@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
-import jakarta.persistence.Column
 
 class UserBuilder {
     private var name: String? = null
