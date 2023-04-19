@@ -26,5 +26,6 @@ class Crypto {
 
     @Column(nullable = false)
     @NotNull(message = "The price cannot be null.")
+    @DecimalMin(value = "0.0", message = "The price cannot be negative.")
     var price: Double? = null
 }

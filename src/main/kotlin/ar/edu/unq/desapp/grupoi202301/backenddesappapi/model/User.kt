@@ -45,4 +45,10 @@ class User {
     @Size(min = 8, max = 8, message = "The wallet address must have 8 digits.")
     @Pattern(regexp = "[0-9]+", message = "The wallet address must only have digits.")
     var walletAddress: String? = null
+
+    @Column(nullable = false)
+    var reputation: Int? = 0
+
+    @Column(nullable = false)
+    var operations: Int? = 0
 }
