@@ -49,23 +49,5 @@ class UserController(private val userService: UserService) {
         val user = userService.create(user.toModel())
         return ResponseEntity.ok().body(user)
     }
-
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "400", description = "Invalid ID supplied"),
-        ApiResponse(responseCode = "404", description = "Customer not found"),
-        ApiResponse(
-            responseCode = "500",
-            description = "Internal server error",
-            content =  [
-                Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = ErrorResponseDTO::class)
-                )
-            ]
-        )
-        ]
-    )
-    @GetMapping
-    fun obtener() = "hola"
 }
 
