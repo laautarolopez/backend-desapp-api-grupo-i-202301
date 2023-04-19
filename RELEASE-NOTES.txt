@@ -1,0 +1,30 @@
+---------------------------------------------------------------------
+ENTREGA 1 TAG 1.0
+---------------------------------------------------------------------
+NEW FEATURES:
+* Add Builders(CryptoBuilder, TradeBuilder, TransactionBuilder and UserBuilder to model).
+* Add Crypto to model.
+* Add CryptoOperated to model.
+* Add CryptoVolume to model.
+* Add Enumerators(CryptoName, OperationType and ActionTransaction) to model.
+* Add Intention to model.
+* Add Trade to model.
+* Add Transaction to model.
+* Add User to model.
+* Add UserDAO to persistence.
+* Add UserDTO to RESTWebService.
+* Add UserCreateDTO to REST Web Service.
+* Add SecurityFilterChain to REST Web Service(allows interacting with the api without authenticating).
+* Add ErrorDTO and ErrorResponseDTO to REST Web Service(allow see errors in a correct way).
+* Add ExceptionHandler to REST Web Service(handles the response status).
+* Add UserController to REST Web Service(only users can register).
+* GitHub repository has been created.
+* GitHubActions is configured and connected. Running successfully.
+* Swagger has been configured and works for /users/register POST method. Running successfully.
+* SonarCloud is configured and connected. Running successfully.
+* Unit tests were implemented on Model and Service.
+
+NOTES:
+* Deploy on railway.app
+* Tests to CryptoTest, TransactionTest, TradeTest and UserTest(some attributes are missing to be tested).
+* Tests to CryptoOperated, CryptoVolume and Intention.

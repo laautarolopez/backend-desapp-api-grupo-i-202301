@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.DTO.UserCreateDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import io.swagger.v3.oas.annotations.Operation
@@ -24,11 +25,20 @@ class UserController(private val userService: UserService) {
         value = [
             ApiResponse(
                 responseCode = "200",
-                description = "success",
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = User::class),
+                        schema = Schema(implementation = User::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
                     )
                 ]
             )
@@ -39,8 +49,5 @@ class UserController(private val userService: UserService) {
         val user = userService.create(user.toModel())
         return ResponseEntity.ok().body(user)
     }
-
-    @GetMapping
-    fun obtener() = "hola"
 }
 

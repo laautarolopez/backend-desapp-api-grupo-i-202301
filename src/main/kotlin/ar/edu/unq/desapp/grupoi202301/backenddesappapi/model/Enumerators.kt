@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
-enum class CryptoQuoteEnum {
+enum class CryptoName {
     ALICEUSDT,
     MATICUSDT,
     AXSUSDT,
@@ -15,4 +15,15 @@ enum class CryptoQuoteEnum {
     ADAUSDT,
     TRXUSDT,
     AUDIOUSDT
+}
+
+enum class OperationType {
+    BUY,
+    SALE
+}
+
+enum class ActionTransaction {
+    MAKE,
+    CONFIRM,
+    CANCEL
 }
