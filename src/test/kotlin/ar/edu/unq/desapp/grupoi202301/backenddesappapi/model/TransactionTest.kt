@@ -131,16 +131,15 @@ class TransactionTest {
         Assertions.assertTrue(violations.isEmpty())
     }
 
-    /*
     @Test
     fun `a violation occurs when change the amount operation of a transaction to negative`() {
-        val trade = anyTransaction().withAmountOperation(-15.0).build()
+        val trade = anyTransaction().withAmountOperation(-15.00).build()
 
         val violations = validator.validate(trade)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The withAmountOperation cannot be negative." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The amount of operation cannot be negative." })
     }
-     */
+
 
     @Test
     fun `a violation occurs when change the amount operation of a transaction for null`() {
