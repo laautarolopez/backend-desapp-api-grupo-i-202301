@@ -47,8 +47,10 @@ class User {
     var walletAddress: String? = null
 
     @Column(nullable = false)
+    // TODO: comprobar y validar anotacion @Min
     var reputation: Int? = 0
 
     @Column(nullable = false)
+    // TODO: comprobar y validar anotacion @Min
     var operations: Int? = 0
 }
