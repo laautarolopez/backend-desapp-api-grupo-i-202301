@@ -70,6 +70,15 @@ class TradeTest {
     }
 
     @Test
+    fun `a violation occurs when change the quantity of a trade to negative`() {
+        val trade = anyTrade().withQuantity(-100.0).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be negative." })
+    }
+
+    @Test
     fun `a violation occurs when change the quantity of a trade for null`() {
         val trade = anyTrade().withQuantity(null).build()
 
@@ -94,6 +103,15 @@ class TradeTest {
         val violations = validator.validate(trade)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The amount cannot be null." })
+    }
+
+    @Test
+    fun `a violation occurs when change the amountARS of a trade to negative`() {
+        val trade = anyTrade().withAmountARS(-10.0).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The amount cannot be negative." })
     }
 
     @Test

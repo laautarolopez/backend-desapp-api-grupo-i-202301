@@ -21,7 +21,7 @@ class UserBuilder {
         user.address = this.address
         user.password = this.password
         user.cvuMercadoPago = this.cvuMercadoPago
-        user.walletAddress = this.walletAddress
+        user.walletAddress = this.walletAddress 
         user.reputation = this.reputation
         user.operations = this.operations
         return user
