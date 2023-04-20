@@ -77,6 +77,15 @@ class CryptoTest {
     }
 
     @Test
+    fun `a violation occurs when change the price of a crypto to negative`() {
+        val crypto = anyCrypto().withPrice(-100.0).build()
+
+        val violations = validator.validate(crypto)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The price cannot be negative." })
+    }
+
+    @Test
     fun `a violation occurs when change the price of a crypto for null`() {
         val crypto = anyCrypto().withPrice(null).build()
 
