@@ -253,4 +253,23 @@ class UserTest {
         assertEquals(1, violations.size)
         assertTrue(violations.any { v -> v.message == "The wallet address must have 8 digits." })
     }
+
+    @Test
+    fun `change the reputation address of an user`() {
+        val user = anyUser().withReputation(8).build()
+
+        val violations = validator.validate(user)
+
+        assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `change the operations of an user`() {
+        val user = anyUser().withOperations(13).build()
+
+        val violations = validator.validate(user)
+
+        assertTrue(violations.isEmpty())
+    }
+
 }
