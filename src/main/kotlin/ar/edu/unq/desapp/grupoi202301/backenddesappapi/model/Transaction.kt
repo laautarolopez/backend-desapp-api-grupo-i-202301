@@ -48,6 +48,7 @@ class Transaction {
     @NotNull(message = "The numbers of operations cannot be null.")
     //@Min(value = 0, message = "The number must be equal to or greater than 0")
     var numberOperations: Int? = null
+    // TODO: comprobar y validar anotacion @Min
 
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0")
@@ -56,8 +57,9 @@ class Transaction {
 
     @Column(nullable = false)
     @NotNull(message = "The shipping address cannot be null.")
+    @Size(min = 8, max = 22, message = "The shipping address must be 8 or 22 digits long.")
     var shippingAddress: String? = null
-    //verificar bien cantidad de digitos
+    // TODO: verificar e implementar bien la cantidad de digitos segun actionTransaction
 
     @Column(nullable = false)
     @NotNull(message = "The action cannot be null.")
