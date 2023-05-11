@@ -6,8 +6,7 @@ class TradeBuilder {
     var crypto: Crypto? = null
     var quantity: Double? = null
     var amountARS: Double? = null
-    var userName: String? = null
-    var userLastName: String? = null
+    var user: User? = null
     var operation: OperationType? = null
 
     fun build(): Trade {
@@ -15,8 +14,7 @@ class TradeBuilder {
         trade.crypto = this.crypto
         trade.quantity = this.quantity
         trade.amountARS = this.amountARS
-        trade.userName = this.userName
-        trade.userLastName = this.userLastName
+        trade.user = this.user
         trade.operation = this.operation
         return trade
     }
@@ -36,13 +34,8 @@ class TradeBuilder {
         return this
     }
 
-    fun withUserName(userName: String?): TradeBuilder {
-        this.userName = userName
-        return this
-    }
-
-    fun withUserLastName(userLastName: String?): TradeBuilder {
-        this.userLastName = userLastName
+    fun withUser(user: User?): TradeBuilder {
+        this.user = user
         return this
     }
 
