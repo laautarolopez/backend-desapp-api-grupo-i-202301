@@ -37,8 +37,6 @@ class TransactionTest {
             .withQuotationCrypto(15.4)
             .withAmountOperation(200.4)
             .withUser(anyUser)
-            .withUserName("Jorge")
-            .withUserLastName("Sanchez")
             .withNumberOperations(5)
             .withReputation(7)
             .withShippingAddress("1234567890123456789012")
@@ -152,7 +150,18 @@ class TransactionTest {
 
     @Test
     fun `change the user name of a transaction`() {
-        val transaction = anyTransaction().withUserName("Nicolas").build()
+        val otherUser: User =
+            UserBuilder()
+                .withName("Matheo")
+                .withLastName("Gomez")
+                .withEmail("matheogomez@gmail.com")
+                .withAddress("calle falsa 321")
+                .withPassword("Password@4321")
+                .withCVU("4321567890123456789012")
+                .withWalletAddress("56781234")
+                .build()
+
+        val transaction = anyTransaction().withUser(otherUser).build()
 
         val violations = validator.validate(transaction)
 
@@ -161,69 +170,11 @@ class TransactionTest {
 
     @Test
     fun `a violation occurs when changing the name of a user in a transaction to null`() {
-        val transaction = anyTransaction().withUserName(null).build()
+        val transaction = anyTransaction().withUser(null).build()
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The username cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user with less than 3 characters`() {
-        val transaction = anyTransaction().withUserName("jo").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user with more than 30 characters`() {
-        val transaction = anyTransaction().withUserName("Juan Alberto Ramon Luis Gerardo").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `change the user lastname of a transaction`() {
-        val transaction = anyTransaction().withUserLastName("Gimenez").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user in a transaction to null`() {
-        val transaction = anyTransaction().withUserLastName(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The user lastname cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user with less than 3 characters`() {
-        val transaction = anyTransaction().withUserLastName("as").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The last name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user with more than 30 characters`() {
-        val transaction = anyTransaction().withUserLastName("Taboada Gomez Lopez Perez Gimenez").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The last name must be between 3 and 30 characters long." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The user cannot be null." })
     }
 
     @Test
