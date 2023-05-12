@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.FetchType
-import jakarta.persistence.OneToMany
+import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
 
 class Intention {
