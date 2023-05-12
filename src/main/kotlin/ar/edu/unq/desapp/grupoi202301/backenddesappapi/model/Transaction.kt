@@ -36,7 +36,7 @@ class Transaction {
 
     @Column(nullable = false)
     @NotNull(message = "The numbers of operations cannot be null.")
-    //@Min(value = 0, message = "The number must be equal to or greater than 0")
+    @Min(value = 0, message = "The number must be equal to or greater than 0")
     var numberOperations: Int? = null
     // TODO: comprobar y validar anotacion @Min
 
@@ -44,6 +44,10 @@ class Transaction {
     @Min(value = 0, message = "The number must be equal to or greater than 0")
     @NotNull(message = "The reputation cannot be null.")
     var reputation: Int? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "The trade cannot be null.")
+    var trade: Trade? = null
 
     @Column(nullable = false)
     @NotNull(message = "The shipping address cannot be null.")
