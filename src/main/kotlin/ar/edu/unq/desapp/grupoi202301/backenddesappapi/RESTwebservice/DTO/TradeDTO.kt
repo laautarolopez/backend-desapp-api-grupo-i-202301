@@ -28,7 +28,7 @@ class TradeDTO(
         fun fromModel(trade: Trade) =
             TradeDTO(
                 id = trade.id,
-                crypto = CryptoDTO(trade.crypto!!.id, trade.crypto!!.name, trade.crypto!!.price),
+                crypto = CryptoDTO(trade.crypto!!.id, trade.crypto!!.name, trade.crypto!!.time, trade.crypto!!.price),
                 quantity = trade.quantity,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
