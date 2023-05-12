@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.ActionTransaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 
 class TransactionBuilder {
     var crypto: CryptoName? = null
@@ -13,6 +10,7 @@ class TransactionBuilder {
     var user: User? = null
     var numberOperations: Int? = null
     var reputation: Int? = null
+    var trade: Trade? =  null
     var shippingAddress: String? = null
     var action: ActionTransaction? = null
 
@@ -25,6 +23,7 @@ class TransactionBuilder {
         transaction.user = this.user
         transaction.numberOperations = this.numberOperations
         transaction.reputation = this.reputation
+        transaction.trade = this.trade
         transaction.shippingAddress = this.shippingAddress
         transaction.action = this.action
         return transaction
@@ -62,6 +61,11 @@ class TransactionBuilder {
 
     fun withReputation(reputation: Int?): TransactionBuilder {
         this.reputation = reputation
+        return this
+    }
+
+    fun withTrade(trade: Trade?): TransactionBuilder {
+        this.trade = trade
         return this
     }
 
