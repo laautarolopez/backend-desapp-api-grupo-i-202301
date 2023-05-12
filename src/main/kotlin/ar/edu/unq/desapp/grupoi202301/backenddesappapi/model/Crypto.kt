@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
-import jakarta.persistence.Column
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
 import org.springframework.format.annotation.DateTimeFormat
