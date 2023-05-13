@@ -6,12 +6,12 @@ import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 
+@Entity(name = "transactions")
 class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "The crypto cannot be null.")
     var crypto: CryptoName? = null
 
