@@ -213,7 +213,7 @@ class TransactionTest {
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0" })
     }
 
     @Test
@@ -240,7 +240,7 @@ class TransactionTest {
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0" })
     }
 
     @Test
