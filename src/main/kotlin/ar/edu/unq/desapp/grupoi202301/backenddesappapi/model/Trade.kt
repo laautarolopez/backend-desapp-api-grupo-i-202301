@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import java.time.LocalDateTime
+@Entity(name = "trades")
 class Trade {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,8 +25,7 @@ class Trade {
     @DecimalMin(value = "0.0", message = "The amount cannot be negative.")
     var amountARS: Double? = null
 
-    @JoinColumn
-    @Column(nullable = false)
+    @ManyToOne
     @NotNull(message = "The user cannot be null.")
     var user: User? = null
 
