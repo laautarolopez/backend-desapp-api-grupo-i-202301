@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
+@Entity(name = "CryptosVolume")
 class CryptoVolume {
 
     @Id
