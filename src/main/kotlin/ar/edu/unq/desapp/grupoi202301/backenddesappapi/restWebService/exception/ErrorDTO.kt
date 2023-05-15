@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.exception
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception
 
 import jakarta.validation.ConstraintViolation
 

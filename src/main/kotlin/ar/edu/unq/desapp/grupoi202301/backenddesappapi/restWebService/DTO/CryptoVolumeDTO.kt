@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.DTO
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoOperated
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoVolume

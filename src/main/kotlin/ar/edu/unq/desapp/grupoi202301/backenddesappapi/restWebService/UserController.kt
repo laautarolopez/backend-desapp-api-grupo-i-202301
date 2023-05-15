@@ -1,7 +1,7 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.DTO.UserCreateDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.exception.ErrorResponseDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserCreateDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import io.swagger.v3.oas.annotations.Operation

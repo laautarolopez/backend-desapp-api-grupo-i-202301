@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi.RESTwebservice.security
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
