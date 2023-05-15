@@ -6,6 +6,7 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import jakarta.validation.Validator
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 
@@ -264,6 +265,15 @@ class UserTest {
     }
 
     @Test
+    fun `a violation occurs when the reputation in a user is changed to a negative`() {
+        val user = anyUser().withReputation(-1).build()
+
+        val violations = validator.validate(user)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
+    }
+
+    @Test
     fun `change the operations of an user`() {
         val user = anyUser().withOperations(13).build()
 
@@ -272,4 +282,12 @@ class UserTest {
         assertTrue(violations.isEmpty())
     }
 
+    @Test
+    fun `a violation occurs when the operations in a user is changed to a negative`() {
+        val user = anyUser().withOperations(-1).build()
+
+        val violations = validator.validate(user)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
+    }
 }
