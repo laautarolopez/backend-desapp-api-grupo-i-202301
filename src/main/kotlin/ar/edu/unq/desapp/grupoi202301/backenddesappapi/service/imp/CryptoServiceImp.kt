@@ -17,4 +17,8 @@ class CryptoServiceImp(
     override fun create(crypto: Crypto): Crypto {
         return cryptoPersistence.save(crypto)
     }
+
+    override fun getPrice(idCrypto: Long): Double {
+        return 1.0
+    }
 }

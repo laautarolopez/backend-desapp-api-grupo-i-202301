@@ -6,4 +6,6 @@ import jakarta.validation.Valid
 interface CryptoService {
 
     fun create(@Valid crypto: Crypto): Crypto
+
+    fun getPrice(cryptoId: Long): Double
 }
