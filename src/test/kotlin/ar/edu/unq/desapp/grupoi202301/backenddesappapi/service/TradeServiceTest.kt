@@ -1,31 +1,40 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.CryptoServiceImp
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.TradeServiceImp
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.UserServiceImp
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
 @SpringBootTest
+@TestInstance(PER_CLASS)
 class TradeServiceTest {
     @Autowired
-    lateinit var tradeService: TradeServiceImp
+    lateinit var tradeService: TradeService
     @Autowired
-    lateinit var cryptoService: CryptoServiceImp
+    lateinit var cryptoService: CryptoService
     @Autowired
-    lateinit var userService: UserServiceImp
+    lateinit var userService: UserService
 
     var sale : OperationType = OperationType.SALE
     var buy : OperationType = OperationType.BUY
+
+    val anyCrypto: Crypto =
+        CryptoBuilder()
+            .withName(CryptoName.BTCUSDT)
+            .withTime(LocalDateTime.now())
+            .withPrice(300.50)
+            .build()
 
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
@@ -49,11 +58,17 @@ class TradeServiceTest {
 
     fun anyTrade(): TradeBuilder {
         return TradeBuilder()
-            .withCrypto(anyCrypto().build())
+            .withCrypto(anyCrypto)
             .withQuantity(200.50)
             .withAmountARS(150.8)
             .withUser(anyUser)
             .withOperation(sale)
+    }
+
+    @BeforeAll
+    fun setup() {
+        cryptoService.create(anyCrypto)
+        userService.create(anyUser)
     }
 
     @Test
@@ -68,6 +83,7 @@ class TradeServiceTest {
     @Test
     fun `change the crypto of a trade`() {
         val anyCrypto = anyCrypto().withPrice(10.0).build()
+        cryptoService.create(anyCrypto)
 
         val tradeRequested = anyTrade().withCrypto(anyCrypto).build()
 
@@ -166,6 +182,7 @@ class TradeServiceTest {
                 .withCVU("4321567890123456781112")
                 .withWalletAddress("87651234")
                 .build()
+        userService.create(otherUser)
 
         val tradeRequested = anyTrade().withUser(otherUser).build()
 
