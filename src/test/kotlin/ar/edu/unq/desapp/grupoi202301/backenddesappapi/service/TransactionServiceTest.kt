@@ -5,17 +5,26 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuild
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.TransactionServiceImp
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
 @SpringBootTest
+@TestInstance(PER_CLASS)
 class TransactionServiceTest {
     @Autowired
-    lateinit var transactionService: TransactionServiceImp
+    lateinit var transactionService: TransactionService
+    @Autowired
+    lateinit var cryptoService: CryptoService
+    @Autowired
+    lateinit var userService: UserService
+    @Autowired
+    lateinit var tradeService: TradeService
 
     var aaveusdt: CryptoName = CryptoName.AAVEUSDT
     var trxusdt: CryptoName = CryptoName.TRXUSDT
@@ -34,6 +43,14 @@ class TransactionServiceTest {
             .withWalletAddress("12345678")
             .build()
 
+    val anyCrypto: Crypto =
+        CryptoBuilder()
+            .withName(CryptoName.BTCUSDT)
+            .withTime(LocalDateTime.now())
+            .withPrice(300.50)
+            .build()
+
+
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
@@ -43,7 +60,7 @@ class TransactionServiceTest {
 
     val anyTrade: Trade =
         TradeBuilder()
-            .withCrypto(anyCrypto().build())
+            .withCrypto(anyCrypto)
             .withQuantity(200.50)
             .withAmountARS(150.8)
             .withUser(anyUser)
@@ -61,6 +78,13 @@ class TransactionServiceTest {
             .withTrade(anyTrade)
             .withShippingAddress("1234567890123456789012")
             .withAction(confirm)
+    }
+
+    @BeforeAll
+    fun setup() {
+        cryptoService.create(anyCrypto)
+        userService.create(anyUser)
+        tradeService.create(anyTrade)
     }
 
     @Test
@@ -213,6 +237,8 @@ class TransactionServiceTest {
                 .withReputation(6)
                 .withOperations(2)
                 .build()
+        userService.create(otherUser)
+
 
         val transactionRequested = anyTransaction().withUser(otherUser).build()
 
@@ -318,11 +344,12 @@ class TransactionServiceTest {
     fun `change the trade of a transaction`() {
         val otherTrade: Trade =
             TradeBuilder()
-                .withCrypto(anyCrypto().build())
+                .withCrypto(anyCrypto)
                 .withQuantity(150.0)
                 .withAmountARS(180.0)
                 .withUser(anyUser)
                 .withOperation(sale).build()
+        tradeService.create(otherTrade)
 
         val transactionRequested = anyTransaction().withTrade(otherTrade).build()
 
