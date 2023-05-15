@@ -13,15 +13,10 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @Transactional
 class TradeServiceImp(
-    private val tradePersistence: TradePersistence,
-    private val cryptoService: CryptoService,
-    private val userService: UserService,
+    private val tradePersistence: TradePersistence
     ) : TradeService {
 
     override fun create(trade: Trade): Trade {
-        cryptoService.create(trade.crypto!!)
-        userService.create(trade.user!!)
         return tradePersistence.save(trade)
-        // TODO: Eliminar persistencia de Crypto y Usuario
     }
 }
