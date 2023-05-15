@@ -23,7 +23,6 @@ class TransactionTest {
     var make : ActionTransaction = ActionTransaction.MAKE
     var sale : OperationType = OperationType.SALE
 
-
     val anyUser: User =
                 UserBuilder()
                 .withName("Jorge")
@@ -80,9 +79,9 @@ class TransactionTest {
 
     @Test
     fun `a violation occurs when change the cryptoname of a transaction for null`() {
-        val crypto = anyTransaction().withCrypto(null).build()
+        val transaction = anyTransaction().withCrypto(null).build()
 
-        val violations = validator.validate(crypto)
+        val violations = validator.validate(transaction)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The crypto cannot be null." })
     }
@@ -98,9 +97,9 @@ class TransactionTest {
 
     @Test
     fun `a violation occurs when change the quantity of a transaction to negative`() {
-        val trade = anyTransaction().withQuantity(-20.0).build()
+        val transaction = anyTransaction().withQuantity(-20.0).build()
 
-        val violations = validator.validate(trade)
+        val violations = validator.validate(transaction)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be negative." })
     }
@@ -125,9 +124,9 @@ class TransactionTest {
 
     @Test
     fun `a violation occurs when change the quotation crypto of a transaction to negative`() {
-        val trade = anyTransaction().withQuotationCrypto(-30.0).build()
+        val transaction = anyTransaction().withQuotationCrypto(-30.0).build()
 
-        val violations = validator.validate(trade)
+        val violations = validator.validate(transaction)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The quotation crypto cannot be negative." })
     }
@@ -152,9 +151,9 @@ class TransactionTest {
 
     @Test
     fun `a violation occurs when change the amount operation of a transaction to negative`() {
-        val trade = anyTransaction().withAmountOperation(-15.00).build()
+        val transaction = anyTransaction().withAmountOperation(-15.00).build()
 
-        val violations = validator.validate(trade)
+        val violations = validator.validate(transaction)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The amount of operation cannot be negative." })
     }
@@ -213,7 +212,7 @@ class TransactionTest {
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0" })
+        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
     }
 
     @Test
@@ -240,7 +239,7 @@ class TransactionTest {
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0" })
+        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
     }
 
     @Test
