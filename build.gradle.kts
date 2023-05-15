@@ -33,6 +33,8 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+	implementation("com.squareup.retrofit2:retrofit:2.3.0")
+	implementation("com.squareup.retrofit2:converter-gson:2.3.0")
 }
 
 tasks.withType<KotlinCompile> {
