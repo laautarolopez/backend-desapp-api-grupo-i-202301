@@ -14,15 +14,10 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @Transactional
 class TransactionServiceImp(
-    private val transactionPersistence: TransactionPersistence,
-    private val userService: UserService,
-    private val tradeService: TradeService,
+    private val transactionPersistence: TransactionPersistence
     ) : TransactionService {
 
     override fun create(transaction: Transaction): Transaction {
-        userService.create(transaction.user!!)
-        tradeService.create(transaction.trade!!)
         return transactionPersistence.save(transaction)
-        // TODO: Eliminar persistencia de Usuario y Trade
     }
 }
