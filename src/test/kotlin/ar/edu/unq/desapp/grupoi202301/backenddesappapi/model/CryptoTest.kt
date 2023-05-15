@@ -14,8 +14,8 @@ class CryptoTest {
     @Autowired
     lateinit var validator: Validator
 
-    var btcusdt : CryptoName = CryptoName.BTCUSDT
-    var aaveusdt : CryptoName = CryptoName.AAVEUSDT
+    val btcusdt : CryptoName = CryptoName.BTCUSDT
+    val aaveusdt : CryptoName = CryptoName.AAVEUSDT
 
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
