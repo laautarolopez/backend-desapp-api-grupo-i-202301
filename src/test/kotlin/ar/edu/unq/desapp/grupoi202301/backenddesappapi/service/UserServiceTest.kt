@@ -21,6 +21,8 @@ class UserServiceTest {
             .withPassword("Password@1234")
             .withCVU("1234567890123456789012")
             .withWalletAddress("12345678")
+            .withReputation(5)
+            .withOperations(15)
     }
 
     @Test
@@ -297,6 +299,48 @@ class UserServiceTest {
             fail("An exception must be throw.")
         } catch (e: RuntimeException) {
             assertEquals("create.user.walletAddress: The wallet address must have 8 digits.", e.message)
+        }
+    }
+
+    @Test
+    fun `change the reputation of an user`() {
+        val userRequested = anyUser().withReputation(10).build()
+
+        val user = userService.create(userRequested)
+
+        assertTrue(user.id != null)
+    }
+
+    @Test
+    fun `a violation occurs when the reputation in a user is changed to a negative`() {
+        val user = anyUser().withReputation(-1).build()
+
+        try {
+            userService.create(user)
+            fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            assertEquals("create.user.reputation: The number must be equal to or greater than 0.", e.message)
+        }
+    }
+
+    @Test
+    fun `change the operations of an user`() {
+        val userRequested = anyUser().withOperations(20).build()
+
+        val user = userService.create(userRequested)
+
+        assertTrue(user.id != null)
+    }
+
+    @Test
+    fun `a violation occurs when the operations in a user is changed to a negative`() {
+        val user = anyUser().withReputation(-10).build()
+
+        try {
+            userService.create(user)
+            fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            assertEquals("create.user.reputation: The number must be equal to or greater than 0.", e.message)
         }
     }
 }
