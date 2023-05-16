@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
@@ -18,7 +20,7 @@ class CryptoServiceImp(
         return cryptoPersistence.save(crypto)
     }
 
-    override fun getPrice(idCrypto: Long): Double {
-        return 1.0
+    override fun getPrice(cryptoName: CryptoName): Double {
+        return BinanceResponse().getPrice(cryptoName)
     }
 }
