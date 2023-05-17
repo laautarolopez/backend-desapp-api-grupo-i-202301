@@ -18,6 +18,19 @@ class TransactionServiceImp(
     ) : TransactionService {
 
     override fun create(transaction: Transaction): Transaction {
+        validateShippingAddress(transaction)
         return transactionPersistence.save(transaction)
+    }
+
+    fun validateShippingAddress(transaction: Transaction) {
+        if(transaction.trade!!.operation.toString() == "SALE") {
+           if(transaction.shippingAddress!!.length != 22) {
+               throw RuntimeException("The shipping address must contain a CVU with 22 digits.")
+           }
+        } else if(transaction.trade!!.operation.toString() == "BUY") {
+            if(transaction.shippingAddress!!.length != 8) {
+                throw RuntimeException("The shipping address must contain a walletAddress with 8 digits.")
+            }
+        }
     }
 }
