@@ -31,6 +31,7 @@ class TransactionServiceTest {
     var confirm: ActionTransaction = ActionTransaction.CONFIRM
     var make: ActionTransaction = ActionTransaction.MAKE
     var sale: OperationType = OperationType.SALE
+    var buy: OperationType = OperationType.BUY
 
     val anyUser: User =
         UserBuilder()
@@ -50,14 +51,6 @@ class TransactionServiceTest {
             .withPrice(300.50)
             .build()
 
-
-    fun anyCrypto(): CryptoBuilder {
-        return CryptoBuilder()
-            .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
-    }
-
     val anyTrade: Trade =
         TradeBuilder()
             .withCrypto(anyCrypto)
@@ -65,6 +58,14 @@ class TransactionServiceTest {
             .withAmountARS(150.8)
             .withUser(anyUser)
             .withOperation(sale).build()
+
+    val otherTrade: Trade =
+        TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withQuantity(300.0)
+            .withAmountARS(250.0)
+            .withUser(anyUser)
+            .withOperation(buy).build()
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
@@ -85,6 +86,7 @@ class TransactionServiceTest {
         cryptoService.create(anyCrypto)
         userService.create(anyUser)
         tradeService.create(anyTrade)
+        tradeService.create(otherTrade)
     }
 
     @Test
@@ -94,6 +96,30 @@ class TransactionServiceTest {
         val transaction = transactionService.create(anyTransaction)
 
         Assertions.assertTrue(transaction.id != null)
+    }
+
+    @Test
+    fun `a violation occurs when creating a sale transaction with a wrong shipping address`() {
+        val anyTransaction = anyTransaction().withShippingAddress("12345678").build()
+
+        try {
+            transactionService.create(anyTransaction)
+            Assertions.fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            Assertions.assertEquals("The shipping address must contain a CVU with 22 digits.", e.message)
+        }
+    }
+
+    @Test
+    fun `a violation occurs when creating a buy transaction with a wrong shipping address`() {
+        val anyTransaction = anyTransaction().withTrade(otherTrade).build()
+
+        try {
+            transactionService.create(anyTransaction)
+            Assertions.fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            Assertions.assertEquals("The shipping address must contain a walletAddress with 8 digits.", e.message)
+        }
     }
 
     @Test
