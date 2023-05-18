@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
@@ -12,16 +14,43 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Transactional
 @Tag(name = "cryptos")
 @RequestMapping("cryptos")
 class CryptoController(private val cryptoService: CryptoService) {
+
+    @Operation(summary = "Create a crypto")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = Crypto::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @PostMapping("/create")
+    fun create(@RequestBody crypto: CryptoCreateDTO) : ResponseEntity<Crypto> {
+        val crypto = cryptoService.create(crypto.toModel())
+        return ResponseEntity.ok().body(crypto)
+    }
 
     @Operation(summary = "Get price of a crypto")
     @ApiResponses(
