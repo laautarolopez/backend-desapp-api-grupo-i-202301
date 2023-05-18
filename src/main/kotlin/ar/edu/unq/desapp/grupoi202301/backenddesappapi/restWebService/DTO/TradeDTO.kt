@@ -6,7 +6,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.Operatio
 
 class TradeDTO(
     val id: Long?,
-    var crypto: CryptoDTO?,
+    var crypto: CryptoSimpleDTO?,
     var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
@@ -28,7 +28,7 @@ class TradeDTO(
         fun fromModel(trade: Trade) =
             TradeDTO(
                 id = trade.id,
-                crypto = CryptoDTO(trade.crypto!!.id, trade.crypto!!.name, trade.crypto!!.time, trade.crypto!!.price),
+                crypto = CryptoSimpleDTO(trade.crypto!!.name, /*trade.crypto!!.time,*/ trade.crypto!!.price),
                 quantity = trade.quantity,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
@@ -39,8 +39,8 @@ class TradeDTO(
     private fun verifyOperation(operation: String?): OperationType {
         var newOperation: OperationType
         when(operation) {
-            "Buy" -> newOperation = OperationType.BUY
-            "Sale" -> newOperation = OperationType.SALE
+            "BUY" -> newOperation = OperationType.BUY
+            "SALE" -> newOperation = OperationType.SALE
             else -> {
                 throw OperationEmptyException()
             }
