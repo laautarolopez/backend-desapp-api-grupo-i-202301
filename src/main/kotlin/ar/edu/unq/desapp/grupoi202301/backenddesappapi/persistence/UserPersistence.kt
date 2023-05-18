@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserPersistence : JpaRepository<User, Long> {
+
+    override fun findAll(): List<User>
 }
