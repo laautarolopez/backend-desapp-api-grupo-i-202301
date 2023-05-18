@@ -17,4 +17,8 @@ class UserServiceImp(
     override fun create(user: User): User {
         return userPersistence.save(user)
     }
+
+    override fun recoverAll(): List<User> {
+        return userPersistence.findAll()
+    }
 }
