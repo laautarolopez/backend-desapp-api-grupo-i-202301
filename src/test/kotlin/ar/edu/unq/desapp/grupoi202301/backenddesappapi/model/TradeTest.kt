@@ -171,4 +171,13 @@ class TradeTest {
 
         Assertions.assertTrue(violations.any { v -> v.message == "The operation cannot be null." })
     }
+
+    @Test
+    fun `change the isActive of a trade`() {
+        val trade = anyTrade().withIsActive(false).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
 }
