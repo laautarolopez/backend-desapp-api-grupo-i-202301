@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface BinanceService {
     @GET("price")
-    fun getPrice(@Query("symbol") cryptoName: CryptoName): Call<PriceResponse>
+    fun getPrice(@Query("symbol") cryptoName: String): Call<PriceResponse>
 
     companion object {
         fun create(): BinanceService {
