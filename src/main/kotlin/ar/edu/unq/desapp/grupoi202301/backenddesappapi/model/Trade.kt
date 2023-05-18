@@ -35,4 +35,7 @@ class Trade {
 
     @Column(nullable = false)
     var creationDate: LocalDateTime? = LocalDateTime.now()
+
+    @Column(nullable = false)
+    var isActive: Boolean? = true
 }
