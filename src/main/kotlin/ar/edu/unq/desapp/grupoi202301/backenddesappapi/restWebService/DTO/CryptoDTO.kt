@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 class CryptoDTO(
     var id: Long?,
     var name: CryptoName?,
-    //var time: LocalDateTime?,
+    var time: LocalDateTime?,
     var price: Double? = null
 ) {
 
@@ -15,7 +15,7 @@ class CryptoDTO(
         val crypto = Crypto()
         crypto.id = this.id
         crypto.name = this.name
-        //crypto.time = this.time
+        crypto.time = this.time
         crypto.price = this.price
         return crypto
     }
@@ -25,7 +25,7 @@ class CryptoDTO(
             CryptoDTO(
                 id = crypto.id,
                 name = crypto.name,
-                //time = crypto.time,
+                time = crypto.time,
                 price = crypto.price,
             )
     }
