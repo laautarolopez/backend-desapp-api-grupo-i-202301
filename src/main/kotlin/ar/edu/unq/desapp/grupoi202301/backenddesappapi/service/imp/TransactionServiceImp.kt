@@ -19,6 +19,7 @@ class TransactionServiceImp(
 
     override fun create(transaction: Transaction): Transaction {
         validateShippingAddress(transaction)
+        //validateAction(transaction)
         return transactionPersistence.save(transaction)
     }
 
@@ -33,4 +34,8 @@ class TransactionServiceImp(
             }
         }
     }
+
+//    fun validateAction(transaction: Transaction) {
+//
+//    }
 }
