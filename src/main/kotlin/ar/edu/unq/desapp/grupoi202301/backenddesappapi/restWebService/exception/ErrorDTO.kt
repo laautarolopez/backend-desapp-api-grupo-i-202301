@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import jakarta.validation.ConstraintViolation
 
 data class ErrorDTO(
@@ -18,3 +19,7 @@ data class ErrorDTO(
 }
 
 data class ErrorResponseDTO(val errors: List<ErrorDTO>)
+
+data class ErrorBinanceResponse(val cryptoName: String, val msg: String)
+
+data class ErrorBinanceServer(val msg: String)
