@@ -52,9 +52,9 @@ class Transaction {
     @NotNull(message = "The shipping address cannot be null.")
     @Size(min = 8, max = 22, message = "The shipping address must be 8 or 22 digits long.")
     var shippingAddress: String? = null
-    // TODO: verificar e implementar bien la cantidad de digitos segun actionTransaction
 
     @Column(nullable = false)
     @NotNull(message = "The action cannot be null.")
     var action: ActionTransaction? = null
+    // TODO: validar tipo de operacion
 }
