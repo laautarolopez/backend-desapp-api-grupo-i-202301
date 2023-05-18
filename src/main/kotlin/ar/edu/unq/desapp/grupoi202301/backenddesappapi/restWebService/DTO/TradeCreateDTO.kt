@@ -5,7 +5,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.OperationEmptyException
 
 class TradeCreateDTO(
-    var crypto: CryptoDTO?,
+    var crypto: CryptoSimpleDTO?,
     var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
@@ -25,9 +25,9 @@ class TradeCreateDTO(
     companion object {
         fun fromModel(trade: Trade) =
             TradeCreateDTO(
-                crypto = CryptoDTO(
+                crypto = CryptoSimpleDTO(
                     trade.crypto!!.id,
-                    trade.crypto!!.name, /*trade.crypto!!.time,*/
+                    trade.crypto!!.name,
                     trade.crypto!!.price
                 ),
                 quantity = trade.quantity,
