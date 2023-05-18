@@ -31,7 +31,7 @@ class TradeController(private val tradeService: TradeService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = Trade::class)
+                        schema = Schema(implementation = TradeDTO::class)
                     )
                 ]
             ),
