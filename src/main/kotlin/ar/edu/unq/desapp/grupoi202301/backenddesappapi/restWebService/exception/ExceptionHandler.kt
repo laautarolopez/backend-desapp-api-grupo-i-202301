@@ -29,4 +29,18 @@ class ExceptionHandler {
         val body = ErrorResponseDTO(errors)
         return ResponseEntity.badRequest().body(body)
     }
+
+    @ExceptionHandler(BinanceResponseException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleBinanceResponseException(ex: BinanceResponseException): ResponseEntity<*> {
+        val body = ErrorBinanceResponse(ex.cryptoName, ex.newMessage)
+        return ResponseEntity.badRequest().body(body)
+    }
+
+    @ExceptionHandler(BinanceServerException::class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    fun handleBinanceServerException(ex: BinanceServerException): ResponseEntity<*> {
+        val body = ErrorBinanceServer(ex.newMessage)
+        return ResponseEntity.internalServerError().body(body)
+    }
 }
