@@ -6,4 +6,6 @@ import jakarta.validation.Valid
 interface UserService {
 
     fun create(@Valid user: User): User
+
+    fun recoverAll(): List<User>
 }
