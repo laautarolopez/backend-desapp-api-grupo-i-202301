@@ -51,13 +51,8 @@ class TransactionTest {
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withCrypto(aaveusdt)
-            .withQuantity(300.10)
             .withQuotationCrypto(15.4)
             .withAmountOperation(200.4)
-            .withUser(anyUser)
-            .withNumberOperations(5)
-            .withReputation(7)
             .withTrade(anyTrade)
             .withShippingAddress("1234567890123456789012")
             .withAction(confirm)
@@ -66,51 +61,6 @@ class TransactionTest {
     @Test
     fun `a transaction is successfully created when it has correct data`() {
         assertDoesNotThrow { anyTransaction().build() }
-    }
-
-    @Test
-    fun `change the cryptoname of a transaction`() {
-        val transaction = anyTransaction().withCrypto(trxusdt).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when change the cryptoname of a transaction for null`() {
-        val transaction = anyTransaction().withCrypto(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The crypto cannot be null." })
-    }
-
-    @Test
-    fun `change the quantity of a transaction`() {
-        val transaction = anyTransaction().withQuantity(250.06).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when change the quantity of a transaction to negative`() {
-        val transaction = anyTransaction().withQuantity(-20.0).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be negative." })
-    }
-
-    @Test
-    fun `a violation occurs when change the quantity of a transaction for null`() {
-        val transaction = anyTransaction().withQuantity(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be null." })
     }
 
     @Test
@@ -166,89 +116,6 @@ class TransactionTest {
         val violations = validator.validate(transaction)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The amount of operation cannot be null." })
-    }
-
-    @Test
-    fun `change the user of a transaction`() {
-        val otherUser: User =
-            UserBuilder()
-                .withName("Matheo")
-                .withLastName("Gomez")
-                .withEmail("matheogomez@gmail.com")
-                .withAddress("calle falsa 321")
-                .withPassword("Password@4321")
-                .withCVU("4321567890123456789012")
-                .withWalletAddress("56781234")
-                .build()
-
-        val transaction = anyTransaction().withUser(otherUser).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the user in a transaction to null`() {
-        val transaction = anyTransaction().withUser(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The user cannot be null." })
-    }
-
-    @Test
-    fun `change the number operations of a transaction`() {
-        val transaction = anyTransaction().withNumberOperations(25).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when the number of operations in a transaction is changed to a negative`() {
-        val transaction = anyTransaction().withNumberOperations(-1).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the number of operations in a transaction to null`() {
-        val transaction = anyTransaction().withNumberOperations(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The numbers of operations cannot be null." })
-    }
-
-    @Test
-    fun `change the reputation of a transaction`() {
-        val transaction = anyTransaction().withReputation(3).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when the reputation in a transaction is changed to a negative`() {
-        val transaction = anyTransaction().withReputation(-5).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the reputation in a transaction to null`() {
-        val transaction = anyTransaction().withReputation(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The reputation cannot be null." })
     }
 
     @Test
