@@ -8,6 +8,7 @@ class TradeBuilder {
     var amountARS: Double? = null
     var user: User? = null
     var operation: OperationType? = null
+    var isActive: Boolean? = null
 
     fun build(): Trade {
         var trade = Trade()
@@ -41,6 +42,11 @@ class TradeBuilder {
 
     fun withOperation(operation: OperationType?): TradeBuilder {
         this.operation = operation
+        return this
+    }
+
+    fun withIsActive(bool: Boolean?): TradeBuilder {
+        this.isActive = bool
         return this
     }
 }
