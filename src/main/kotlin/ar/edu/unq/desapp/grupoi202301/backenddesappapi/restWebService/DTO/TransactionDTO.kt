@@ -10,7 +10,7 @@ class TransactionDTO(
     var quantity: Double?,
     var quotationCrypto: Double?,
     var amountOperation: Double?,
-    var user: UserDTO?,
+    var user: UserSimpleDTO?,
     var numberOperations: Int?,
     var reputation: Int?,
     var shippingAddress: String?,
@@ -20,13 +20,13 @@ class TransactionDTO(
     fun toModel(): Transaction {
         val transaction = Transaction()
         transaction.id = this.id
-        transaction.crypto = this.verifyCrypto(this.crypto)
-        transaction.quantity = this.quantity
+        transaction.trade!!.crypto!!.name = this.verifyCrypto(this.crypto)
+        transaction.trade!!.quantity = this.quantity
         transaction.quotationCrypto = this.quotationCrypto
         transaction.amountOperation = this.amountOperation
-        transaction.user = this.user!!.toModel()
-        transaction.numberOperations = this.numberOperations
-        transaction.reputation = this.reputation
+        transaction.trade!!.user = this.user!!.toModel()
+        transaction.trade!!.user!!.operations = this.numberOperations
+        transaction.trade!!.user!!.reputation = this.reputation
         transaction.shippingAddress = this.shippingAddress
         transaction.action = this.verifyAction(this.action)
         return transaction
@@ -36,13 +36,13 @@ class TransactionDTO(
         fun fromModel(transaction: Transaction) =
             TransactionDTO(
                 id = transaction.id,
-                crypto = transaction.crypto.toString(),
-                quantity = transaction.quantity,
+                crypto = transaction.trade!!.crypto.toString(),
+                quantity = transaction.trade!!.quantity,
                 quotationCrypto = transaction.quotationCrypto,
                 amountOperation = transaction.amountOperation,
-                user = UserDTO(transaction.user!!.id, transaction.user!!.name, transaction.user!!.lastName, transaction.user!!.email, transaction.user!!.address, transaction.user!!.password, transaction.user!!.cvuMercadoPago, transaction.user!!.walletAddress),
-                numberOperations =  transaction.numberOperations,
-                reputation = transaction.reputation,
+                user = UserSimpleDTO(transaction.trade!!.user!!.id, transaction.trade!!.user!!.name, transaction.trade!!.user!!.lastName),
+                numberOperations =  transaction.trade!!.user!!.operations,
+                reputation = transaction.trade!!.user!!.reputation,
                 shippingAddress = transaction.shippingAddress,
                 action = transaction.action.toString()
             )
