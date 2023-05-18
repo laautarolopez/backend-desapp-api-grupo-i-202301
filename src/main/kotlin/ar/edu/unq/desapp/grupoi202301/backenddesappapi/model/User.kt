@@ -49,11 +49,11 @@ class User {
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0.")
     @NotNull(message = "The reputation cannot be null.")
-    // TODO: comprobar y validar anotacion @Min
     var reputation: Int? = 0
+    // TODO: agregar operacion para calcular reputacion
 
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0.")
-    // TODO: comprobar y validar anotacion @Min
+
     var operations: Int? = 0
 }
