@@ -69,13 +69,8 @@ class TransactionServiceTest {
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withCrypto(aaveusdt)
-            .withQuantity(300.10)
             .withQuotationCrypto(15.4)
             .withAmountOperation(200.4)
-            .withUser(anyUser)
-            .withNumberOperations(5)
-            .withReputation(7)
             .withTrade(anyTrade)
             .withShippingAddress("1234567890123456789012")
             .withAction(confirm)
@@ -119,60 +114,6 @@ class TransactionServiceTest {
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
             Assertions.assertEquals("The shipping address must contain a walletAddress with 8 digits.", e.message)
-        }
-    }
-
-    @Test
-    fun `change the cryptoname of a transaction`() {
-        val transactionRequested = anyTransaction().withCrypto(trxusdt).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when change the cryptoname of a transaction for null`() {
-        val transactionRequested = anyTransaction().withCrypto(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.transaction.crypto: The crypto cannot be null.", e.message)
-        }
-    }
-
-    @Test
-    fun `change the quantity of a transaction`() {
-        val transactionRequested = anyTransaction().withQuantity(250.06).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when change the quantity of a transaction to negative`() {
-        val transactionRequested = anyTransaction().withQuantity(-20.0).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.transaction.quantity: The quantity cannot be negative.", e.message)
-        }
-    }
-
-    @Test
-    fun `a violation occurs when change the quantity of a transaction for null`() {
-        val transactionRequested = anyTransaction().withQuantity(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.transaction.quantity: The quantity cannot be null.", e.message)
         }
     }
 
@@ -244,123 +185,6 @@ class TransactionServiceTest {
         } catch (e: RuntimeException) {
             Assertions.assertEquals(
                 "create.transaction.amountOperation: The amount of operation cannot be null.",
-                e.message
-            )
-        }
-    }
-
-    @Test
-    fun `change the user of a transaction`() {
-        val otherUser: User =
-            UserBuilder()
-                .withName("Matheo")
-                .withLastName("Gomez")
-                .withEmail("matheogomez@gmail.com")
-                .withAddress("calle falsa 321")
-                .withPassword("Password@4321")
-                .withCVU("4321567890123456789012")
-                .withWalletAddress("56781234")
-                .withReputation(6)
-                .withOperations(2)
-                .build()
-        userService.create(otherUser)
-
-
-        val transactionRequested = anyTransaction().withUser(otherUser).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when changing the user in a transaction to null`() {
-        val transactionRequested = anyTransaction().withUser(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.user: The user cannot be null.",
-                e.message
-            )
-        }
-    }
-
-    @Test
-    fun `change the number operations of a transaction`() {
-        val transactionRequested = anyTransaction().withNumberOperations(25).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when the number of operations in a transaction is changed to a negative`() {
-        val transactionRequested = anyTransaction().withNumberOperations(-1).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.numberOperations: The number must be equal to or greater than 0.",
-                e.message
-            )
-        }
-    }
-
-    @Test
-    fun `a violation occurs when changing the number of operations in a transaction to null`() {
-        val transactionRequested = anyTransaction().withNumberOperations(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.numberOperations: The numbers of operations cannot be null.",
-                e.message
-            )
-        }
-    }
-
-    @Test
-    fun `change the reputation of a transaction`() {
-        val transactionRequested = anyTransaction().withReputation(3).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when the reputation in a transaction is changed to a negative`() {
-        val transactionRequested = anyTransaction().withReputation(-5).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.reputation: The number must be equal to or greater than 0.",
-                e.message
-            )
-        }
-    }
-
-    @Test
-    fun `a violation occurs when changing the reputation in a transaction to null`() {
-        val transactionRequested = anyTransaction().withReputation(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.reputation: The reputation cannot be null.",
                 e.message
             )
         }
