@@ -53,7 +53,7 @@ class UserController(private val userService: UserService) {
         return ResponseEntity.ok().body(user)
     }
 
-    @Operation(summary = "Get prices of cryptos")
+    @Operation(summary = "Get users")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -77,7 +77,7 @@ class UserController(private val userService: UserService) {
             )
         ]
     )
-    @GetMapping("/")
+    @GetMapping()
     fun getAll(): ResponseEntity<List<UserResponseDTO>> {
         val users = userService.recoverAll().map { user -> UserResponseDTO.fromModel(user) }
         return ResponseEntity.ok().body(users)
