@@ -27,4 +27,8 @@ class CryptoServiceImp(
     override fun getPrices(): List<PriceResponse> {
         return BinanceResponse().getPrices()
     }
+
+    override fun clear() {
+        cryptoPersistence.deleteAll()
+    }
 }

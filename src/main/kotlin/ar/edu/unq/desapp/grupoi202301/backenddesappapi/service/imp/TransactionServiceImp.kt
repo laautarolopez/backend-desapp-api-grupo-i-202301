@@ -23,6 +23,10 @@ class TransactionServiceImp(
         return transactionPersistence.save(transaction)
     }
 
+    override fun clear() {
+        transactionPersistence.deleteAll()
+    }
+
     fun validateShippingAddress(transaction: Transaction) {
         if(transaction.trade!!.operation.toString() == "SALE") {
            if(transaction.shippingAddress!!.length != 22) {

@@ -21,4 +21,8 @@ class UserServiceImp(
     override fun recoverAll(): List<User> {
         return userPersistence.findAll()
     }
+
+    override fun clear() {
+        userPersistence.deleteAll()
+    }
 }

@@ -36,4 +36,8 @@ class TradeServiceImp(
         }
         return tradesActives
     }
+
+    override fun clear() {
+        tradePersistence.deleteAll()
+    }
 }
