@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
@@ -61,6 +58,45 @@ class TradeServiceTest {
             .withCrypto(anyCrypto)
             .withQuantity(200.50)
             .withAmountARS(150.8)
+            .withUser(anyUser)
+            .withOperation(sale)
+            .withIsActive(true)
+    }
+
+    fun otherTrade1(): TradeBuilder {
+        return TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withQuantity(250.50)
+            .withAmountARS(200.0)
+            .withUser(anyUser)
+            .withOperation(sale)
+            .withIsActive(true)
+    }
+
+    fun otherTrade2(): TradeBuilder {
+        return TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withQuantity(150.0)
+            .withAmountARS(100.0)
+            .withUser(anyUser)
+            .withOperation(buy)
+            .withIsActive(true)
+    }
+
+    fun otherTrade3(): TradeBuilder {
+        return TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withQuantity(230.50)
+            .withAmountARS(130.0)
+            .withUser(anyUser)
+            .withOperation(buy)
+    }
+
+    fun otherTrade4(): TradeBuilder {
+        return TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withQuantity(150.50)
+            .withAmountARS(150.0)
             .withUser(anyUser)
             .withOperation(sale)
     }
@@ -222,5 +258,26 @@ class TradeServiceTest {
         } catch (e: RuntimeException) {
             Assertions.assertEquals("create.trade.operation: The operation cannot be null.", e.message)
         }
+    }
+
+    @Test
+    fun `3 active user trades are recovered`() {
+        tradeService.create(anyTrade().build())
+        tradeService.create(otherTrade1().build())
+        tradeService.create(otherTrade2().build())
+
+        var trades = tradeService.recoverAll()
+        Assertions.assertTrue(trades.size == 3)
+
+        val tradeNotActive1 = otherTrade3().withIsActive(false).build()
+        tradeService.create(tradeNotActive1)
+        val tradeNotActive2 = otherTrade4().withIsActive(false).build()
+        tradeService.create(tradeNotActive2)
+
+        trades = tradeService.recoverAll()
+        Assertions.assertTrue(trades.size == 5)
+
+        val tradesActives = tradeService.recoverActives(anyUser.id!!)
+        Assertions.assertTrue(tradesActives.size == 3)
     }
 }
