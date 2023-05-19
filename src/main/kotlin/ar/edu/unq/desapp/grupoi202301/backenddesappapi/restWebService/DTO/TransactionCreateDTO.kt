@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEmptyException
 
 class TransactionCreateDTO(
-
     var amountOperation: Double?,
     var trade: TradeDTO?,
     var shippingAddress: String?,

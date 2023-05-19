@@ -19,15 +19,16 @@ import java.time.LocalDateTime
 class TransactionServiceTest {
     @Autowired
     lateinit var transactionService: TransactionService
+
     @Autowired
     lateinit var cryptoService: CryptoService
+
     @Autowired
     lateinit var userService: UserService
+
     @Autowired
     lateinit var tradeService: TradeService
 
-    var aaveusdt: CryptoName = CryptoName.AAVEUSDT
-    var trxusdt: CryptoName = CryptoName.TRXUSDT
     var confirm: ActionTransaction = ActionTransaction.CONFIRM
     var make: ActionTransaction = ActionTransaction.MAKE
     var sale: OperationType = OperationType.SALE
@@ -57,7 +58,8 @@ class TransactionServiceTest {
             .withQuantity(200.50)
             .withAmountARS(150.8)
             .withUser(anyUser)
-            .withOperation(sale).build()
+            .withOperation(sale)
+            .withIsActive(true).build()
 
     val otherTrade: Trade =
         TradeBuilder()
@@ -65,11 +67,11 @@ class TransactionServiceTest {
             .withQuantity(300.0)
             .withAmountARS(250.0)
             .withUser(anyUser)
-            .withOperation(buy).build()
+            .withOperation(buy)
+            .withIsActive(true).build()
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withQuotationCrypto(15.4)
             .withAmountOperation(200.4)
             .withTrade(anyTrade)
             .withShippingAddress("1234567890123456789012")
@@ -114,39 +116,6 @@ class TransactionServiceTest {
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
             Assertions.assertEquals("The shipping address must contain a walletAddress with 8 digits.", e.message)
-        }
-    }
-
-    @Test
-    fun `change the quotation crypto of a transaction`() {
-        val transactionRequested = anyTransaction().withQuotationCrypto(150.86).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when change the quotation crypto of a transaction to negative`() {
-        val transactionRequested = anyTransaction().withQuotationCrypto(-30.0).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.transaction.quotationCrypto: The quotation crypto cannot be negative.", e.message)
-        }
-    }
-
-    @Test
-    fun `a violation occurs when change the quotation crypto of a transaction for null`() {
-        val transactionRequested = anyTransaction().withQuotationCrypto(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.transaction.quotationCrypto: The quotation crypto cannot be null.", e.message)
         }
     }
 
@@ -198,7 +167,8 @@ class TransactionServiceTest {
                 .withQuantity(150.0)
                 .withAmountARS(180.0)
                 .withUser(anyUser)
-                .withOperation(sale).build()
+                .withOperation(sale)
+                .withIsActive(true).build()
         tradeService.create(otherTrade)
 
         val transactionRequested = anyTransaction().withTrade(otherTrade).build()
