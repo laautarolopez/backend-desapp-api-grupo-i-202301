@@ -17,6 +17,7 @@ class TradeBuilder {
         trade.amountARS = this.amountARS
         trade.user = this.user
         trade.operation = this.operation
+        trade.isActive = this.isActive
         return trade
     }
 
@@ -45,8 +46,8 @@ class TradeBuilder {
         return this
     }
 
-    fun withIsActive(bool: Boolean?): TradeBuilder {
-        this.isActive = bool
+    fun withIsActive(active: Boolean?): TradeBuilder {
+        this.isActive = active
         return this
     }
 }
