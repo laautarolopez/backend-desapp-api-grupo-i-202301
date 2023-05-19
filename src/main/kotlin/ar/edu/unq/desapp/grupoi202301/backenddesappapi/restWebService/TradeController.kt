@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeResponseDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserSimpleDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import io.swagger.v3.oas.annotations.Operation
@@ -31,7 +32,7 @@ class TradeController(private val tradeService: TradeService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = TradeDTO::class)
+                        schema = Schema(implementation = TradeCreateDTO::class)
                     )
                 ]
             ),
@@ -48,9 +49,19 @@ class TradeController(private val tradeService: TradeService) {
         ]
     )
     @PostMapping("/create")
-    fun create(@RequestBody trade: TradeCreateDTO) : ResponseEntity<Trade> {
+    fun create(@RequestBody trade: TradeCreateDTO) : ResponseEntity<TradeResponseDTO> {
         val trade = tradeService.create(trade.toModel())
-        return ResponseEntity.ok().body(trade)
+        val tradeResponse = TradeResponseDTO(trade.id!!,
+                                             trade.creationDate,
+                                             trade.crypto!!.name.toString(),
+                                             trade.quantity,
+                                             trade.amountARS,
+                                             UserSimpleDTO(trade.user!!.id,
+                                                           trade.user!!.name,
+                                                           trade.user!!.lastName),
+                                             trade.user!!.operations,
+                                             trade.user!!.reputation)
+        return ResponseEntity.ok().body(tradeResponse)
     }
 
     @Operation(summary = "Get all the active trade of a user")
