@@ -8,7 +8,6 @@ class TransactionDTO(
     var id: Long?,
     var crypto: String?,
     var quantity: Double?,
-    var quotationCrypto: Double?,
     var amountOperation: Double?,
     var user: UserSimpleDTO?,
     var numberOperations: Int?,
@@ -22,7 +21,6 @@ class TransactionDTO(
         transaction.id = this.id
         transaction.trade!!.crypto!!.name = this.verifyCrypto(this.crypto)
         transaction.trade!!.quantity = this.quantity
-        transaction.quotationCrypto = this.quotationCrypto
         transaction.amountOperation = this.amountOperation
         transaction.trade!!.user = this.user!!.toModel()
         transaction.trade!!.user!!.operations = this.numberOperations
@@ -38,7 +36,6 @@ class TransactionDTO(
                 id = transaction.id,
                 crypto = transaction.trade!!.crypto.toString(),
                 quantity = transaction.trade!!.quantity,
-                quotationCrypto = transaction.quotationCrypto,
                 amountOperation = transaction.amountOperation,
                 user = UserSimpleDTO(transaction.trade!!.user!!.id, transaction.trade!!.user!!.name, transaction.trade!!.user!!.lastName),
                 numberOperations =  transaction.trade!!.user!!.operations,
