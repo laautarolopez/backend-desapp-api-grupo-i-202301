@@ -51,7 +51,6 @@ class TransactionTest {
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withQuotationCrypto(15.4)
             .withAmountOperation(200.4)
             .withTrade(anyTrade)
             .withShippingAddress("1234567890123456789012")
@@ -61,33 +60,6 @@ class TransactionTest {
     @Test
     fun `a transaction is successfully created when it has correct data`() {
         assertDoesNotThrow { anyTransaction().build() }
-    }
-
-    @Test
-    fun `change the quotation crypto of a transaction`() {
-        val transaction = anyTransaction().withQuotationCrypto(150.86).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when change the quotation crypto of a transaction to negative`() {
-        val transaction = anyTransaction().withQuotationCrypto(-30.0).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quotation crypto cannot be negative." })
-    }
-
-    @Test
-    fun `a violation occurs when change the quotation crypto of a transaction for null`() {
-        val transaction = anyTransaction().withQuotationCrypto(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quotation crypto cannot be null." })
     }
 
     @Test
