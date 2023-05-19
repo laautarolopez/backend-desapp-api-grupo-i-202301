@@ -6,4 +6,6 @@ import jakarta.validation.Valid
 interface TransactionService {
 
     fun create(@Valid transaction: Transaction): Transaction
+
+    fun clear()
 }

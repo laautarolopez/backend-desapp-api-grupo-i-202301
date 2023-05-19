@@ -11,4 +11,6 @@ interface CryptoService {
     fun getPrice(cryptoName: String): PriceResponse
 
     fun getPrices(): List<PriceResponse>
+
+    fun clear()
 }

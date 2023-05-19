@@ -8,4 +8,6 @@ interface UserService {
     fun create(@Valid user: User): User
 
     fun recoverAll(): List<User>
+
+    fun clear()
 }

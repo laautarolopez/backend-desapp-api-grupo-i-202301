@@ -11,4 +11,6 @@ interface TradeService {
     fun recoverAll(): List<Trade>
 
     fun recoverActives(idUser: Long): List<Trade>
+
+    fun clear()
 }
