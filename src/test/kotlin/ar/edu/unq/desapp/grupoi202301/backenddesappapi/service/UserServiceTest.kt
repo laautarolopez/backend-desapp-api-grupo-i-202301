@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.UserServiceImp
 import org.junit.jupiter.api.*
@@ -24,6 +25,28 @@ class UserServiceTest {
             .withReputation(5)
             .withOperations(15)
     }
+
+    val otherUser1: User =
+        UserBuilder()
+            .withName("Marta")
+            .withLastName("Lopez")
+            .withEmail("martalopez@gmail.com")
+            .withAddress("calle belgrano 140")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+
+    val otherUser2: User =
+        UserBuilder()
+            .withName("Jorge")
+            .withLastName("Sanchez")
+            .withEmail("jorgesanchez@gmail.com")
+            .withAddress("calle san martin 13")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
 
     @Test
     fun `a user is successfully created when it has correct data`() {
@@ -342,5 +365,26 @@ class UserServiceTest {
         } catch (e: RuntimeException) {
             assertEquals("create.user.reputation: The number must be equal to or greater than 0.", e.message)
         }
+    }
+
+    @Test
+    fun `3 users are successfully created and recovered`() {
+        userService.create(anyUser().build())
+
+        var users = userService.recoverAll()
+        println(users.size)
+        assertTrue(users.size == 1)
+
+        userService.create(otherUser1)
+        userService.create(otherUser2)
+
+        users = userService.recoverAll()
+
+        assertTrue(users.size == 3)
+    }
+
+    @AfterEach
+    fun cleanup() {
+        userService.clear()
     }
 }
