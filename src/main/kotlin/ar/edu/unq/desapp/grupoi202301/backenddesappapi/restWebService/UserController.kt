@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserCr
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserResponseDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
