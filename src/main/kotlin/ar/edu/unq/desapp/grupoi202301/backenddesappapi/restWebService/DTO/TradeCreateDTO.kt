@@ -9,7 +9,8 @@ class TradeCreateDTO(
     var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
-    var operation: String?
+    var operation: String?,
+    var isActive: Boolean?
 ) {
 
     fun toModel(): Trade {
@@ -19,6 +20,7 @@ class TradeCreateDTO(
         trade.amountARS = this.amountARS
         trade.user = this.user!!.toModel()
         trade.operation = this.verifyOperation(this.operation)
+        trade.isActive = this.isActive
         return trade
     }
 
@@ -33,7 +35,8 @@ class TradeCreateDTO(
                 quantity = trade.quantity,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
-                operation = trade.operation.toString()
+                operation = trade.operation.toString(),
+                isActive = trade.isActive
             )
     }
 
