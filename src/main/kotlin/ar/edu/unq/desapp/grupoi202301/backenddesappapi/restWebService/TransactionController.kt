@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
@@ -31,7 +32,7 @@ class TransactionController(private val transactionService: TransactionService) 
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = Transaction::class)
+                        schema = Schema(implementation = TransactionDTO::class)
                     )
                 ]
             ),
@@ -48,7 +49,7 @@ class TransactionController(private val transactionService: TransactionService) 
         ]
     )
     @PostMapping("/create")
-    fun create(@RequestBody transaction: TransactionDTO) : ResponseEntity<Transaction> {
+    fun create(@RequestBody transaction: TransactionCreateDTO) : ResponseEntity<Transaction> {
         val transaction = transactionService.create(transaction.toModel())
         return ResponseEntity.ok().body(transaction)
     }
