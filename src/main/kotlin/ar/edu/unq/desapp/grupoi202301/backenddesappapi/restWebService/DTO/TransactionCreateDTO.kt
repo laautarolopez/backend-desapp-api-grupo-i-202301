@@ -27,8 +27,7 @@ class TransactionCreateDTO(
                 trade = TradeDTO(transaction.trade!!.user!!.id,
                     CryptoSimpleDTO(
                         transaction.trade!!.crypto!!.id,
-                        transaction.trade!!.crypto!!.name,
-                        transaction.trade!!.crypto!!.price),
+                        transaction.trade!!.crypto!!.name),
                     transaction.trade!!.quantity,
                     transaction.trade!!.amountARS,
                     UserSimpleDTO(transaction.trade!!.user!!.id,
