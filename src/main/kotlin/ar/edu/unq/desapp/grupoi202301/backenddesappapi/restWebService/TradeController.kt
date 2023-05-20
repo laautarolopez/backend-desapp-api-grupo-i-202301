@@ -32,7 +32,7 @@ class TradeController(private val tradeService: TradeService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = TradeCreateDTO::class)
+                        schema = Schema(implementation = TradeResponseDTO::class)
                     )
                 ]
             ),
@@ -51,16 +51,7 @@ class TradeController(private val tradeService: TradeService) {
     @PostMapping("/create")
     fun create(@RequestBody trade: TradeCreateDTO) : ResponseEntity<TradeResponseDTO> {
         val trade = tradeService.create(trade.toModel())
-        val tradeResponse = TradeResponseDTO(trade.id!!,
-                                             trade.creationDate,
-                                             trade.crypto!!.name.toString(),
-                                             trade.quantity,
-                                             trade.amountARS,
-                                             UserSimpleDTO(trade.user!!.id,
-                                                           trade.user!!.name,
-                                                           trade.user!!.lastName),
-                                             trade.user!!.operations,
-                                             trade.user!!.reputation)
+        val tradeResponse = TradeResponseDTO.fromModel(trade)
         return ResponseEntity.ok().body(tradeResponse)
     }
 
@@ -88,13 +79,13 @@ class TradeController(private val tradeService: TradeService) {
             )
         ]
     )
-    @GetMapping("/trades/{idUser}")
+    @GetMapping("/active-trades/{idUser}")
     fun getTradesActive(@PathVariable("idUser") idUser: Long): ResponseEntity<List<TradeResponseDTO>> {
         val trades = tradeService.recoverActives(idUser).map { trade -> TradeResponseDTO.fromModel(trade) }
         return ResponseEntity.ok().body(trades)
     }
 
-    @Operation(summary = "Get all the active trade of a user")
+    @Operation(summary = "Get all the active trades")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -118,7 +109,7 @@ class TradeController(private val tradeService: TradeService) {
             )
         ]
     )
-    @GetMapping("/trades")
+    @GetMapping("/active-trades")
     fun getTrades(): ResponseEntity<List<TradeDTO>> {
         val trades = tradeService.recoverAll().map { trade -> TradeDTO.fromModel(trade) }
         return ResponseEntity.ok().body(trades)
