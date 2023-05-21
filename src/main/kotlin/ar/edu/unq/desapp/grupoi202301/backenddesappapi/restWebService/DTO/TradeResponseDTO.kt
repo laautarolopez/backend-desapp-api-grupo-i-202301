@@ -1,17 +1,17 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import java.time.LocalDateTime
 
 class TradeResponseDTO(
-    val id: Long?,
-    val date: LocalDateTime?,
+    var id: Long?,
+    var date: LocalDateTime?,
     var crypto: CryptoSimpleDTO,
     var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
-    var operations: Int?,
-    var reputation: Int?
+    var operation: OperationType?
 ) {
 
     companion object {
@@ -23,8 +23,7 @@ class TradeResponseDTO(
                 quantity = trade.quantity,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
-                operations = trade!!.user!!.operations,
-                reputation = trade!!.user!!.reputation
+                operation = trade.operation
             )
     }
 }
