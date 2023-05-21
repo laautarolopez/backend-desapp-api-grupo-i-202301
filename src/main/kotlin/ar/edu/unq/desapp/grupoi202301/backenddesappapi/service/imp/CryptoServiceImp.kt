@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -18,6 +19,18 @@ class CryptoServiceImp(
 
     override fun create(crypto: Crypto): Crypto {
         return cryptoPersistence.save(crypto)
+    }
+
+    override fun update(crypto: Crypto): Crypto {
+        return this.create(crypto)
+    }
+
+    override fun recove(cryptoId: Int): Crypto {
+        val crypto = cryptoPersistence.findByIdOrNull(cryptoId.toLong())
+        if (crypto == null) {
+            throw RuntimeException("The id does not exist.")
+        }
+        return crypto
     }
 
     override fun getPrice(cryptoName: String): PriceResponse {
