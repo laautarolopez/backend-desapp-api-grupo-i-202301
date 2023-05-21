@@ -9,6 +9,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.Cry
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
+import java.time.LocalDateTime
 
 @Service
 @Validated
@@ -23,10 +24,19 @@ class CryptoServiceImp(
 
     override fun getCrypto(idCrypto: Long): Crypto {
         try {
-            return cryptoPersistence.getReferenceById(idCrypto)
+            val crypto = cryptoPersistence.getReferenceById(idCrypto)
+            return updatePrice(crypto)
         } catch(e: RuntimeException) {
             throw CryptoNonExistent()
         }
+    }
+
+    private fun updatePrice(crypto: Crypto): Crypto {
+        val price = this.getPrice(crypto.name.toString()).price
+        val time = LocalDateTime.now()
+        crypto.price = price
+        crypto.time = time
+        return crypto
     }
 
     override fun getPrice(cryptoName: String): PriceResponse {
