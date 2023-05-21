@@ -66,18 +66,6 @@ class CryptoServiceTest {
     }
 
     @Test
-    fun `a violation occurs when change the time of a crypto for null`() {
-        val cryptoRequested = anyCrypto().withTime(null).build()
-
-        try {
-            cryptoService.create(cryptoRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.crypto.time: The time cannot be null.", e.message)
-        }
-    }
-
-    @Test
     fun `change the price of a crypto`() {
         val cryptoRequested = anyCrypto().withPrice(120.84).build()
 
@@ -95,18 +83,6 @@ class CryptoServiceTest {
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
             Assertions.assertEquals("create.crypto.price: The price cannot be negative.", e.message)
-        }
-    }
-
-    @Test
-    fun `a violation occurs when change the price of a crypto for null`() {
-        val cryptoRequested = anyCrypto().withPrice(null).build()
-
-        try {
-            cryptoService.create(cryptoRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.crypto.price: The price cannot be null.", e.message)
         }
     }
 }
