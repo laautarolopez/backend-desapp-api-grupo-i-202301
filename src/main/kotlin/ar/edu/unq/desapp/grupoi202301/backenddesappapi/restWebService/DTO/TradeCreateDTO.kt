@@ -6,7 +6,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.Operatio
 
 class TradeCreateDTO(
     var crypto: CryptoSimpleDTO?,
-    var quantity: Double?,
+    //var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
     var operation: String?,
@@ -16,7 +16,6 @@ class TradeCreateDTO(
     fun toModel(): Trade {
         val trade = Trade()
         trade.crypto = this.crypto!!.toModel()
-        trade.quantity = this.quantity
         trade.amountARS = this.amountARS
         trade.user = this.user!!.toModel()
         trade.operation = this.verifyOperation(this.operation)
@@ -28,7 +27,7 @@ class TradeCreateDTO(
         fun fromModel(trade: Trade) =
             TradeCreateDTO(
                 crypto = CryptoSimpleDTO(trade.crypto!!.id, trade.crypto!!.name),
-                quantity = trade.quantity,
+//                quantity = trade.crypto!!.price,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
                 operation = trade.operation.toString(),
