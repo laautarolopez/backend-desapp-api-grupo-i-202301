@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersist
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
@@ -18,6 +19,14 @@ class CryptoServiceImp(
 
     override fun create(crypto: Crypto): Crypto {
         return cryptoPersistence.save(crypto)
+    }
+
+    override fun getCrypto(idCrypto: Long): Crypto {
+        try {
+            return cryptoPersistence.getReferenceById(idCrypto)
+        } catch(e: RuntimeException) {
+            throw CryptoNonExistent()
+        }
     }
 
     override fun getPrice(cryptoName: String): PriceResponse {

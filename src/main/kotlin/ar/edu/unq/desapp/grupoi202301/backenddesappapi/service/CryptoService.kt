@@ -8,6 +8,8 @@ interface CryptoService {
 
     fun create(@Valid crypto: Crypto): Crypto
 
+    fun getCrypto(idCrypto: Long): Crypto
+
     fun getPrice(cryptoName: String): PriceResponse
 
     fun getPrices(): List<PriceResponse>
