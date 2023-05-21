@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoCreateDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
@@ -30,7 +30,7 @@ class CryptoController(private val cryptoService: CryptoService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = Crypto::class)
+                        schema = Schema(implementation = CryptoSimpleDTO::class)
                     )
                 ]
             ),
@@ -47,9 +47,9 @@ class CryptoController(private val cryptoService: CryptoService) {
         ]
     )
     @PostMapping("/create")
-    fun create(@RequestBody crypto: CryptoCreateDTO) : ResponseEntity<Crypto> {
+    fun create(@RequestBody crypto: CryptoCreateDTO) : ResponseEntity<CryptoSimpleDTO> {
         val crypto = cryptoService.create(crypto.toModel())
-        return ResponseEntity.ok().body(crypto)
+        return ResponseEntity.ok().body(CryptoSimpleDTO(crypto.id, crypto.name))
     }
 
     @Operation(summary = "Get price of a crypto")
