@@ -24,8 +24,10 @@ class TradeServiceImp(
     ) : TradeService {
 
     override fun create(trade: Trade): Trade {
-        cryptoService.getCrypto(trade.crypto!!.id!!)
-        userService.getUser(trade.user!!.id!!)
+        val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
+        val user = userService.getUser(trade.user!!.id!!)
+        trade.crypto = crypto
+        trade.user = user
         return tradePersistence.save(trade)
     }
 
