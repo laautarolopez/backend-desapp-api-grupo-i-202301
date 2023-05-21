@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 class TradeResponseDTO(
     val id: Long?,
     val date: LocalDateTime?,
-    var crypto: String,
+    var crypto: CryptoSimpleDTO,
     var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
@@ -19,7 +19,7 @@ class TradeResponseDTO(
             TradeResponseDTO(
                 id = trade.id,
                 date = trade.creationDate,
-                crypto = trade.crypto!!.name.toString(),
+                crypto = CryptoSimpleDTO.fromModel(trade.crypto!!),
                 quantity = trade.quantity,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
