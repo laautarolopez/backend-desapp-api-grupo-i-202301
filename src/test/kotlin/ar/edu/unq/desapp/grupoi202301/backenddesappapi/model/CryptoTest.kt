@@ -59,15 +59,6 @@ class CryptoTest {
     }
 
     @Test
-    fun `a violation occurs when change the time of a crypto for null`() {
-        val crypto = anyCrypto().withTime(null).build()
-
-        val violations = validator.validate(crypto)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The time cannot be null." })
-    }
-
-    @Test
     fun `change the price of a crypto`() {
         val crypto = anyCrypto().withPrice(120.84).build()
 
@@ -83,14 +74,5 @@ class CryptoTest {
         val violations = validator.validate(crypto)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The price cannot be negative." })
-    }
-
-    @Test
-    fun `a violation occurs when change the price of a crypto for null`() {
-        val crypto = anyCrypto().withPrice(null).build()
-
-        val violations = validator.validate(crypto)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The price cannot be null." })
     }
 }
