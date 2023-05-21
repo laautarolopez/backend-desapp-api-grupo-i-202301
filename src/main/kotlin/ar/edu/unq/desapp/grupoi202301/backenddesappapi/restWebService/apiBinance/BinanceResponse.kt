@@ -7,13 +7,14 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.
 import com.google.gson.Gson
 import retrofit2.Call
 
-
 data class PriceResponse(val cryptoName: String, val price: Double)
 
 class BinanceResponse {
     fun getPrice(cryptoName: String): PriceResponse {
         val binanceService = BinanceService.create()
         val call = binanceService.getPrice(cryptoName)
+        // TODO: Revisar si agregar la hora en la que se hace la cotizacion.
+        // TODO: Se deberia persistir el crypto antes de traer cotizacion? se deberian actualizar valores?
 
         return executeCall(cryptoName, call)
     }
