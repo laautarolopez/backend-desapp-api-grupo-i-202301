@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
