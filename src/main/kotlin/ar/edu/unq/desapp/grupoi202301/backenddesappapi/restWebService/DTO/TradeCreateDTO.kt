@@ -9,7 +9,6 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.Operatio
 class TradeCreateDTO(
     var idCrypto: Long,
     var quantity: Double?,
-    var amountARS: Double?,
     var idUser: Long,
     var operation: String?
 ) {
@@ -20,13 +19,11 @@ class TradeCreateDTO(
         crypto.id = this.idCrypto
         trade.crypto = crypto
         trade.quantity = this.quantity
-        trade.amountARS = this.amountARS
         val user = User()
         user.id = this.idUser
         trade.user = user
         trade.operation = this.verifyOperation(this.operation)
         trade.isActive = true
-        // TODO: agregar amountARS con llamado a la api
         return trade
     }
 
