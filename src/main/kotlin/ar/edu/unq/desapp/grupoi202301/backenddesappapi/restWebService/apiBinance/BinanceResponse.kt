@@ -5,16 +5,16 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.BinanceServerException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorBinanceResponse
 import com.google.gson.Gson
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter
 import retrofit2.Call
+import java.time.LocalDateTime
 
-data class PriceResponse(val cryptoName: String, val price: Double)
+data class PriceResponse(val cryptoName: String, val price: Double, val time: String)
 
 class BinanceResponse {
     fun getPrice(cryptoName: String): PriceResponse {
         val binanceService = BinanceService.create()
         val call = binanceService.getPrice(cryptoName)
-        // TODO: Revisar si agregar la hora en la que se hace la cotizacion.
-        // TODO: Se deberia persistir el crypto antes de traer cotizacion? se deberian actualizar valores?
 
         return executeCall(cryptoName, call)
     }
@@ -22,7 +22,8 @@ class BinanceResponse {
     private fun executeCall(cryptoName: String, call: Call<PriceResponse>): PriceResponse {
         var response = call.execute()
         if(response.isSuccessful) {
-            return PriceResponse(cryptoName, response.body()!!.price)
+            val time = LocalDateTime.now().toString()
+            return PriceResponse(cryptoName, response.body()!!.price, time)
         } else {
             try {
                 val gson = Gson()
