@@ -12,8 +12,6 @@ class CryptoBuilder {
     fun build(): Crypto {
         var crypto = Crypto()
         crypto.name = this.name
-        crypto.time = this.time
-        crypto.price = this.price
         return crypto
     }
 
