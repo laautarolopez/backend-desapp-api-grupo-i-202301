@@ -49,8 +49,9 @@ class TransactionController(private val transactionService: TransactionService) 
         ]
     )
     @PostMapping("/create")
-    fun create(@RequestBody transaction: TransactionCreateDTO) : ResponseEntity<Transaction> {
+    fun create(@RequestBody transaction: TransactionCreateDTO) : ResponseEntity<TransactionResponseDTO> {
         val transaction = transactionService.create(transaction.toModel())
-        return ResponseEntity.ok().body(transaction)
+        val transactionResponse = TransactionResponseDTO.fromModel(transaction)
+        return ResponseEntity.ok().body(transactionResponse)
     }
 }
