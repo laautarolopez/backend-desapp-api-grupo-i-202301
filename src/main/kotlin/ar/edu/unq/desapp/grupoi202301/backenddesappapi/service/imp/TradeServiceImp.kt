@@ -32,7 +32,7 @@ class TradeServiceImp(
     private fun recoverCrypto(trade: Trade) {
         val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
         trade.crypto = crypto
-        trade.cryptoPrice = crypto.price
+        trade.cryptoPrice = crypto.getPrice().price
     }
 
     private fun recoverUser(trade: Trade) {
