@@ -6,24 +6,26 @@ import java.time.LocalDateTime
 
 class TradeResponseDTO(
     var id: Long?,
-    var date: LocalDateTime?,
     var crypto: CryptoSimpleDTO,
+    var cryptoPrice: Double?,
     var quantity: Double?,
     var amountARS: Double?,
     var user: UserSimpleDTO?,
-    var operation: OperationType?
+    var operation: OperationType?,
+    var isActive: Boolean?
 ) {
 
     companion object {
         fun fromModel(trade: Trade) =
             TradeResponseDTO(
                 id = trade.id,
-                date = trade.creationDate,
                 crypto = CryptoSimpleDTO.fromModel(trade.crypto!!),
+                cryptoPrice = trade.cryptoPrice,
                 quantity = trade.quantity,
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
-                operation = trade.operation
+                operation = trade.operation,
+                isActive = trade.isActive
             )
     }
 }
