@@ -20,24 +20,6 @@ class DolarResponse {
         return executeCall(call)
     }
 
-//    private fun executeCall(call: Call<List<Casa>>): DolarBlueResponse {
-//        var response = call.execute()
-//        if(response.isSuccessful) {
-//            val casaDolar = response.body()!!.find {
-//                casa -> casa.nombre == "Dolar Blue"
-//            }
-//            return DolarBlueResponse(casaDolar!!.venta)
-//        } else {
-//            try {
-//                val gson = Gson()
-//                val error: ErrorBinanceResponse = gson.fromJson(response.errorBody()?.charStream(), ErrorBinanceResponse::class.java)
-//                throw BinanceResponseException("cryptoname", error.msg)
-//            } catch (e: com.google.gson.JsonSyntaxException) {
-//                throw BinanceServerException("The server does not respond.")
-//            }
-//        }
-//    }
-
     private fun executeCall(call: Call<Array<DolarSiResponse>>): DolarBlueResponse {
         var response = call.execute()
         if(response.isSuccessful) {
