@@ -1,9 +1,9 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import jakarta.persistence.*
-import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
-import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
 @Entity(name = "cryptos")
@@ -17,11 +17,7 @@ class Crypto {
     @NotNull(message = "The crypto name cannot be null.")
     var name: CryptoName? = null
 
-    @Column
-    @DateTimeFormat
-    var time: LocalDateTime? = null
-
-    @Column
-    @DecimalMin(value = "0.0", message = "The price cannot be negative.")
-    var price: Double? = null
+    fun getPrice(): PriceResponse {
+        return BinanceResponse().getPrice(name.toString())
+    }
 }
