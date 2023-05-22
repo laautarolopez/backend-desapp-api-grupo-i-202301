@@ -4,10 +4,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

@@ -48,7 +48,6 @@ class User {
 
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0.")
-    @NotNull(message = "The reputation cannot be null.")
     var reputation: Int? = 0
     // TODO: agregar operacion para calcular reputacion
 
