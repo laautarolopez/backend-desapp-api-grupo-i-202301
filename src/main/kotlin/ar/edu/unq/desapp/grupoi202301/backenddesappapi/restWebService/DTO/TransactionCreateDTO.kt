@@ -1,20 +1,24 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.ActionTransaction
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEmptyException
 
 class TransactionCreateDTO(
-    var amountOperation: Double?,
     var idTrade: Long?,
+    var amountOperation: Double?,
     var shippingAddress: String?,
     var action: String?,
 ) {
 
     fun toModel(): Transaction {
         val transaction = Transaction()
+        val trade = Trade()
+        trade.id = this.idTrade
+        transaction.trade = trade
         transaction.amountOperation = this.amountOperation
-        transaction.trade = transaction.trade
+        // TODO: agregar amount con llamado a la api?
         transaction.shippingAddress = this.shippingAddress
         transaction.action = this.verifyAction(this.action)
         return transaction
@@ -23,8 +27,8 @@ class TransactionCreateDTO(
     companion object {
         fun fromModel(transaction: Transaction) =
             TransactionCreateDTO(
-                amountOperation = transaction.amountOperation,
                 idTrade = transaction.trade!!.id,
+                amountOperation = transaction.amountOperation,
                 shippingAddress = transaction.shippingAddress,
                 action = transaction.action.toString()
             )
