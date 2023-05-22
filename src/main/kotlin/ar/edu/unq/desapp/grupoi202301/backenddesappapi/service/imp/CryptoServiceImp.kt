@@ -41,6 +41,7 @@ class CryptoServiceImp(
 
     override fun getPrice(cryptoName: String): PriceResponse {
         return BinanceResponse().getPrice(cryptoName)
+        // TODO: Validar
     }
 
     override fun getPrices(): List<PriceResponse> {
