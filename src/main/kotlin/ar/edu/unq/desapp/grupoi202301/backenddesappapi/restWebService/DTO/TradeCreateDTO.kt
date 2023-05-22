@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.OperationEmptyException
 
 class TradeCreateDTO(
@@ -14,24 +16,18 @@ class TradeCreateDTO(
 
     fun toModel(): Trade {
         val trade = Trade()
-        trade.crypto!!.id = this.idCrypto
+        val crypto = Crypto()
+        crypto.id = this.idCrypto
+        trade.crypto = crypto
         trade.quantity = this.quantity
         trade.amountARS = this.amountARS
-        trade.user!!.id = this.idUser
+        val user = User()
+        user.id = this.idUser
+        trade.user = user
         trade.operation = this.verifyOperation(this.operation)
         trade.isActive = true
+        // TODO: agregar amountARS con llamado a la api
         return trade
-    }
-
-    companion object {
-//        fun fromModel(trade: Trade) =
-//            TradeCreateDTO(
-//                idCrypto = trade.crypto!!.id!!,
-//                quantity = trade.quantity,
-//                amountARS = trade.amountARS,
-//                idUser = trade.user!!.id!!,
-//                operation = trade.operation.toString()
-//            )
     }
 
     private fun verifyOperation(operation: String?): OperationType {

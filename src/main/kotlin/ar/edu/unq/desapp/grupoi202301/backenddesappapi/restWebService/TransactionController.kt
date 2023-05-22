@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionCreateDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
 import io.swagger.v3.oas.annotations.Operation
@@ -32,7 +32,7 @@ class TransactionController(private val transactionService: TransactionService) 
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = TransactionDTO::class)
+                        schema = Schema(implementation = TransactionResponseDTO::class)
                     )
                 ]
             ),

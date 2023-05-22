@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEmptyException
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.OperationEmptyException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.UserNonExistent
 import jakarta.validation.ConstraintViolationException
@@ -57,6 +59,20 @@ class ExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleUserNonExistentException(ex: UserNonExistent): ResponseEntity<*> {
         val body = ErrorDTO("User", ex.message!!)
+        return ResponseEntity.badRequest().body(body)
+    }
+
+    @ExceptionHandler(OperationEmptyException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleParserException(ex: OperationEmptyException): ResponseEntity<*> {
+        val body = ErrorDTO("Operation", ex.message!!)
+        return ResponseEntity.badRequest().body(body)
+    }
+
+    @ExceptionHandler(ActionEmptyException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleParserException(ex: ActionEmptyException): ResponseEntity<*> {
+        val body = ErrorDTO("Action", ex.message!!)
         return ResponseEntity.badRequest().body(body)
     }
 }

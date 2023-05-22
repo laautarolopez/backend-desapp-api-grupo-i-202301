@@ -4,7 +4,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEmptyException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.CryptoEmptyException
 
-class TransactionDTO(
+class TransactionResponseDTO(
     var id: Long?,
     var crypto: String?,
     var quantity: Double?,
@@ -32,7 +32,7 @@ class TransactionDTO(
 
     companion object {
         fun fromModel(transaction: Transaction) =
-            TransactionDTO(
+            TransactionResponseDTO(
                 id = transaction.id,
                 crypto = transaction.trade!!.crypto.toString(),
                 quantity = transaction.trade!!.quantity,

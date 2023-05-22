@@ -1,10 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.UserPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
@@ -26,11 +23,19 @@ class TradeServiceImp(
     ) : TradeService {
 
     override fun create(trade: Trade): Trade {
-        val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
-        val user = userService.getUser(trade.user!!.id!!)
-        trade.crypto = crypto
-        trade.user = user
+        recoverCrypto(trade)
+        recoverUser(trade)
         return tradePersistence.save(trade)
+    }
+
+    private fun recoverCrypto(trade: Trade) {
+        val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
+        trade.crypto = crypto
+        trade.cryptoPrice = crypto.price
+    }
+
+    private fun recoverUser(trade: Trade) {
+        trade.user = userService.getUser(trade.user!!.id!!)
     }
 
     override fun update(trade: Trade): Trade {
