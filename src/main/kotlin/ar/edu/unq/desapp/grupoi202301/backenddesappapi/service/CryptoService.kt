@@ -10,8 +10,6 @@ interface CryptoService {
 
     fun getCrypto(idCrypto: Long): Crypto
 
-    fun update(@Valid crypto: Crypto): Crypto
-
     fun getPrice(cryptoName: String): PriceResponse
 
     fun getPrices(): List<PriceResponse>
