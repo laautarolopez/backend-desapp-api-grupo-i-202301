@@ -53,6 +53,5 @@ class User {
 
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0.")
-
     var operations: Int? = 0
 }
