@@ -15,7 +15,6 @@ class Transaction {
     @NotNull(message = "The amount of operation cannot be null.")
     @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
     var amountOperation: Double? = null
-    // TODO: Revisar si atributo esta de mas
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "The trade cannot be null.")

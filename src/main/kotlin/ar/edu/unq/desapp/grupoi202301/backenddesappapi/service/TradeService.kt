@@ -9,7 +9,7 @@ interface TradeService {
 
     fun update(@Valid trade: Trade): Trade
 
-    fun recove(tradeId: Int): Trade
+    fun getTrade(idTrade: Long): Trade
 
     fun recoverAll(): List<Trade>
 
