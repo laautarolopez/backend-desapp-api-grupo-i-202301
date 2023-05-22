@@ -25,7 +25,6 @@ class Trade {
     var quantity: Double? = null
 
     @Column(nullable = false)
-    @NotNull(message = "The amount cannot be null.")
     @DecimalMin(value = "0.0", message = "The amount cannot be negative.")
     var amountARS: Double? = null
 
