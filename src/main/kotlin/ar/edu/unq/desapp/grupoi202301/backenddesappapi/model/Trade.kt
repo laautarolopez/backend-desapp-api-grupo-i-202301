@@ -16,6 +16,10 @@ class Trade {
     var crypto: Crypto? = null
 
     @Column(nullable = false)
+    @DecimalMin(value = "0.0", message = "The cryptoPrice cannot be negative.")
+    var cryptoPrice: Double? = null
+
+    @Column(nullable = false)
     @NotNull(message = "The quantity cannot be null.")
     @DecimalMin(value = "0.0", message = "The quantity cannot be negative.")
     var quantity: Double? = null
