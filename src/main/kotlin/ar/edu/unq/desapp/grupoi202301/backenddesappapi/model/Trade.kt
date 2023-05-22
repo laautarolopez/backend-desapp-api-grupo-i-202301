@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponse
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
@@ -24,9 +25,11 @@ class Trade {
     @DecimalMin(value = "0.0", message = "The quantity cannot be negative.")
     var quantity: Double? = null
 
-    @Column(nullable = false)
-    @DecimalMin(value = "0.0", message = "The amount cannot be negative.")
-    var amountARS: Double? = null
+    fun getAmountARS(): Double {
+        val price = this.quantity!! * this.cryptoPrice!!
+        val DolarBlue = DolarResponse().getPrice()
+        return price * DolarBlue.price
+    }
 
     @ManyToOne
     @NotNull(message = "The user cannot be null.")
