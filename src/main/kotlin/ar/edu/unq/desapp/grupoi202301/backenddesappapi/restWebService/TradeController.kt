@@ -1,10 +1,8 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeActiveDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeCreateDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeResponseDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserSimpleDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import io.swagger.v3.oas.annotations.Operation
@@ -63,7 +61,7 @@ class TradeController(private val tradeService: TradeService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        array = ArraySchema(schema = Schema(implementation = TradeResponseDTO::class))
+                        array = ArraySchema(schema = Schema(implementation = TradeActiveDTO::class))
                     )
                 ]
             ),
@@ -80,12 +78,12 @@ class TradeController(private val tradeService: TradeService) {
         ]
     )
     @GetMapping("/active-trades/{idUser}")
-    fun getTradesActive(@PathVariable("idUser") idUser: Long): ResponseEntity<List<TradeResponseDTO>> {
-        val trades = tradeService.recoverActives(idUser).map { trade -> TradeResponseDTO.fromModel(trade) }
+    fun getTradesActive(@PathVariable("idUser") idUser: Long): ResponseEntity<List<TradeActiveDTO>> {
+        val trades = tradeService.recoverActives(idUser).map { trade -> TradeActiveDTO.fromModel(trade) }
         return ResponseEntity.ok().body(trades)
     }
 
-    @Operation(summary = "Get all the active trades")
+    @Operation(summary = "Get all trades")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -93,7 +91,7 @@ class TradeController(private val tradeService: TradeService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        array = ArraySchema(schema = Schema(implementation = TradeDTO::class))
+                        array = ArraySchema(schema = Schema(implementation = TradeResponseDTO::class))
                     )
                 ]
             ),
@@ -109,9 +107,9 @@ class TradeController(private val tradeService: TradeService) {
             )
         ]
     )
-    @GetMapping("/active-trades")
-    fun getTrades(): ResponseEntity<List<TradeDTO>> {
-        val trades = tradeService.recoverAll().map { trade -> TradeDTO.fromModel(trade) }
+    @GetMapping
+    fun getTrades(): ResponseEntity<List<TradeResponseDTO>> {
+        val trades = tradeService.recoverAll().map { trade -> TradeResponseDTO.fromModel(trade) }
         return ResponseEntity.ok().body(trades)
     }
 }
