@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
@@ -9,6 +10,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -17,15 +19,17 @@ import org.springframework.validation.annotation.Validated
 @Transactional
 class TradeServiceImp(
     private val tradePersistence: TradePersistence,
+    @Autowired
     private val cryptoService: CryptoService,
+    @Autowired
     private val userService: UserService
     ) : TradeService {
 
     override fun create(trade: Trade): Trade {
-        val crypto = cryptoService.recove(trade.crypto!!.id!!.toInt())
-        val user = userService.recove(trade.user!!.id!!.toInt())
-        // TODO: terminar de validar crypto y user.
-        // TODO: instanciar
+        val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
+        val user = userService.getUser(trade.user!!.id!!)
+        trade.crypto = crypto
+        trade.user = user
         return tradePersistence.save(trade)
     }
 
@@ -33,8 +37,8 @@ class TradeServiceImp(
         return this.create(trade)
     }
 
-    override fun recove(tradeId: Int): Trade {
-        val trade = tradePersistence.findByIdOrNull(tradeId.toLong())
+    override fun getTrade(idTrade: Long): Trade {
+        val trade = tradePersistence.findByIdOrNull(idTrade)
         if (trade == null) {
             throw RuntimeException("The id does not exist.")
         }

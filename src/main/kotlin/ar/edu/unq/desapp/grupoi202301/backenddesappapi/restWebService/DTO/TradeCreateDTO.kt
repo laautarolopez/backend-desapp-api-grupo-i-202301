@@ -5,34 +5,33 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.OperationEmptyException
 
 class TradeCreateDTO(
-    var crypto: CryptoSimpleDTO?,
-    //var quantity: Double?,
+    var idCrypto: Long,
+    var quantity: Double?,
     var amountARS: Double?,
-    var user: UserSimpleDTO?,
-    var operation: String?,
-    var isActive: Boolean?
+    var idUser: Long,
+    var operation: String?
 ) {
 
     fun toModel(): Trade {
         val trade = Trade()
-        trade.crypto = this.crypto!!.toModel()
+        trade.crypto!!.id = this.idCrypto
+        trade.quantity = this.quantity
         trade.amountARS = this.amountARS
-        trade.user = this.user!!.toModel()
+        trade.user!!.id = this.idUser
         trade.operation = this.verifyOperation(this.operation)
-        trade.isActive = this.isActive
+        trade.isActive = true
         return trade
     }
 
     companion object {
-        fun fromModel(trade: Trade) =
-            TradeCreateDTO(
-                crypto = CryptoSimpleDTO(trade.crypto!!.id, trade.crypto!!.name),
-//                quantity = trade.crypto!!.price,
-                amountARS = trade.amountARS,
-                user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
-                operation = trade.operation.toString(),
-                isActive = trade.isActive
-            )
+//        fun fromModel(trade: Trade) =
+//            TradeCreateDTO(
+//                idCrypto = trade.crypto!!.id!!,
+//                quantity = trade.quantity,
+//                amountARS = trade.amountARS,
+//                idUser = trade.user!!.id!!,
+//                operation = trade.operation.toString()
+//            )
     }
 
     private fun verifyOperation(operation: String?): OperationType {

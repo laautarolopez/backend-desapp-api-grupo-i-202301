@@ -7,7 +7,7 @@ interface UserService {
 
     fun create(@Valid user: User): User
 
-    fun recove(userId: Int): User
+    fun getUser(idUser: Long): User
 
     fun recoverAll(): List<User>
 

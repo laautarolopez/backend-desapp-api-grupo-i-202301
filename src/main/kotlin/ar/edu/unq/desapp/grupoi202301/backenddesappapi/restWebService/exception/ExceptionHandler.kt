@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.UserNonExistent
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -42,5 +44,19 @@ class ExceptionHandler {
     fun handleBinanceServerException(ex: BinanceServerException): ResponseEntity<*> {
         val body = ErrorBinanceServer(ex.newMessage)
         return ResponseEntity.internalServerError().body(body)
+    }
+
+    @ExceptionHandler(CryptoNonExistent::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleCryptoNonExistentException(ex: CryptoNonExistent): ResponseEntity<*> {
+        val body = ErrorDTO("Crypto", ex.message!!)
+        return ResponseEntity.badRequest().body(body)
+    }
+
+    @ExceptionHandler(UserNonExistent::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleUserNonExistentException(ex: UserNonExistent): ResponseEntity<*> {
+        val body = ErrorDTO("User", ex.message!!)
+        return ResponseEntity.badRequest().body(body)
     }
 }
