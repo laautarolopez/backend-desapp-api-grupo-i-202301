@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
@@ -32,6 +33,15 @@ class TradeServiceImp(
         val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
         trade.crypto = crypto
         trade.cryptoPrice = crypto.price
+
+        updateAmountARS(trade)
+    }
+
+    private fun updateAmountARS(trade: Trade) {
+        val price = trade.quantity!! * trade.cryptoPrice!!
+        val dolarBlue = DolarResponse().getPrice()
+
+        trade.amountARS = price * dolarBlue.price
     }
 
     private fun recoverUser(trade: Trade) {
