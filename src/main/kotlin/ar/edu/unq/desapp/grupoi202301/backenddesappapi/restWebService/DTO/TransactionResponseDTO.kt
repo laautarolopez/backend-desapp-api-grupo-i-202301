@@ -34,7 +34,7 @@ class TransactionResponseDTO(
         fun fromModel(transaction: Transaction) =
             TransactionResponseDTO(
                 id = transaction.id,
-                crypto = transaction.trade!!.crypto.toString(),
+                crypto = transaction.trade!!.crypto!!.name.toString(),
                 quantity = transaction.trade!!.quantity,
                 amountOperation = transaction.amountOperation,
                 user = UserSimpleDTO(transaction.trade!!.user!!.id, transaction.trade!!.user!!.name, transaction.trade!!.user!!.lastName),
