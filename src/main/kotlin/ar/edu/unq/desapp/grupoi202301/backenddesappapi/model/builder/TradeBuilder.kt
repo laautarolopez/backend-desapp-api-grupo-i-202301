@@ -14,7 +14,6 @@ class TradeBuilder {
         var trade = Trade()
         trade.crypto = this.crypto
         trade.quantity = this.quantity
-        trade.amountARS = this.amountARS
         trade.user = this.user
         trade.operation = this.operation
         trade.isActive = this.isActive

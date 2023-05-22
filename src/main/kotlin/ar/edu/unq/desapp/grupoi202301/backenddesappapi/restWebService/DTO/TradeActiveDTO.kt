@@ -24,7 +24,7 @@ class TradeActiveDTO(
                 crypto = CryptoSimpleDTO.fromModel(trade.crypto!!),
                 cryptoPrice = trade.cryptoPrice,
                 quantity = trade.quantity,
-                amountARS = trade.amountARS,
+                amountARS = trade.getAmountARS(),
                 user = UserResponseDTO(
                     trade.user!!.id,
                     trade.user!!.name,
