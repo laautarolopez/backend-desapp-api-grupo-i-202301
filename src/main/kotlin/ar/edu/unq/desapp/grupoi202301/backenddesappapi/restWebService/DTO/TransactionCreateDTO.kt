@@ -6,7 +6,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEm
 
 class TransactionCreateDTO(
     var amountOperation: Double?,
-    var trade: TradeDTO?,
+    var idTrade: Long?,
     var shippingAddress: String?,
     var action: String?,
 ) {
@@ -24,16 +24,7 @@ class TransactionCreateDTO(
         fun fromModel(transaction: Transaction) =
             TransactionCreateDTO(
                 amountOperation = transaction.amountOperation,
-                trade = TradeDTO(transaction.trade!!.user!!.id,
-                    CryptoSimpleDTO(
-                        transaction.trade!!.crypto!!.id,
-                        transaction.trade!!.crypto!!.name),
-                    transaction.trade!!.quantity,
-                    transaction.trade!!.amountARS,
-                    UserSimpleDTO(transaction.trade!!.user!!.id,
-                        transaction.trade!!.user!!.name,
-                        transaction.trade!!.user!!.lastName),
-                    transaction.trade!!.operation.toString()),
+                idTrade = transaction.trade!!.id,
                 shippingAddress = transaction.shippingAddress,
                 action = transaction.action.toString()
             )
