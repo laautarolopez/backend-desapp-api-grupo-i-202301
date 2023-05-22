@@ -1,12 +1,11 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TransactionPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -14,13 +13,30 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @Transactional
 class TransactionServiceImp(
-    private val transactionPersistence: TransactionPersistence
+    private val transactionPersistence: TransactionPersistence,
+    private val tradeService: TradeService
     ) : TransactionService {
 
     override fun create(transaction: Transaction): Transaction {
+        recoverTrade(transaction)
         validateShippingAddress(transaction)
-        //validateAction(transaction)
         return transactionPersistence.save(transaction)
+    }
+
+    private fun recoverTrade(transaction: Transaction) {
+        transaction.trade = tradeService.getTrade(transaction.trade!!.id!!)
+    }
+
+    override fun getTransaction(idTrade: Long): Transaction {
+        val transaction = transactionPersistence.findByIdOrNull(idTrade)
+        if (transaction == null) {
+            throw RuntimeException("The id does not exist.")
+        }
+        return transaction
+    }
+
+    override fun recoverAll(): List<Transaction> {
+        return transactionPersistence.findAll()
     }
 
     override fun clear() {
