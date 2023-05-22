@@ -36,7 +36,7 @@ class CryptoServiceImp(
         val time = LocalDateTime.now()
         crypto.price = price
         crypto.time = time
-        return crypto
+        return cryptoPersistence.save(crypto)
     }
 
     override fun getPrice(cryptoName: String): PriceResponse {
