@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
-import java.time.LocalDateTime
 
 @Entity(name = "cryptos")
 class Crypto {
