@@ -20,6 +20,7 @@ class TransactionServiceImp(
     override fun create(transaction: Transaction): Transaction {
         recoverTrade(transaction)
         validateShippingAddress(transaction)
+        validateAction(transaction)
         return transactionPersistence.save(transaction)
     }
 
@@ -43,7 +44,7 @@ class TransactionServiceImp(
         transactionPersistence.deleteAll()
     }
 
-    fun validateShippingAddress(transaction: Transaction) {
+    private fun validateShippingAddress(transaction: Transaction) {
         if(transaction.trade!!.operation.toString() == "SALE") {
            if(transaction.shippingAddress!!.length != 22) {
                throw RuntimeException("The shipping address must contain a CVU with 22 digits.")
@@ -55,7 +56,15 @@ class TransactionServiceImp(
         }
     }
 
-//    fun validateAction(transaction: Transaction) {
-//
-//    }
+    private fun validateAction(transaction: Transaction) {
+        if(transaction.action.toString() == "MAKE") {
+            if(transaction.trade!!.operation.toString() != "BUY") {
+                throw RuntimeException(".") // TODO: agregar mensaje de validacion
+            }
+        } else if(transaction.action.toString() == "CONFIRM") {
+            if(transaction.trade!!.operation.toString() != "SALE") {
+                throw RuntimeException(".") // TODO: agregar mensaje de validacion
+            }
+        }
+    }
 }
