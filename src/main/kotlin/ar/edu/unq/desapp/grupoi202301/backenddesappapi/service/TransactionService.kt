@@ -7,6 +7,14 @@ interface TransactionService {
 
     fun create(@Valid transaction: Transaction): Transaction
 
+    fun update(transaction: Transaction): Transaction
+
+    fun transfer(transaction: Transaction): Transaction
+
+    fun confirm(transaction: Transaction): Transaction
+
+    fun cancel(transaction: Transaction): Transaction
+
     fun getTransaction(idTransaction: Long): Transaction
 
     fun recoverAll(): List<Transaction>
