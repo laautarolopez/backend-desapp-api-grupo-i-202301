@@ -63,7 +63,11 @@ class User {
     }
 
     fun getReputation(): String {
-        return (points / operations).toString()
+        if (operations == 0) {
+            return "Sin operaciones"
+        } else {
+            return (points / operations).toString()
+        }
     }
 
     @Column(nullable = false)
