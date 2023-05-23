@@ -20,21 +20,22 @@ class Transaction {
     @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
     var amountARS: Double? = null
 
+    @Column(nullable = false)
+    @NotNull
+    var idUserRequested: Long? = null
+
     @ManyToOne
-    @NotNull(message = "The user cannot be null.")
-    var user: User? = null
+    @NotNull(message = "The buyer cannot be null.")
+    var buyer: User? = null
+
+    @ManyToOne
+    @NotNull(message = "The buyer cannot be null.")
+    var seller: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "The trade cannot be null.")
     var trade: Trade? = null
 
     @Column(nullable = false)
-    @NotNull(message = "The shipping address cannot be null.")
-    @Size(min = 8, max = 22, message = "The shipping address must be 8 or 22 digits long.")
-    var shippingAddress: String? = null
-
-    @Column(nullable = false)
-    @NotNull(message = "The action cannot be null.")
-    var action: ActionTransaction? = null
-    // TODO: validar tipo de operacion
+    var status: TransactionStatus = TransactionStatus.CREATED
 }
