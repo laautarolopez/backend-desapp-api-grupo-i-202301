@@ -14,7 +14,15 @@ class Transaction {
     @Column(nullable = false)
     @NotNull(message = "The amount of operation cannot be null.")
     @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
-    var amountOperation: Double? = null
+    var amountUSD: Double? = null
+
+    @Column(nullable = false)
+    @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
+    var amountARS: Double? = null
+
+    @ManyToOne
+    @NotNull(message = "The user cannot be null.")
+    var user: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @NotNull(message = "The trade cannot be null.")
