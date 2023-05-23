@@ -9,8 +9,8 @@ class TransactionRequestDTO(
 
     fun toModel(): Transaction {
         val transaction = Transaction()
-        transaction.id = idTransaction
-        transaction.idUserRequested = idUserRequested
+        transaction.id = this.idTransaction
+        transaction.idUserRequested = this.idUserRequested
         return transaction
     }
 }
