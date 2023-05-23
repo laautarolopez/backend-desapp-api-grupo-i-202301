@@ -8,7 +8,6 @@ import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
 
 @SpringBootTest
 @TestInstance(PER_CLASS)
@@ -26,16 +25,7 @@ class TradeServiceTest {
     val anyCrypto: Crypto =
         CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
             .build()
-
-    fun anyCrypto(): CryptoBuilder {
-        return CryptoBuilder()
-            .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
-    }
 
     val anyUser: User =
         UserBuilder()
@@ -54,7 +44,6 @@ class TradeServiceTest {
         return TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(200.50)
-            .withAmountARS(150.8)
             .withUser(anyUser)
             .withOperation(sale)
             .withIsActive(true)
@@ -64,7 +53,6 @@ class TradeServiceTest {
         return TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(250.50)
-            .withAmountARS(200.0)
             .withUser(anyUser)
             .withOperation(sale)
             .withIsActive(true)
@@ -74,7 +62,6 @@ class TradeServiceTest {
         return TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(150.0)
-            .withAmountARS(100.0)
             .withUser(anyUser)
             .withOperation(buy)
             .withIsActive(true)
@@ -84,7 +71,6 @@ class TradeServiceTest {
         return TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(230.50)
-            .withAmountARS(130.0)
             .withUser(anyUser)
             .withOperation(buy)
     }
@@ -93,7 +79,6 @@ class TradeServiceTest {
         return TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(150.50)
-            .withAmountARS(150.0)
             .withUser(anyUser)
             .withOperation(sale)
     }
@@ -109,18 +94,6 @@ class TradeServiceTest {
         val anyTrade = anyTrade().build()
 
         val trade = tradeService.create(anyTrade)
-
-        Assertions.assertTrue(trade.id != null)
-    }
-
-    @Test
-    fun `change the crypto of a trade`() {
-        val anyCrypto = anyCrypto().withPrice(10.0).build()
-        cryptoService.create(anyCrypto)
-
-        val tradeRequested = anyTrade().withCrypto(anyCrypto).build()
-
-        val trade = tradeService.create(tradeRequested)
 
         Assertions.assertTrue(trade.id != null)
     }
@@ -167,39 +140,6 @@ class TradeServiceTest {
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
             Assertions.assertEquals("create.trade.quantity: The quantity cannot be null.", e.message)
-        }
-    }
-
-    @Test
-    fun `change the amountARS of a trade`() {
-        val tradeRequested = anyTrade().withAmountARS(220.80).build()
-
-        val trade = tradeService.create(tradeRequested)
-
-        Assertions.assertTrue(trade.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when change the amountARS of a trade for null`() {
-        val tradeRequested = anyTrade().withAmountARS(null).build()
-
-        try {
-            tradeService.create(tradeRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.trade.amountARS: The amount cannot be null.", e.message)
-        }
-    }
-
-    @Test
-    fun `a violation occurs when change the amountARS of a trade to negative`() {
-        val tradeRequested = anyTrade().withAmountARS(-10.0).build()
-
-        try {
-            tradeService.create(tradeRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.trade.amountARS: The amount cannot be negative.", e.message)
         }
     }
 
@@ -276,5 +216,12 @@ class TradeServiceTest {
 
         val tradesActives = tradeService.recoverActives(anyUser.id!!)
         Assertions.assertTrue(tradesActives.size == 3)
+    }
+
+    @AfterEach
+    fun cleanup() {
+        cryptoService.clear()
+        userService.clear()
+        tradeService.clear()
     }
 }
