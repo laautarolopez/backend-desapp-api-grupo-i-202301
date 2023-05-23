@@ -30,7 +30,7 @@ class TradeActiveDTO(
                     trade.user!!.name,
                     trade.user!!.lastName,
                     trade.user!!.operations,
-                    trade.user!!.reputation
+                    trade.user!!.getReputation()
                 ),
                 operation = trade.operation,
                 isActive = trade.isActive
