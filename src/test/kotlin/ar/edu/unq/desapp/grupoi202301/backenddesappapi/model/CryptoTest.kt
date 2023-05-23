@@ -20,8 +20,6 @@ class CryptoTest {
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(btcusdt)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
     }
 
     @Test
@@ -45,34 +43,5 @@ class CryptoTest {
         val violations = validator.validate(crypto)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The crypto name cannot be null." })
-    }
-
-    @Test
-    fun `change the time of a crypto`() {
-        val oldTime = anyCrypto().time
-        val crypto = anyCrypto().withTime(LocalDateTime.now()).build()
-
-        val violations = validator.validate(crypto)
-
-        Assertions.assertTrue(violations.isEmpty())
-        Assertions.assertTrue(oldTime != crypto.time)
-    }
-
-    @Test
-    fun `change the price of a crypto`() {
-        val crypto = anyCrypto().withPrice(120.84).build()
-
-        val violations = validator.validate(crypto)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when change the price of a crypto to negative`() {
-        val crypto = anyCrypto().withPrice(-100.0).build()
-
-        val violations = validator.validate(crypto)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The price cannot be negative." })
     }
 }
