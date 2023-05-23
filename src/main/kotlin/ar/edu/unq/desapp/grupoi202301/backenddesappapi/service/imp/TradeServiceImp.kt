@@ -44,11 +44,11 @@ class TradeServiceImp(
     }
 
     override fun getTrade(idTrade: Long): Trade {
-        val trade = tradePersistence.findByIdOrNull(idTrade)
-        if (trade == null) {
-            throw RuntimeException("The id does not exist.")
+        try {
+            return tradePersistence.getReferenceById(idTrade)
+        } catch(e: RuntimeException) {
+            throw RuntimeException("The trade does not exist.")
         }
-        return trade
     }
 
     override fun recoverAll(): List<Trade> {
