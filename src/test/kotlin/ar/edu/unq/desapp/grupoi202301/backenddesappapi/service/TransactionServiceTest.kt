@@ -5,14 +5,10 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuild
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
 
 @SpringBootTest
 @TestInstance(PER_CLASS)
@@ -48,15 +44,12 @@ class TransactionServiceTest {
     val anyCrypto: Crypto =
         CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
             .build()
 
     val anyTrade: Trade =
         TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(200.50)
-            .withAmountARS(150.8)
             .withUser(anyUser)
             .withOperation(sale)
             .withIsActive(true).build()
@@ -65,7 +58,6 @@ class TransactionServiceTest {
         TradeBuilder()
             .withCrypto(anyCrypto)
             .withQuantity(300.0)
-            .withAmountARS(250.0)
             .withUser(anyUser)
             .withOperation(buy)
             .withIsActive(true).build()
@@ -143,7 +135,6 @@ class TransactionServiceTest {
         }
     }
 
-
     @Test
     fun `a violation occurs when change the amount operation of a transaction for null`() {
         val transactionRequested = anyTransaction().withAmountOperation(null).build()
@@ -165,7 +156,6 @@ class TransactionServiceTest {
             TradeBuilder()
                 .withCrypto(anyCrypto)
                 .withQuantity(150.0)
-                .withAmountARS(180.0)
                 .withUser(anyUser)
                 .withOperation(sale)
                 .withIsActive(true).build()
@@ -239,5 +229,13 @@ class TransactionServiceTest {
                 e.message
             )
         }
+    }
+
+    @AfterEach
+    fun cleanup() {
+        cryptoService.clear()
+        userService.clear()
+        tradeService.clear()
+        transactionService.clear()
     }
 }
