@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
 
 @SpringBootTest
 class TradeTest {
@@ -22,8 +21,6 @@ class TradeTest {
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
     }
 
     val anyUser: User =
@@ -41,7 +38,6 @@ class TradeTest {
         return TradeBuilder()
             .withCrypto(anyCrypto().build())
             .withQuantity(200.50)
-            .withAmountARS(150.8)
             .withUser(anyUser)
             .withOperation(sale)
     }
@@ -53,7 +49,7 @@ class TradeTest {
 
     @Test
     fun `change the crypto of a trade`() {
-        val anyCrypto = anyCrypto().withPrice(10.0).build()
+        val anyCrypto = anyCrypto().build()
 
         val trade = anyTrade().withCrypto(anyCrypto).build()
 
@@ -96,33 +92,6 @@ class TradeTest {
         val violations = validator.validate(trade)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be null." })
-    }
-
-    @Test
-    fun `change the amountARS of a trade`() {
-        val trade = anyTrade().withAmountARS(220.80).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when change the amountARS of a trade for null`() {
-        val trade = anyTrade().withAmountARS(null).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when change the amountARS of a trade to negative`() {
-        val trade = anyTrade().withAmountARS(-10.0).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount cannot be negative." })
     }
 
     @Test
