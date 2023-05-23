@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 class TradeBuilder {
     var crypto: Crypto? = null
     var quantity: Double? = null
-    var amountARS: Double? = null
     var user: User? = null
     var operation: OperationType? = null
     var isActive: Boolean? = null
@@ -27,11 +26,6 @@ class TradeBuilder {
 
     fun withQuantity(quantity: Double?): TradeBuilder {
         this.quantity = quantity
-        return this
-    }
-
-    fun withAmountARS(amountARS: Double?): TradeBuilder {
-        this.amountARS = amountARS
         return this
     }
 
