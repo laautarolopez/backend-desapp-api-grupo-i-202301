@@ -7,7 +7,7 @@ class UserResponseDTO(
     val name:String?,
     val lastName:String?,
     val operations: Int?,
-    val reputation: Int?
+    val reputation: String?
     ) {
 
     fun toModel(): User {
@@ -15,8 +15,7 @@ class UserResponseDTO(
         user.id = this.id
         user.name = this.name
         user.lastName = this.lastName
-        user.operations = this.operations
-        user.reputation = this.reputation
+        user.operations = this.operations!!
         return user
     }
 
@@ -27,7 +26,7 @@ class UserResponseDTO(
                 name = user.name,
                 lastName = user.lastName,
                 operations = user.operations,
-                reputation = user.reputation
+                reputation = user.getReputation()
             )
     }
 }
