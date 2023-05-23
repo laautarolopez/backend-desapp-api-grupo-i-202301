@@ -18,12 +18,6 @@ class Transaction {
         return quantity!! * cryptoPrice!!
     }
 
-    fun getAmountARS(): Double {
-        val amountUSD = this.getAmountUSD()
-        val DolarBlue = DolarResponse().getPrice()
-        return amountUSD * DolarBlue.price
-    }
-
     @Column(nullable = false)
     @NotNull
     var idUserRequested: Long? = null
