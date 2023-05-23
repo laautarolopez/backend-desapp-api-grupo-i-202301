@@ -55,7 +55,11 @@ class User {
     }
 
     fun subtractPoints(amount: Int) {
-        points -= amount
+        if(points - amount <= 0) {
+            points = 0
+        } else {
+            points -= amount
+        }
     }
 
     fun getReputation(): String {
