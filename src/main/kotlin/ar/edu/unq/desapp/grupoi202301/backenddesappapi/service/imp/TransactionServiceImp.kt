@@ -40,7 +40,9 @@ class TransactionServiceImp(
     }
 
     override fun transfer(transaction: Transaction): Transaction {
+        val idUserRequested = transaction.idUserRequested
         val transaction = this.getTransaction(transaction.id!!)
+        transaction.idUserRequested = idUserRequested
         validateTransfer(transaction)
         transaction.status = TransactionStatus.TRANSFERRED
         return update(transaction)
@@ -66,7 +68,9 @@ class TransactionServiceImp(
     }
 
     override fun confirm(transaction: Transaction): Transaction {
+        val idUserRequested = transaction.idUserRequested
         val transaction = this.getTransaction(transaction.id!!)
+        transaction.idUserRequested = idUserRequested
         validateConfirm(transaction)
 
         if(isPriceVariationViolation(transaction)) {
@@ -130,7 +134,9 @@ class TransactionServiceImp(
     }
 
     override fun cancel(transaction: Transaction): Transaction {
+        val idUserRequested = transaction.idUserRequested
         val transaction = this.getTransaction(transaction.id!!)
+        transaction.idUserRequested = idUserRequested
         validateCancel(transaction)
         transaction.status = TransactionStatus.CANCELED
         subtractPoints(recoverUserRequested(transaction))
@@ -138,11 +144,16 @@ class TransactionServiceImp(
     }
 
     private fun validateCancel(transaction: Transaction) {
-        validateStatus(transaction, TransactionStatus.CREATED)
-        validateStatus(transaction, TransactionStatus.TRANSFERRED)
+        validateStatusCancel(transaction)
         recoverTrade(transaction)
         recoverUserRequested(transaction)
         validateUserRequestedBuyerOrSeller(transaction)
+    }
+
+    private fun validateStatusCancel(transaction: Transaction) {
+        if(transaction.status != TransactionStatus.TRANSFERRED && transaction.status != TransactionStatus.CREATED) {
+            throw TransactionException("transaction.status", "The status must be TRANSFERRED or CREATED")
+        }
     }
 
     private fun validateUserRequestedBuyerOrSeller(transaction: Transaction) {
@@ -169,6 +180,10 @@ class TransactionServiceImp(
     }
 
     private fun updateBuyerSeller(transaction: Transaction, userRequested: User) {
+        if(userRequested == transaction.trade!!.user) {
+            throw TransactionException("user requested", "The transaction cannot be created by this user")
+        }
+
         if (isOperationType(transaction, OperationType.BUY)) {
             transaction.buyer = transaction.trade!!.user
             transaction.seller = userRequested
