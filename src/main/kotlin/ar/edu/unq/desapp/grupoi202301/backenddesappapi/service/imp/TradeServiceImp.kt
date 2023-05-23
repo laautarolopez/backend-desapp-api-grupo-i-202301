@@ -1,13 +1,12 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TradeNonExistentException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import jakarta.transaction.Transactional
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
@@ -47,7 +46,7 @@ class TradeServiceImp(
         try {
             return tradePersistence.getReferenceById(idTrade)
         } catch(e: RuntimeException) {
-            throw RuntimeException("The trade does not exist.")
+            throw TradeNonExistentException("trade", "The trade does not exist.")
         }
     }
 
