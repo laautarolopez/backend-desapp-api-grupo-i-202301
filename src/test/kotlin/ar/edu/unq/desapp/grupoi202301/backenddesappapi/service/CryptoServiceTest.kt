@@ -20,8 +20,6 @@ class CryptoServiceTest {
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(btcusdt)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
     }
 
     @Test
@@ -54,35 +52,5 @@ class CryptoServiceTest {
         }
     }
 
-    @Test
-    fun `change the time of a crypto`() {
-        val oldTime = anyCrypto().time
-        val cryptoRequested = anyCrypto().withTime(LocalDateTime.now()).build()
-
-        val crypto = cryptoService.create(cryptoRequested)
-
-        Assertions.assertTrue(crypto.id != null)
-        Assertions.assertTrue(oldTime != crypto.time)
-    }
-
-    @Test
-    fun `change the price of a crypto`() {
-        val cryptoRequested = anyCrypto().withPrice(120.84).build()
-
-        val crypto = cryptoService.create(cryptoRequested)
-
-        Assertions.assertTrue(crypto.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when change the price of a crypto to negative`() {
-        val cryptoRequested = anyCrypto().withPrice(-100.0).build()
-
-        try {
-            cryptoService.create(cryptoRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("create.crypto.price: The price cannot be negative.", e.message)
-        }
-    }
+    // TODO: Testear getPrice() con Mock?
 }
