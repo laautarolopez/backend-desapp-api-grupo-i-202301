@@ -39,7 +39,8 @@ class TradeServiceImp(
     }
 
     override fun update(trade: Trade): Trade {
-        return this.create(trade)
+        getTrade(trade.id!!)
+        return tradePersistence.save(trade)
     }
 
     override fun getTrade(idTrade: Long): Trade {
