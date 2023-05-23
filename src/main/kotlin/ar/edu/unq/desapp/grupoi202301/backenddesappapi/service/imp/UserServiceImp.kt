@@ -28,6 +28,11 @@ class UserServiceImp(
         }
     }
 
+    override fun update(user: User): User {
+        this.getUser(user.id!!)
+        return userPersistence.save(user)
+    }
+
     override fun recoverAll(): List<User> {
         return userPersistence.findAll()
     }

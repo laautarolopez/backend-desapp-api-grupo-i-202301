@@ -9,6 +9,8 @@ interface UserService {
 
     fun getUser(idUser: Long): User
 
+    fun update(user: User): User
+
     fun recoverAll(): List<User>
 
     fun clear()
