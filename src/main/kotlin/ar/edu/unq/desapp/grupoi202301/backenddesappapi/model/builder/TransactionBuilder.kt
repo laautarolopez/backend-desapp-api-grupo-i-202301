@@ -6,14 +6,10 @@ class TransactionBuilder {
     var amountOperation: Double? = null
     var trade: Trade? =  null
     var shippingAddress: String? = null
-    var action: ActionTransaction? = null
 
     fun build(): Transaction {
         var transaction = Transaction()
-        transaction.amountOperation = this.amountOperation
         transaction.trade = this.trade
-        transaction.shippingAddress = this.shippingAddress
-        transaction.action = this.action
         return transaction
     }
 
@@ -29,11 +25,6 @@ class TransactionBuilder {
 
     fun withShippingAddress(shippingAddress: String?): TransactionBuilder {
         this.shippingAddress = shippingAddress
-        return this
-    }
-
-    fun withAction(action: ActionTransaction?): TransactionBuilder {
-        this.action = action
         return this
     }
 }

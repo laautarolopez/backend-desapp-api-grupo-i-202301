@@ -10,8 +10,8 @@ class UserBuilder {
     private var password: String? = null
     private var cvuMercadoPago: String? = null
     private var walletAddress: String? = null
-    private var reputation: Int? = 0
-    private var operations: Int? = 0
+    private var reputation: Int = 0
+    private var operations: Int = 0
 
     fun build(): User {
         var user = User()
@@ -21,8 +21,7 @@ class UserBuilder {
         user.address = this.address
         user.password = this.password
         user.cvuMercadoPago = this.cvuMercadoPago
-        user.walletAddress = this.walletAddress 
-        user.reputation = this.reputation
+        user.walletAddress = this.walletAddress
         user.operations = this.operations
         return user
     }
@@ -63,12 +62,12 @@ class UserBuilder {
         return this
     }
 
-    fun withReputation(reputation: Int?) : UserBuilder {
+    fun withReputation(reputation: Int) : UserBuilder {
         this.reputation = reputation
         return this
     }
 
-    fun withOperations(operations: Int?) : UserBuilder {
+    fun withOperations(operations: Int) : UserBuilder {
         this.operations = operations
         return this
     }
