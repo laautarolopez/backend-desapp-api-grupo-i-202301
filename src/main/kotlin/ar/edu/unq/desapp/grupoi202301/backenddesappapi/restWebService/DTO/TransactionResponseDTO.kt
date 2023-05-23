@@ -72,9 +72,9 @@ class TransactionResponseDTO(
     private fun verifyAction(action: String?): ActionTransaction {
         var newAction: ActionTransaction
         when(action) {
-            "Make" -> newAction = ActionTransaction.MAKE
-            "Confirm" -> newAction = ActionTransaction.CONFIRM
-            "Cancel" -> newAction = ActionTransaction.CANCEL
+            "MAKE" -> newAction = ActionTransaction.MAKE
+            "CONFIRM" -> newAction = ActionTransaction.CONFIRM
+            "CANCEL" -> newAction = ActionTransaction.CANCEL
             else -> {
                 throw ActionEmptyException()
             }
