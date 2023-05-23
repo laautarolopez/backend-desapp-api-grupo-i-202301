@@ -1,16 +1,18 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.ActionTransaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TransactionException
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ViolationException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TransactionPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
+import java.time.LocalDateTime
 
 @Service
 @Validated
@@ -20,26 +22,167 @@ class TransactionServiceImp(
     @Autowired
     private val tradeService: TradeService,
     @Autowired
-    private val cryptoService: CryptoService
+    private val cryptoService: CryptoService,
+    @Autowired
+    private val userService: UserService
     ) : TransactionService {
 
     override fun create(transaction: Transaction): Transaction {
         recoverTrade(transaction)
-        validateShippingAddress(transaction)
-        validateAction(transaction)
-        processTransaction(transaction)
+        val userRequested = recoverUserRequested(transaction)
+        updateBuyerSeller(transaction, userRequested)
         return transactionPersistence.save(transaction)
+    }
+
+    override fun update(transaction: Transaction): Transaction {
+        this.getTransaction(transaction.id!!)
+        return transactionPersistence.save(transaction)
+    }
+
+    override fun transfer(transaction: Transaction): Transaction {
+        val transaction = this.getTransaction(transaction.id!!)
+        validateTransfer(transaction)
+        transaction.status = TransactionStatus.TRANSFERRED
+        return update(transaction)
+    }
+
+    private fun validateTransfer(transaction: Transaction) {
+        validateStatus(transaction, TransactionStatus.CREATED)
+        recoverTrade(transaction)
+        recoverUserRequested(transaction)
+        validateUserRequestedBuyer(transaction)
+    }
+
+    private fun validateStatus(transaction: Transaction, status: TransactionStatus) {
+        if(transaction.status != status) {
+            throw TransactionException("transaction.status", "The status must be ${status}")
+        }
+    }
+
+    private fun validateUserRequestedBuyer(transaction: Transaction) {
+        if(transaction.idUserRequested != transaction.buyer!!.id) {
+            throw TransactionException("transaction.buyer", "The user request is not the buyer")
+        }
+    }
+
+    override fun confirm(transaction: Transaction): Transaction {
+        val transaction = this.getTransaction(transaction.id!!)
+        validateConfirm(transaction)
+
+        if(isPriceVariationViolation(transaction)) {
+            transaction.status = TransactionStatus.CANCELED
+            cancelTrade(transaction.trade!!)
+            return update(transaction)
+        } else {
+            transaction.status = TransactionStatus.CONFIRMED
+            cancelTrade(transaction.trade!!)
+
+            addOperationToUsers(transaction)
+            addPointsToUsers(transaction)
+
+            return update(transaction)
+        }
+    }
+
+    private fun validateConfirm(transaction: Transaction) {
+        validateStatus(transaction, TransactionStatus.TRANSFERRED)
+        recoverTrade(transaction)
+        recoverUserRequested(transaction)
+        validateUserRequestedSeller(transaction)
+    }
+
+    private fun validateUserRequestedSeller(transaction: Transaction) {
+        if(transaction.idUserRequested != transaction.seller!!.id) {
+            throw TransactionException("transaction.seller", "The user request is not the seller")
+        }
+    }
+
+    private fun cancelTrade(trade: Trade) {
+        val cancelTrade = trade
+        cancelTrade.isActive = false
+        tradeService.update(trade)
+    }
+
+    private fun addOperationToUsers(transaction: Transaction) {
+        val buyer = transaction.buyer
+        val seller = transaction.seller
+
+        buyer!!.addOperation()
+        seller!!.addOperation()
+    }
+
+    private fun addPointsToUsers(transaction: Transaction) {
+        val buyer = transaction.buyer
+        val seller = transaction.seller
+        val time = transaction.trade!!.creationDate
+        val actualTime = LocalDateTime.now()
+
+        if(actualTime.isBefore(time!!.plusMinutes(30))) {
+            buyer!!.addPoints(10)
+            seller!!.addPoints(10)
+        } else {
+            buyer!!.addPoints(5)
+            seller!!.addPoints(5)
+        }
+
+        userService.update(buyer)
+        userService.update(seller)
+    }
+
+    override fun cancel(transaction: Transaction): Transaction {
+        val transaction = this.getTransaction(transaction.id!!)
+        validateCancel(transaction)
+        transaction.status = TransactionStatus.CANCELED
+        subtractPoints(recoverUserRequested(transaction))
+        return update(transaction)
+    }
+
+    private fun validateCancel(transaction: Transaction) {
+        validateStatus(transaction, TransactionStatus.CREATED)
+        validateStatus(transaction, TransactionStatus.TRANSFERRED)
+        recoverTrade(transaction)
+        recoverUserRequested(transaction)
+        validateUserRequestedBuyerOrSeller(transaction)
+    }
+
+    private fun validateUserRequestedBuyerOrSeller(transaction: Transaction) {
+        if(transaction.idUserRequested != transaction.buyer!!.id && transaction.idUserRequested != transaction.seller!!.id) {
+            throw TransactionException("transaction.buyer/seller", "The user request is not the buyer/seller")
+        }
+    }
+
+    private fun subtractPoints(userRequested: User) {
+        val user = userRequested
+        user.subtractPoints(20)
+        userService.update(user)
     }
 
     private fun recoverTrade(transaction: Transaction) {
         transaction.trade = tradeService.getTrade(transaction.trade!!.id!!)
+        if(!transaction.trade!!.isActive!!) {
+            throw TransactionException("trade.isActive", "The trade is not active.")
+        }
+    }
+
+    private fun recoverUserRequested(transaction: Transaction): User {
+        return userService.getUser(transaction.idUserRequested!!)
+    }
+
+    private fun updateBuyerSeller(transaction: Transaction, userRequested: User) {
+        if (isOperationType(transaction, OperationType.BUY)) {
+            transaction.buyer = transaction.trade!!.user
+            transaction.seller = userRequested
+        } else {
+            transaction.buyer = userRequested
+            transaction.seller = transaction.trade!!.user
+        }
     }
 
     override fun getTransaction(idTransaction: Long): Transaction {
         try {
             return transactionPersistence.getReferenceById(idTransaction)
         } catch(e: RuntimeException) {
-            throw RuntimeException("The transaction does not exist.")
+            throw ViolationException("transaction", "The transaction does not exist.")
         }
     }
 
@@ -51,44 +194,11 @@ class TransactionServiceImp(
         transactionPersistence.deleteAll()
     }
 
-    private fun validateShippingAddress(transaction: Transaction) {
-        if(isOperationType(transaction, OperationType.SALE)) {
-            transaction.shippingAddress = transaction.trade!!.user!!.cvuMercadoPago
-        } else if(isOperationType(transaction, OperationType.BUY)) {
-            transaction.shippingAddress = transaction.trade!!.user!!.walletAddress
-        }
-    }
-
     private fun isOperationType(transaction: Transaction, operation: OperationType): Boolean {
         return transaction.trade!!.operation == operation
     }
 
-    private fun validateAction(transaction: Transaction) {
-        // TODO: validar si el usuario de la transaccion es comprador o vendedor(no el user del trade)
-        if(isActionTransaction(transaction, ActionTransaction.CONFIRM) && isOperationType(transaction, OperationType.BUY)) {
-                throw RuntimeException("The action must be 'MAKE' or 'CANCEL' for buy operation.")
-        } else if(isActionTransaction(transaction, ActionTransaction.MAKE) && isOperationType(transaction, OperationType.SALE)) {
-            throw RuntimeException("The action must be 'CONFIRM' or 'CANCEL' for sale operation.")
-        }
-    }
-
-    private fun isActionTransaction(transaction: Transaction, action: ActionTransaction): Boolean {
-        return transaction.action == action
-    }
-
-    private fun processTransaction(transaction: Transaction) {
-        if(isSuccessful(transaction)) {
-
-        } else {
-
-        }
-    }
-
-    private fun isSuccessful(transaction: Transaction): Boolean {
-        return !isActionTransaction(transaction, ActionTransaction.CANCEL) && !isPriceDifferent(transaction)
-    }
-
-    private fun isPriceDifferent(transaction: Transaction): Boolean {
+    private fun isPriceVariationViolation(transaction: Transaction): Boolean {
         val crypto = transaction.trade!!.crypto
         val tradePrice = transaction.trade!!.cryptoPrice
         val actualPrice = cryptoService.getPrice(crypto!!.name.toString()).price
