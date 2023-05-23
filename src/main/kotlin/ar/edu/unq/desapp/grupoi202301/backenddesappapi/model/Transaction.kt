@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponse
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
@@ -11,14 +12,17 @@ class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
-    @Column(nullable = false)
-    @NotNull(message = "The amount of operation cannot be null.")
-    @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
-    var amountUSD: Double? = null
+    fun getAmountUSD(): Double {
+        val quantity = this.trade!!.quantity
+        val cryptoPrice = this.trade!!.cryptoPrice
+        return quantity!! * cryptoPrice!!
+    }
 
-    @Column(nullable = false)
-    @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
-    var amountARS: Double? = null
+    fun getAmountARS(): Double {
+        val amountUSD = this.getAmountUSD()
+        val DolarBlue = DolarResponse().getPrice()
+        return amountUSD * DolarBlue.price
+    }
 
     @Column(nullable = false)
     @NotNull
