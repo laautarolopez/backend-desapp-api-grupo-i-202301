@@ -22,8 +22,9 @@ enum class OperationType {
     SALE
 }
 
-enum class ActionTransaction {
-    MAKE,
-    CONFIRM,
-    CANCEL
+enum class TransactionStatus {
+    CREATED,
+    TRANSFERRED,
+    CONFIRMED,
+    CANCELED
 }
