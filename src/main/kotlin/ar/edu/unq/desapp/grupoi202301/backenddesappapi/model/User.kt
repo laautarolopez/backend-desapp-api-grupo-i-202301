@@ -48,10 +48,25 @@ class User {
 
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0.")
-    var reputation: Int? = 0
-    // TODO: agregar operacion para calcular reputacion
+    private var points: Int = 0
+
+    fun addPoints(amount: Int) {
+        points += amount
+    }
+
+    fun subtractPoints(amount: Int) {
+        points -= amount
+    }
+
+    fun getReputation(): String {
+        return (points / operations).toString()
+    }
 
     @Column(nullable = false)
     @Min(value = 0, message = "The number must be equal to or greater than 0.")
-    var operations: Int? = 0
+    var operations: Int = 0
+
+    fun addOperation() {
+        operations += 1
+    }
 }
