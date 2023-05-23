@@ -288,6 +288,6 @@ class UserTest {
 
         val violations = validator.validate(user)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
+        assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
     }
 }

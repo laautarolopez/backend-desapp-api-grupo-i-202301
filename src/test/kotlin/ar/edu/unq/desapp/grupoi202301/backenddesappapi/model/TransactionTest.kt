@@ -37,15 +37,12 @@ class TransactionTest {
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
     }
 
     val anyTrade: Trade =
             TradeBuilder()
             .withCrypto(anyCrypto().build())
             .withQuantity(200.50)
-            .withAmountARS(150.8)
             .withUser(anyUser)
             .withOperation(sale).build()
 
@@ -96,7 +93,6 @@ class TransactionTest {
             TradeBuilder()
                 .withCrypto(anyCrypto().build())
                 .withQuantity(150.0)
-                .withAmountARS(180.0)
                 .withUser(anyUser)
                 .withOperation(sale).build()
 
