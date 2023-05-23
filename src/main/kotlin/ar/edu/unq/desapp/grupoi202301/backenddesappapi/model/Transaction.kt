@@ -23,11 +23,9 @@ class Transaction {
     var idUserRequested: Long? = null
 
     @ManyToOne
-    @NotNull(message = "The buyer cannot be null.")
     var buyer: User? = null
 
     @ManyToOne
-    @NotNull(message = "The buyer cannot be null.")
     var seller: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
