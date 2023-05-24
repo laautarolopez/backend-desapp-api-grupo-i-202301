@@ -44,4 +44,6 @@ class CryptoTest {
 
         Assertions.assertTrue(violations.any { v -> v.message == "The crypto name cannot be null." })
     }
+
+    //TODO(Testear getPrice() con Mock?)
 }
