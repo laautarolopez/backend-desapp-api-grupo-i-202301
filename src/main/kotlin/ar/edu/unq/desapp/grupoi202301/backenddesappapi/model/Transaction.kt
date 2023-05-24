@@ -32,4 +32,28 @@ class Transaction {
     @Column(nullable = false)
     @NotNull(message = "The status cannot be null.")
     var status: TransactionStatus = TransactionStatus.CREATED
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Transaction
+
+        if (id != other.id) return false
+        if (idUserRequested != other.idUserRequested) return false
+        if (buyer != other.buyer) return false
+        if (seller != other.seller) return false
+        if (trade != other.trade) return false
+        return status == other.status
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (idUserRequested?.hashCode() ?: 0)
+        result = 31 * result + (buyer?.hashCode() ?: 0)
+        result = 31 * result + (seller?.hashCode() ?: 0)
+        result = 31 * result + (trade?.hashCode() ?: 0)
+        result = 31 * result + status.hashCode()
+        return result
+    }
 }
