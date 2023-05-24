@@ -31,6 +31,34 @@ class Trade {
         return price * DolarBlue.price
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Trade
+
+        if (id != other.id) return false
+        if (crypto != other.crypto) return false
+        if (cryptoPrice != other.cryptoPrice) return false
+        if (quantity != other.quantity) return false
+        if (user != other.user) return false
+        if (operation != other.operation) return false
+        if (creationDate != other.creationDate) return false
+        return isActive == other.isActive
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (crypto?.hashCode() ?: 0)
+        result = 31 * result + (cryptoPrice?.hashCode() ?: 0)
+        result = 31 * result + (quantity?.hashCode() ?: 0)
+        result = 31 * result + (user?.hashCode() ?: 0)
+        result = 31 * result + (operation?.hashCode() ?: 0)
+        result = 31 * result + (creationDate?.hashCode() ?: 0)
+        result = 31 * result + (isActive?.hashCode() ?: 0)
+        return result
+    }
+
     @ManyToOne
     @NotNull(message = "The user cannot be null.")
     var user: User? = null
@@ -46,4 +74,6 @@ class Trade {
     @Column(nullable = false)
     @NotNull(message = "The isActive cannot be null.")
     var isActive: Boolean? = true
+
+
 }
