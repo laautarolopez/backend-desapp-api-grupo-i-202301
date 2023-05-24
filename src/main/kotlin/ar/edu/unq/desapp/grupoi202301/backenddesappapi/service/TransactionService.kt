@@ -15,7 +15,7 @@ interface TransactionService {
 
     fun cancel(transaction: Transaction): Transaction
 
-    fun getTransaction(idTransaction: Long): Transaction
+    fun getTransaction(idTransaction: Long?): Transaction
 
     fun recoverAll(): List<Transaction>
 

@@ -169,14 +169,14 @@ class TransactionServiceImp(
     }
 
     private fun recoverTrade(transaction: Transaction) {
-        transaction.trade = tradeService.getTrade(transaction.trade!!.id!!)
+        transaction.trade = tradeService.getTrade(transaction.trade!!.id)
         if(!transaction.trade!!.isActive!!) {
             throw TransactionException("trade.isActive", "The trade is not active.")
         }
     }
 
     private fun recoverUserRequested(transaction: Transaction): User {
-        return userService.getUser(transaction.idUserRequested!!)
+        return userService.getUser(transaction.idUserRequested)
     }
 
     private fun updateBuyerSeller(transaction: Transaction, userRequested: User) {
@@ -193,11 +193,18 @@ class TransactionServiceImp(
         }
     }
 
-    override fun getTransaction(idTransaction: Long): Transaction {
+    override fun getTransaction(idTransaction: Long?): Transaction {
+        validateId(idTransaction)
         try {
-            return transactionPersistence.getReferenceById(idTransaction)
+            return transactionPersistence.getReferenceById(idTransaction!!)
         } catch(e: RuntimeException) {
-            throw ViolationException("transaction", "The transaction does not exist.")
+            throw TransactionException("transaction", "The transaction does not exist.")
+        }
+    }
+
+    private fun validateId(idTransaction: Long?) {
+        if(idTransaction == null) {
+            throw TransactionException("transaction", "The transaction does not exist.")
         }
     }
 
