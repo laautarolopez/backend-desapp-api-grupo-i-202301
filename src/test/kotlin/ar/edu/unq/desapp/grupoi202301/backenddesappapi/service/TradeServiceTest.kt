@@ -4,8 +4,10 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TradeNonExistentException
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
+import org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
@@ -36,7 +38,6 @@ class TradeServiceTest {
             .withPassword("Password@1234")
             .withCVU("1234567890123456789012")
             .withWalletAddress("12345678")
-            .withReputation(3)
             .withOperations(1)
             .build()
 
@@ -107,6 +108,32 @@ class TradeServiceTest {
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
             Assertions.assertEquals("create.trade.crypto: The crypto cannot be null.", e.message)
+        }
+    }
+
+    @Test
+    fun `an exception occurs when the user not exists`() {
+        val user = anyUser().build()
+        val tradeRequested = anyTrade().withUser(user).build()
+
+        try {
+            tradeService.create(tradeRequested)
+            Assertions.fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            Assertions.assertEquals("User non-existent.", e.message)
+        }
+    }
+
+    @Test
+    fun `an exception occurs when the crypto not exists`() {
+        val crypto = anyCrypto().build()
+        val tradeRequested = anyTrade().withCrypto(crypto).build()
+
+        try {
+            tradeService.create(tradeRequested)
+            Assertions.fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            Assertions.assertEquals("Crypto non-existent.", e.message)
         }
     }
 
@@ -218,10 +245,31 @@ class TradeServiceTest {
         Assertions.assertTrue(tradesActives.size == 3)
     }
 
-    @AfterEach
-    fun cleanup() {
-        cryptoService.clear()
-        userService.clear()
-        tradeService.clear()
+    @Test
+    fun `a trade is updated`() {
+        val trade = tradeService.create(anyTrade().build())
+        val idTrade = trade.id
+        trade.isActive = false
+
+        tradeService.update(trade)
+
+        val tradeGetted = tradeService.getTrade(idTrade)
+
+        Assertions.assertEquals(false, tradeGetted.isActive)
     }
+
+    @Test
+    fun `an exception occurs when change the trade not exists`() {
+        val trade = anyTrade().build()
+        trade.isActive = false
+
+        try {
+            tradeService.update(trade)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: TradeNonExistentException) {
+            Assertions.assertEquals("The trade does not exist.", e.message)
+        }
+    }
+
+    //TODO mockear crypto.getPrice()
 }
