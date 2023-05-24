@@ -60,6 +60,24 @@ class TransactionTest {
     }
 
     @Test
+    fun `change the id user requested`() {
+        val transaction = anyTransaction().withIdUserRequested(3).build()
+
+        val violations = validator.validate(transaction)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the id user requested to null`() {
+        val transaction = anyTransaction().withIdUserRequested(null).build()
+
+        val violations = validator.validate(transaction)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The idUserRequested cannot be null." })
+    }
+
+    @Test
     fun `change the amount operation of a transaction`() {
         val transaction = anyTransaction().withAmountOperation(55.86).build()
 
@@ -140,8 +158,9 @@ class TransactionTest {
     }
 
     @Test
-    fun `a violation occurs when changing the action in a transaction to null`() {
-        val transaction = anyTransaction().withAction(null).build()
+    fun `change the status of a transaction`() {
+
+        val transaction = anyTransaction().withStatus(statusCanceled).build()
 
         val violations = validator.validate(transaction)
 
