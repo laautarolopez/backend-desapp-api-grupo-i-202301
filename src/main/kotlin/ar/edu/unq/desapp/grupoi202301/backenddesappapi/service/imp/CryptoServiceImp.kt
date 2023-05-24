@@ -21,10 +21,17 @@ class CryptoServiceImp(
         return cryptoPersistence.save(crypto)
     }
 
-    override fun getCrypto(idCrypto: Long): Crypto {
+    override fun getCrypto(idCrypto: Long?): Crypto {
+        validateId(idCrypto)
         try {
-            return cryptoPersistence.getReferenceById(idCrypto)
+            return cryptoPersistence.getReferenceById(idCrypto!!)
         } catch(e: RuntimeException) {
+            throw CryptoNonExistent()
+        }
+    }
+
+    private fun validateId(idCrypto: Long?) {
+        if(idCrypto == null) {
             throw CryptoNonExistent()
         }
     }
