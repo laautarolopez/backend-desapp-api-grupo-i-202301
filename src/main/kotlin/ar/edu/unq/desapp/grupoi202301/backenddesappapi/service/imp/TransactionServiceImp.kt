@@ -35,13 +35,13 @@ class TransactionServiceImp(
     }
 
     override fun update(transaction: Transaction): Transaction {
-        this.getTransaction(transaction.id!!)
+        this.getTransaction(transaction.id)
         return transactionPersistence.save(transaction)
     }
 
     override fun transfer(transaction: Transaction): Transaction {
         val idUserRequested = transaction.idUserRequested
-        val transaction = this.getTransaction(transaction.id!!)
+        val transaction = this.getTransaction(transaction.id)
         transaction.idUserRequested = idUserRequested
         validateTransfer(transaction)
         transaction.status = TransactionStatus.TRANSFERRED
@@ -69,7 +69,7 @@ class TransactionServiceImp(
 
     override fun confirm(transaction: Transaction): Transaction {
         val idUserRequested = transaction.idUserRequested
-        val transaction = this.getTransaction(transaction.id!!)
+        val transaction = this.getTransaction(transaction.id)
         transaction.idUserRequested = idUserRequested
         validateConfirm(transaction)
 
@@ -135,7 +135,7 @@ class TransactionServiceImp(
 
     override fun cancel(transaction: Transaction): Transaction {
         val idUserRequested = transaction.idUserRequested
-        val transaction = this.getTransaction(transaction.id!!)
+        val transaction = this.getTransaction(transaction.id)
         transaction.idUserRequested = idUserRequested
         validateCancel(transaction)
         transaction.status = TransactionStatus.CANCELED
