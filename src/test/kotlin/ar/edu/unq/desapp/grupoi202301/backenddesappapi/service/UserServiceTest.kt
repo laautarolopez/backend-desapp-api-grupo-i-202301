@@ -22,7 +22,6 @@ class UserServiceTest {
             .withPassword("Password@1234")
             .withCVU("1234567890123456789012")
             .withWalletAddress("12345678")
-            .withReputation(5)
             .withOperations(15)
     }
 
@@ -372,7 +371,6 @@ class UserServiceTest {
         userService.create(anyUser().build())
 
         var users = userService.recoverAll()
-        println(users.size)
         assertTrue(users.size == 1)
 
         userService.create(otherUser1)
@@ -382,6 +380,58 @@ class UserServiceTest {
 
         assertTrue(users.size == 3)
     }
+
+    @Test
+    fun `no user is recovered`() {
+        var users = userService.recoverAll()
+
+        assertTrue(users.isEmpty())
+    }
+
+    @Test
+    fun `an user is getted`() {
+        val user = userService.create(anyUser().build())
+        val idUser = user.id
+
+        val userGetted = userService.getUser(idUser!!)
+
+        assertEquals(user, userGetted)
+    }
+
+    @Test
+    fun `an exception be thrown when an user is not exist`() {
+        try {
+            userService.getUser(55)
+            fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            assertEquals("User non-existent.", e.message)
+        }
+    }
+
+    @Test
+    fun `update user by change the name`() {
+        val userRequested = anyUser().withName("Carlos").build()
+        val user = userService.create(userRequested)
+        user.name = "Roberto"
+        userService.update(user)
+
+        val userRecovered = userService.getUser(user.id!!)
+
+        assertEquals("Roberto", userRecovered.name)
+    }
+
+    @Test
+    fun `an exception be thrown when update null user`() {
+        try {
+            val user = anyUser().build()
+            userService.update(user)
+            fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            assertEquals("User non-existent.", e.message)
+        }
+    }
+
+
 
     @AfterEach
     fun cleanup() {
