@@ -1,12 +1,15 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
+import java.time.LocalDateTime
 
 class TradeBuilder {
     var crypto: Crypto? = null
+    var cryptoPrice: Double? = null
     var quantity: Double? = null
     var user: User? = null
     var operation: OperationType? = null
+    var creationDate: LocalDateTime? = null
     var isActive: Boolean? = null
 
     fun build(): Trade {
