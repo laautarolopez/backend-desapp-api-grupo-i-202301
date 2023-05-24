@@ -1,9 +1,6 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.BinanceResponseException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.BinanceServerException
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorBinanceResponse
-import com.google.gson.Gson
 import org.springframework.stereotype.Service
 import retrofit2.Call
 

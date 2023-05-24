@@ -3,8 +3,8 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.CryptoServiceImp
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions

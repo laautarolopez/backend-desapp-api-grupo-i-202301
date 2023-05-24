@@ -2,8 +2,8 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import jakarta.transaction.Transactional

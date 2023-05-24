@@ -3,7 +3,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TradeNonExistentException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.DolarResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService

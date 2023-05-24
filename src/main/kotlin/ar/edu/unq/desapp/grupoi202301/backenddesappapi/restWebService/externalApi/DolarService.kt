@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi
 
 import retrofit2.Call
 import retrofit2.Retrofit
