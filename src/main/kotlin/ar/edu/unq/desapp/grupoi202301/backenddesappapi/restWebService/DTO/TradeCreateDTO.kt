@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.OperationEmptyException
+import java.time.LocalDateTime
 
 class TradeCreateDTO(
     var idCrypto: Long,
@@ -23,6 +24,7 @@ class TradeCreateDTO(
         user.id = this.idUser
         trade.user = user
         trade.operation = this.verifyOperation(this.operation)
+        trade.creationDate = LocalDateTime.now()
         trade.isActive = true
         return trade
     }
