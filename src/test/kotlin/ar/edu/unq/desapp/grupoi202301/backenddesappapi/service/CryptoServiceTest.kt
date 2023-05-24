@@ -3,17 +3,29 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.CryptoServiceImp
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mockito
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import java.time.LocalDateTime
 
 @SpringBootTest
+@ExtendWith(MockitoExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CryptoServiceTest {
+    @MockBean
+    lateinit var binanceResponse: BinanceResponseInt
+
     @Autowired
     lateinit var cryptoService: CryptoServiceImp
 
@@ -41,6 +53,18 @@ class CryptoServiceTest {
         CryptoBuilder()
             .withName(ethusdt)
             .build()
+
+    @BeforeEach
+    fun setup() {
+        fun price(cryptoName: String) = PriceResponse(cryptoName, 1.123, LocalDateTime.now().toString())
+        val list = listOf(price("BTCUSDT"), price("AAVEUSDT"), price("ALICEUSDT"), price("ETHUSDT"))
+
+        CryptoName.values().forEach {
+            name -> Mockito.`when`(binanceResponse.getPrice(name.toString())).thenReturn(price(name.toString()))
+        }
+
+        Mockito.`when`(binanceResponse.getPrices()).thenReturn(list)
+    }
 
     @Test
     fun `a crypto is successfully created when it has correct data`() {
@@ -95,24 +119,26 @@ class CryptoServiceTest {
     }
 
     @Test
+    fun `get price of ALICEUSDT`() {
+        cryptoService.create(anyCrypto().withName(aliceusdt).build())
+
+        var priceResponse = cryptoService.getPrice(aliceusdt.toString())
+
+        Assertions.assertTrue(priceResponse.cryptoName == "ALICEUSDT")
+        Assertions.assertTrue(priceResponse.price == 1.123)
+    }
+
+    @Test
     fun `4 cryptos prices are recovered successfully`() {
         cryptoService.create(anyCrypto().build())
-
-        //var prices = cryptoService.getPrices()
-
-        //Assertions.assertTrue(prices.size == 1)
-
         cryptoService.create(otherCrypto1)
         cryptoService.create(otherCrypto2)
         cryptoService.create(otherCrypto3)
 
-        //prices = cryptoService.getPrices()
+        var prices = cryptoService.getPrices()
 
-        //Assertions.assertTrue(prices.size == 4)
+        Assertions.assertTrue(prices.size == 4)
     }
-
-    //TODO(Testear getPrice() con Mock?)
-    //TODO(Testear getPrices() con Mock?)
 
     @AfterAll
     fun clear() {
