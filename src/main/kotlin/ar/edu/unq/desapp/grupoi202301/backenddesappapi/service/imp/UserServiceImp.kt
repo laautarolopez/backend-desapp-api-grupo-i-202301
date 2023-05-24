@@ -20,22 +20,22 @@ class UserServiceImp(
         return userPersistence.save(user)
     }
 
-    override fun getUser(idUser: Long): User {
+    override fun getUser(idUser: Long?): User {
+        validateId(idUser)
         try {
-            return userPersistence.getReferenceById(idUser)
+            return userPersistence.getReferenceById(idUser!!)
         } catch(e: RuntimeException) {
             throw UserNonExistent()
         }
     }
 
     override fun update(user: User): User {
-        validateId(user)
-        this.getUser(user.id!!)
+        this.getUser(user.id)
         return userPersistence.save(user)
     }
 
-    private fun validateId(user: User) {
-        if(user.id == null) {
+    private fun validateId(idUser: Long?) {
+        if(idUser == null) {
             throw UserNonExistent()
         }
     }
