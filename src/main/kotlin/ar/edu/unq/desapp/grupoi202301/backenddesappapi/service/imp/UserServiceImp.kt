@@ -29,8 +29,15 @@ class UserServiceImp(
     }
 
     override fun update(user: User): User {
+        validateId(user)
         this.getUser(user.id!!)
         return userPersistence.save(user)
+    }
+
+    private fun validateId(user: User) {
+        if(user.id == null) {
+            throw UserNonExistent()
+        }
     }
 
     override fun recoverAll(): List<User> {
