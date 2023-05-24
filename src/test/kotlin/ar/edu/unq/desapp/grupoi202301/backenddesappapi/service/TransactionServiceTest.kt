@@ -5,10 +5,12 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuild
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TradeNonExistentException
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 @TestInstance(PER_CLASS)
@@ -25,8 +27,6 @@ class TransactionServiceTest {
     @Autowired
     lateinit var tradeService: TradeService
 
-    var confirm: ActionTransaction = ActionTransaction.CONFIRM
-    var make: ActionTransaction = ActionTransaction.MAKE
     var sale: OperationType = OperationType.SALE
     var buy: OperationType = OperationType.BUY
 
@@ -35,6 +35,17 @@ class TransactionServiceTest {
             .withName("Jorge")
             .withLastName("Sanchez")
             .withEmail("jorgesanchez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+
+    val otherUser: User =
+        UserBuilder()
+            .withName("Marcos")
+            .withLastName("Perez")
+            .withEmail("marcosperez@gmail.com")
             .withAddress("calle falsa 123")
             .withPassword("Password@1234")
             .withCVU("1234567890123456789012")
@@ -60,31 +71,55 @@ class TransactionServiceTest {
     val anyTrade: Trade =
         TradeBuilder()
             .withCrypto(anyCrypto)
+            .withCryptoPrice(200.00)
             .withQuantity(200.50)
             .withUser(anyUser)
             .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
             .withIsActive(true).build()
 
     val otherTrade: Trade =
         TradeBuilder()
             .withCrypto(anyCrypto)
+            .withCryptoPrice(100.00)
             .withQuantity(300.0)
-            .withUser(anyUser)
+            .withUser(otherUser)
             .withOperation(buy)
+            .withCreationDate(LocalDateTime.now())
             .withIsActive(true).build()
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withAmountOperation(200.4)
+            .withIdUserRequested(1)
+            .withBuyer(otherUser)
+            .withSeller(anyUser)
             .withTrade(anyTrade)
-            .withShippingAddress("1234567890123456789012")
-            .withAction(confirm)
     }
+
+    fun otherTransaction1(): TransactionBuilder {
+         return TransactionBuilder()
+            .withIdUserRequested(2)
+             .withBuyer(otherUser)
+             .withSeller(anyUser)
+            .withTrade(anyTrade)
+    }
+
+    fun otherTransaction2(): TransactionBuilder {
+        return TransactionBuilder()
+            .withIdUserRequested(1)
+            .withBuyer(anyUser)
+            .withSeller(otherUser)
+            .withTrade(otherTrade)
+    }
+
+    var user1: User? = null
+    var user2: User? = null
 
     @BeforeAll
     fun setup() {
         cryptoService.create(anyCrypto)
-        userService.create(anyUser)
+        user1 = userService.create(anyUser)
+        user2 = userService.create(otherUser)
         tradeService.create(anyTrade)
         tradeService.create(otherTrade)
     }
@@ -99,8 +134,9 @@ class TransactionServiceTest {
     }
 
     @Test
-    fun `a violation occurs when creating a sale transaction with a wrong shipping address`() {
-        val anyTransaction = anyTransaction().withShippingAddress("12345678").build()
+    fun `an exception occurs when the trade not exists`() {
+        val anyTrade = anyTrade().build()
+        val anyTransaction = anyTransaction().withIdUserRequested(user1!!.id).withTrade(anyTrade).build()
 
         try {
             transactionService.create(anyTransaction)
@@ -111,32 +147,14 @@ class TransactionServiceTest {
     }
 
     @Test
-    fun `a violation occurs when change the amount operation of a transaction to negative`() {
-        val transactionRequested = anyTransaction().withAmountOperation(-15.00).build()
+    fun `an exception occurs when the user not exists`() {
+        val anyTransaction = anyTransaction().withIdUserRequested(50).withTrade(anyTrade).build()
 
         try {
-            transactionService.create(transactionRequested)
+            transactionService.create(anyTransaction)
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.amountOperation: The amount of operation cannot be negative.",
-                e.message
-            )
-        }
-    }
-
-    @Test
-    fun `a violation occurs when change the amount operation of a transaction for null`() {
-        val transactionRequested = anyTransaction().withAmountOperation(null).build()
-
-        try {
-            transactionService.create(transactionRequested)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.amountOperation: The amount of operation cannot be null.",
-                e.message
-            )
+            Assertions.assertEquals("User non-existent.", e.message)
         }
     }
 
@@ -188,58 +206,227 @@ class TransactionServiceTest {
     }
 
     @Test
-    fun `change the shipping address of a transaction`() {
-        val transactionRequested = anyTransaction().withShippingAddress("2131267169283121567927").build()
+    fun `a transaction changes status to transfer`() {
+        val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
+        val idTransaction = transaction.id
 
-        val transaction = transactionService.create(transactionRequested)
+        var transactionRecovered = transactionService.getTransaction(idTransaction)
+        Assertions.assertEquals(transactionRecovered.status, TransactionStatus.CREATED)
 
-        Assertions.assertTrue(transaction.id != null)
+        var transactionTransfer = transactionService.transfer(transaction)
+        Assertions.assertEquals(transactionTransfer.status, TransactionStatus.TRANSFERRED)
     }
 
     @Test
-    fun `a violation occurs when changing the shipping address in a transaction to null`() {
-        val transactionRequested = anyTransaction().withShippingAddress(null).build()
+    fun `an exception occurs transfering when the transaction does not exist`() {
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).build()
 
         try {
-            transactionService.create(transactionRequested)
+            transactionService.transfer(transaction)
             Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.shippingAddress: The shipping address cannot be null.",
-                e.message
-            )
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The transaction does not exist.", e.message)
         }
     }
 
     @Test
-    fun `change the action of a transaction`() {
-        val transactionRequested = anyTransaction().withAction(make).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
-    }
-
-    @Test
-    fun `a violation occurs when changing the action in a transaction to null`() {
-        val transactionRequested = anyTransaction().withAction(null).build()
+    fun `an exception occurs transfering when the transaction status is TRANSFERRED`() {
+            val status = TransactionStatus.TRANSFERRED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
 
         try {
-            transactionService.create(transactionRequested)
+            transactionService.transfer(transaction)
             Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals(
-                "create.transaction.action: The action cannot be null.",
-                e.message
-            )
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be CREATED", e.message)
         }
     }
 
-    @AfterEach
-    fun cleanup() {
-        cryptoService.clear()
-        userService.clear()
-        tradeService.clear()
+    @Test
+    fun `an exception occurs transfering when the transaction status is CONFIRMED`() {
+        val status = TransactionStatus.CONFIRMED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
+
+        try {
+            transactionService.transfer(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be CREATED", e.message)
+        }
+    }
+
+    @Test
+    fun `an exception occurs transfering when the transaction status is CANCELED`() {
+        val status = TransactionStatus.CANCELED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
+
+        try {
+            transactionService.transfer(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be CREATED", e.message)
+        }
+    }
+
+    @Test
+    fun `a transaction changes status to canceled`() {
+        val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
+        val idTransaction = transaction.id
+
+        var transactionRecovered = transactionService.getTransaction(idTransaction)
+        Assertions.assertEquals(transactionRecovered.status, TransactionStatus.CREATED)
+
+        var transactionTransfer = transactionService.cancel(transaction)
+        Assertions.assertEquals( TransactionStatus.CANCELED, transactionTransfer.status)
+    }
+
+    @Test
+    fun `an exception occurs canceling when the transaction status is CANCELED`() {
+        val status = TransactionStatus.CANCELED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
+
+        try {
+            transactionService.cancel(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be TRANSFERRED or CREATED", e.message)
+        }
+    }
+
+    @Test
+    fun `an exception occurs canceling when the transaction status is CONFIRMED`() {
+        val status = TransactionStatus.CONFIRMED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
+
+        try {
+            transactionService.cancel(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be TRANSFERRED or CREATED", e.message)
+        }
+    }
+
+    @Test
+    fun `a transaction changes status to confirmed`() {
+        val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
+        val idTransaction = transaction.id
+
+        var transactionRecovered = transactionService.getTransaction(idTransaction)
+        Assertions.assertEquals(TransactionStatus.CREATED, transactionRecovered.status)
+
+        transactionRecovered = transactionService.transfer(transactionRecovered)
+        Assertions.assertEquals(TransactionStatus.TRANSFERRED, transactionRecovered.status)
+
+        transactionRecovered.idUserRequested = user1!!.id
+        transactionRecovered = transactionService.update(transactionRecovered)
+
+        var transactionTransfer = transactionService.confirm(transactionRecovered)
+        Assertions.assertEquals( TransactionStatus.CONFIRMED, transactionTransfer.status)
+    }
+
+    @Test
+    fun `an exception occurs confirming when the transaction status is CONFIRMED`() {
+        val status = TransactionStatus.CONFIRMED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
+
+        try {
+            transactionService.confirm(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be TRANSFERRED", e.message)
+        }
+    }
+
+    @Test
+    fun `an exception occurs confirming when the transaction status is CANCELED`() {
+        val status = TransactionStatus.CANCELED
+        val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
+        transactionService.create(transaction)
+
+        try {
+            transactionService.confirm(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The status must be TRANSFERRED", e.message)
+        }
+    }
+
+    @Test
+    fun `a transaction is getted`() {
+        val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
+        val idTransaction = transaction.id
+
+        val transactionGetted = transactionService.getTransaction(idTransaction)
+
+        Assertions.assertEquals(transaction, transactionGetted)
+    }
+
+    @Test
+    fun `an exception be thrown when a transaction is not exists`() {
+        try {
+            transactionService.getTransaction(50)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The transaction does not exist.", e.message)
+        }
+    }
+
+    @Test
+    fun `a transaction is updated`() {
+        val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
+        val idTransaction = transaction.id
+        transaction.status = TransactionStatus.TRANSFERRED
+
+        transactionService.update(transaction)
+
+        val transactionGetted = transactionService.getTransaction(idTransaction)
+
+        Assertions.assertEquals(TransactionStatus.TRANSFERRED, transactionGetted.status)
+    }
+
+    @Test
+    fun `an exception occurs when change the transaction not exists`() {
+        val transaction = anyTransaction().build()
+        transaction.status = TransactionStatus.CONFIRMED
+
+        try {
+            transactionService.update(transaction)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The transaction does not exist.", e.message)
+        }
+    }
+
+    @Test
+    fun `no transaction is recovered`() {
         transactionService.clear()
+        var transaction = transactionService.recoverAll()
+
+        Assertions.assertTrue(transaction.isEmpty())
+    }
+
+    @Test
+    fun `5 transactions are successfully created and recovered`() {
+        transactionService.clear()
+
+        var transactions = transactionService.recoverAll()
+        Assertions.assertTrue(transactions.isEmpty())
+
+        val transaction1 = anyTransaction().withIdUserRequested(user2!!.id).build()
+        val transaction2 = otherTransaction1().withIdUserRequested(user2!!.id).build()
+        val transaction3 = otherTransaction2().withIdUserRequested(user1!!.id).build()
+        transactionService.create(transaction1)
+        transactionService.create(transaction2)
+        transactionService.create(transaction3)
+
+        transactions = transactionService.recoverAll()
+
+        Assertions.assertTrue(transactions.size == 3)
     }
 }
