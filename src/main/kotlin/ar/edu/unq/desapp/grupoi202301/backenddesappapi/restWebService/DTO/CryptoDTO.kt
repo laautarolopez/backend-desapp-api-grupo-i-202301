@@ -20,11 +20,10 @@ class CryptoDTO(
 
     companion object {
         fun fromModel(crypto: Crypto) {
-            val cryptoPrice = crypto.getPrice()
             CryptoDTO(
                 id = crypto.id,
                 name = crypto.name,
-                price = PriceDTO(cryptoPrice.price, cryptoPrice.time)
+                price = PriceDTO(crypto.price!!, crypto.time.toString())
             )
         }
     }
