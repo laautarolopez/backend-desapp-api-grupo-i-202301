@@ -19,7 +19,7 @@ class Transaction {
     }
 
     @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "The idUserRequested cannot be null.")
     var idUserRequested: Long? = null
 
     @ManyToOne
@@ -33,5 +33,6 @@ class Transaction {
     var trade: Trade? = null
 
     @Column(nullable = false)
+    @NotNull(message = "The status cannot be null.")
     var status: TransactionStatus = TransactionStatus.CREATED
 }
