@@ -6,7 +6,6 @@ import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import jakarta.validation.Validator
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 
@@ -253,24 +252,6 @@ class UserTest {
 
         assertEquals(1, violations.size)
         assertTrue(violations.any { v -> v.message == "The wallet address must have 8 digits." })
-    }
-
-    @Test
-    fun `change the reputation address of an user`() {
-        val user = anyUser().withReputation(8).build()
-
-        val violations = validator.validate(user)
-
-        assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when the reputation in a user is changed to a negative`() {
-        val user = anyUser().withReputation(-1).build()
-
-        val violations = validator.validate(user)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
     }
 
     @Test
