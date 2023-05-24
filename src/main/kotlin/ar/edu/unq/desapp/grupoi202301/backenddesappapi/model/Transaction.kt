@@ -1,65 +1,59 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
-import jakarta.validation.constraints.DecimalMin
-import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Size
 
+@Entity(name = "transactions")
 class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull(message = "The crypto cannot be null.")
-    var crypto: CryptoName? = null
+    fun getAmountUSD(): Double {
+        val quantity = this.trade!!.quantity
+        val cryptoPrice = this.trade!!.cryptoPrice
+        return quantity!! * cryptoPrice!!
+    }
 
     @Column(nullable = false)
-    @NotNull(message = "The quantity cannot be null.")
-    @DecimalMin(value = "0.0", message = "The quantity cannot be negative.")
-    var quantity: Double? = null
+    @NotNull(message = "The idUserRequested cannot be null.")
+    var idUserRequested: Long? = null
 
-    @Column(nullable = false)
-    @NotNull(message = "The quotation crypto cannot be null.")
-    @DecimalMin(value = "0.0", message = "The quotation crypto cannot be negative.")
-    var quotationCrypto: Double? = null
+    @ManyToOne
+    var buyer: User? = null
 
-    @Column(nullable = false)
-    @NotNull(message = "The amount of operation cannot be null.")
-    @DecimalMin(value = "0.0", message = "The amount of operation cannot be negative.")
-    var amountOperation: Double? = null
+    @ManyToOne
+    var seller: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull(message = "The user cannot be null.")
-    var user: User? = null
+    @NotNull(message = "The trade cannot be null.")
+    var trade: Trade? = null
 
     @Column(nullable = false)
-    @NotNull(message = "The username cannot be null.")
-    @Size(min = 3, max = 30, message = "The name must be between 3 and 30 characters long.")
-    var userName: String? = null
+    @NotNull(message = "The status cannot be null.")
+    var status: TransactionStatus = TransactionStatus.CREATED
 
-    @Column(nullable = false)
-    @NotNull(message = "The user lastname cannot be null.")
-    @Size(min = 3, max = 30, message = "The last name must be between 3 and 30 characters long.")
-    var userLastName: String? = null
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
 
-    @Column(nullable = false)
-    @NotNull(message = "The numbers of operations cannot be null.")
-    //@Min(value = 0, message = "The number must be equal to or greater than 0")
-    var numberOperations: Int? = null
+        other as Transaction
 
-    @Column(nullable = false)
-    @Min(value = 0, message = "The number must be equal to or greater than 0")
-    @NotNull(message = "The reputation cannot be null.")
-    var reputation: Int? = null
+        if (id != other.id) return false
+        if (idUserRequested != other.idUserRequested) return false
+        if (buyer != other.buyer) return false
+        if (seller != other.seller) return false
+        if (trade != other.trade) return false
+        return status == other.status
+    }
 
-    @Column(nullable = false)
-    @NotNull(message = "The shipping address cannot be null.")
-    var shippingAddress: String? = null
-    //verificar bien cantidad de digitos
-
-    @Column(nullable = false)
-    @NotNull(message = "The action cannot be null.")
-    var action: ActionTransaction? = null
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (idUserRequested?.hashCode() ?: 0)
+        result = 31 * result + (buyer?.hashCode() ?: 0)
+        result = 31 * result + (seller?.hashCode() ?: 0)
+        result = 31 * result + (trade?.hashCode() ?: 0)
+        result = 31 * result + status.hashCode()
+        return result
+    }
 }

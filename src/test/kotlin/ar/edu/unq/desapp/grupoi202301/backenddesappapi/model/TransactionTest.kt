@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import jakarta.validation.Validator
@@ -8,16 +10,18 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 class TransactionTest {
     @Autowired
     lateinit var validator: Validator
 
-    var aaveusdt : CryptoName = CryptoName.AAVEUSDT
-    var trxusdt : CryptoName = CryptoName.TRXUSDT
-    var confirm : ActionTransaction = ActionTransaction.CONFIRM
-    var make : ActionTransaction = ActionTransaction.MAKE
+    var sale : OperationType = OperationType.SALE
+    var buy : OperationType = OperationType.BUY
+
+    var statusCreated: TransactionStatus = TransactionStatus.CREATED
+    var statusCanceled: TransactionStatus = TransactionStatus.CANCELED
 
     val anyUser: User =
                 UserBuilder()
@@ -30,19 +34,37 @@ class TransactionTest {
                 .withWalletAddress("12345678")
                 .build()
 
+    val otherUser: User =
+        UserBuilder()
+            .withName("Marcos")
+            .withLastName("Perez")
+            .withEmail("marcosperez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+
+    fun anyCrypto(): CryptoBuilder {
+        return CryptoBuilder()
+            .withName(CryptoName.BTCUSDT)
+    }
+
+    val anyTrade: Trade =
+            TradeBuilder()
+            .withCrypto(anyCrypto().build())
+            .withCryptoPrice(200.00)
+            .withQuantity(200.50)
+            .withUser(anyUser)
+            .withOperation(sale)
+            .withCreationDate(LocalDateTime.now()).build()
+
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withCrypto(aaveusdt)
-            .withQuantity(300.10)
-            .withQuotationCrypto(15.4)
-            .withAmountOperation(200.4)
-            .withUser(anyUser)
-            .withUserName("Jorge")
-            .withUserLastName("Sanchez")
-            .withNumberOperations(5)
-            .withReputation(7)
-            .withShippingAddress("1234567890123456789012")
-            .withAction(confirm)
+            .withIdUserRequested(2)
+            .withBuyer(anyUser)
+            .withSeller(otherUser)
+            .withTrade(anyTrade)
     }
 
     @Test
@@ -51,8 +73,8 @@ class TransactionTest {
     }
 
     @Test
-    fun `change the cryptoname of a transaction`() {
-        val transaction = anyTransaction().withCrypto(trxusdt).build()
+    fun `change the id user requested`() {
+        val transaction = anyTransaction().withIdUserRequested(3).build()
 
         val violations = validator.validate(transaction)
 
@@ -60,17 +82,27 @@ class TransactionTest {
     }
 
     @Test
-    fun `a violation occurs when change the cryptoname of a transaction for null`() {
-        val crypto = anyTransaction().withCrypto(null).build()
+    fun `a violation occurs when change the id user requested to null`() {
+        val transaction = anyTransaction().withIdUserRequested(null).build()
 
-        val violations = validator.validate(crypto)
+        val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The crypto cannot be null." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The idUserRequested cannot be null." })
     }
 
     @Test
-    fun `change the quantity of a transaction`() {
-        val transaction = anyTransaction().withQuantity(250.06).build()
+    fun `change the trade of a transaction`() {
+        val otherTrade: Trade =
+            TradeBuilder()
+                .withCrypto(anyCrypto().build())
+                .withCryptoPrice(200.00)
+                .withQuantity(150.0)
+                .withUser(anyUser)
+                .withOperation(buy)
+                .withCreationDate(LocalDateTime.now()).build()
+
+
+        val transaction = anyTransaction().withTrade(otherTrade).build()
 
         val violations = validator.validate(transaction)
 
@@ -78,26 +110,18 @@ class TransactionTest {
     }
 
     @Test
-    fun `a violation occurs when change the quantity of a transaction to negative`() {
-        val trade = anyTransaction().withQuantity(-20.0).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be negative." })
-    }
-
-    @Test
-    fun `a violation occurs when change the quantity of a transaction for null`() {
-        val transaction = anyTransaction().withQuantity(null).build()
+    fun `a violation occurs when changing the trade a transaction to null`() {
+        val transaction = anyTransaction().withTrade(null).build()
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The quantity cannot be null." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The trade cannot be null." })
     }
 
     @Test
-    fun `change the quotation crypto of a transaction`() {
-        val transaction = anyTransaction().withQuotationCrypto(150.86).build()
+    fun `change the buyer of a transaction`() {
+
+        val transaction = anyTransaction().withBuyer(otherUser).build()
 
         val violations = validator.validate(transaction)
 
@@ -105,55 +129,9 @@ class TransactionTest {
     }
 
     @Test
-    fun `a violation occurs when change the quotation crypto of a transaction to negative`() {
-        val trade = anyTransaction().withQuotationCrypto(-30.0).build()
+    fun `change the seller of a transaction`() {
 
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quotation crypto cannot be negative." })
-    }
-
-    @Test
-    fun `a violation occurs when change the quotation crypto of a transaction for null`() {
-        val transaction = anyTransaction().withQuotationCrypto(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The quotation crypto cannot be null." })
-    }
-
-    @Test
-    fun `change the amount operation of a transaction`() {
-        val transaction = anyTransaction().withAmountOperation(55.86).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    /*
-    @Test
-    fun `a violation occurs when change the amount operation of a transaction to negative`() {
-        val trade = anyTransaction().withAmountOperation(-15.0).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The withAmountOperation cannot be negative." })
-    }
-     */
-
-    @Test
-    fun `a violation occurs when change the amount operation of a transaction for null`() {
-        val transaction = anyTransaction().withAmountOperation(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount of operation cannot be null." })
-    }
-
-    @Test
-    fun `change the user name of a transaction`() {
-        val transaction = anyTransaction().withUserName("Nicolas").build()
+        val transaction = anyTransaction().withBuyer(anyUser).build()
 
         val violations = validator.validate(transaction)
 
@@ -161,163 +139,12 @@ class TransactionTest {
     }
 
     @Test
-    fun `a violation occurs when changing the name of a user in a transaction to null`() {
-        val transaction = anyTransaction().withUserName(null).build()
+    fun `change the status of a transaction`() {
 
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The username cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user with less than 3 characters`() {
-        val transaction = anyTransaction().withUserName("jo").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user with more than 30 characters`() {
-        val transaction = anyTransaction().withUserName("Juan Alberto Ramon Luis Gerardo").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `change the user lastname of a transaction`() {
-        val transaction = anyTransaction().withUserLastName("Gimenez").build()
+        val transaction = anyTransaction().withStatus(statusCanceled).build()
 
         val violations = validator.validate(transaction)
 
         Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user in a transaction to null`() {
-        val transaction = anyTransaction().withUserLastName(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The user lastname cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user with less than 3 characters`() {
-        val transaction = anyTransaction().withUserLastName("as").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The last name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user with more than 30 characters`() {
-        val transaction = anyTransaction().withUserLastName("Taboada Gomez Lopez Perez Gimenez").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The last name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `change the number operations of a transaction`() {
-        val transaction = anyTransaction().withNumberOperations(25).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    /*
-    @Test
-    fun `a violation occurs when the number of operations in a transaction is changed to a negative`() {
-        val transaction = anyTransaction().withNumberOperations(-1).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
-    }
-     */
-
-    @Test
-    fun `a violation occurs when changing the number of operations in a transaction to null`() {
-        val transaction = anyTransaction().withNumberOperations(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The numbers of operations cannot be null." })
-    }
-
-    @Test
-    fun `change the reputation of a transaction`() {
-        val transaction = anyTransaction().withReputation(3).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    /*
-    @Test
-    fun `a violation occurs when the reputation in a transaction is changed to a negative`() {
-        val transaction = anyTransaction().withReputation(-3).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
-    }
-     */
-
-    @Test
-    fun `a violation occurs when changing the reputation in a transaction to null`() {
-        val transaction = anyTransaction().withReputation(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The reputation cannot be null." })
-    }
-
-    @Test
-    fun `change the shipping address of a transaction`() {
-        val transaction = anyTransaction().withShippingAddress("2131267169283121567927").build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the shipping address in a transaction to null`() {
-        val transaction = anyTransaction().withShippingAddress(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The shipping address cannot be null." })
-    }
-
-    @Test
-    fun `change the action of a transaction`() {
-        val transaction = anyTransaction().withAction(make).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the action in a transaction to null`() {
-        val transaction = anyTransaction().withAction(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The action cannot be null." })
     }
 }

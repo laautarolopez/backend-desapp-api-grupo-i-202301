@@ -28,3 +28,38 @@ NOTES:
 * Deploy on railway.app
 * Tests to CryptoTest, TransactionTest, TradeTest and UserTest(some attributes are missing to be tested).
 * Tests to CryptoOperated, CryptoVolume and Intention.
+
+
+---------------------------------------------------------------------
+ENTREGA 2 TAG 2.0
+---------------------------------------------------------------------
+
+NEW FEATURES:
+* Added BinanceResponse to the REST Web Service binance api.
+* Added DolarResponse to the REST Web Service binance api.
+* Added BinanceService to the REST Web Service binance api.
+* Added DolarService to the REST Web Service binance api.
+* Added UserCreateDTO to REST Web Service.
+* Added UserResponseDTO to REST Web Service.
+* Added PriceDTO to REST Web Service.
+* Added TradeActiveDTO to REST Web Service.
+* Added TradeCreate to REST Web Service.
+* Added TradeResponseDTO to REST Web Service.
+* Added TransactionCreateDTO to REST Web Service.
+* Added TransactionRequestDTO to REST Web Service.
+* Added TransactionResponseDTO to REST Web Service.
+* Added VolumenOperatedResponseDTO to REST Web Service.
+* Added VolumenOperatedRequestDTO to REST Web Service.
+* Added TransactionController to REST Web Service.
+* Added TradeController to REST Web Service.
+* Added CryptoController to REST Web Service.
+* Added VolumenOperatedController to REST Web Service.
+* Added functionality for listing crypto-asset quotes.
+* Functionality was added to allow a user to express their intent to buy/sell.
+* Added functionality to build a list showing active buying/selling intentions
+* Added functionality to process the transaction reported by a user
+
+NOTES:
+* Report to the user the traded volume of crypto-assets between two dates
+* Integral testing of 2 controllers (end-to-end)
+

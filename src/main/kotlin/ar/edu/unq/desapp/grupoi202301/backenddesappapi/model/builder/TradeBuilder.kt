@@ -1,23 +1,26 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
+import java.time.LocalDateTime
 
 class TradeBuilder {
     var crypto: Crypto? = null
+    var cryptoPrice: Double? = null
     var quantity: Double? = null
-    var amountARS: Double? = null
-    var userName: String? = null
-    var userLastName: String? = null
+    var user: User? = null
     var operation: OperationType? = null
+    var creationDate: LocalDateTime? = null
+    var isActive: Boolean? = null
 
     fun build(): Trade {
         var trade = Trade()
         trade.crypto = this.crypto
+        trade.cryptoPrice = this.cryptoPrice
         trade.quantity = this.quantity
-        trade.amountARS = this.amountARS
-        trade.userName = this.userName
-        trade.userLastName = this.userLastName
+        trade.user = this.user
         trade.operation = this.operation
+        trade.creationDate = this.creationDate
+        trade.isActive = this.isActive
         return trade
     }
 
@@ -26,28 +29,34 @@ class TradeBuilder {
         return this
     }
 
+    fun withCryptoPrice(crypto: Double?): TradeBuilder {
+        this.cryptoPrice = crypto
+        return this
+    }
+
+
     fun withQuantity(quantity: Double?): TradeBuilder {
         this.quantity = quantity
         return this
     }
 
-    fun withAmountARS(amountARS: Double?): TradeBuilder {
-        this.amountARS = amountARS
-        return this
-    }
-
-    fun withUserName(userName: String?): TradeBuilder {
-        this.userName = userName
-        return this
-    }
-
-    fun withUserLastName(userLastName: String?): TradeBuilder {
-        this.userLastName = userLastName
+    fun withUser(user: User?): TradeBuilder {
+        this.user = user
         return this
     }
 
     fun withOperation(operation: OperationType?): TradeBuilder {
         this.operation = operation
+        return this
+    }
+
+    fun withCreationDate(date: LocalDateTime?): TradeBuilder {
+        this.creationDate = date
+        return this
+    }
+
+    fun withIsActive(active: Boolean?): TradeBuilder {
+        this.isActive = active
         return this
     }
 }

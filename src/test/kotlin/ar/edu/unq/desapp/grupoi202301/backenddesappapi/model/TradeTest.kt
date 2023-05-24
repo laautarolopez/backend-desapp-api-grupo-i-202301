@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -21,18 +22,28 @@ class TradeTest {
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
-            .withTime(LocalDateTime.now())
-            .withPrice(300.50)
     }
+
+    val anyUser: User =
+        UserBuilder()
+            .withName("Jorge")
+            .withLastName("Sanchez")
+            .withEmail("jorgesanchez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
 
     fun anyTrade(): TradeBuilder {
         return TradeBuilder()
             .withCrypto(anyCrypto().build())
+            .withCryptoPrice(200.00)
             .withQuantity(200.50)
-            .withAmountARS(150.8)
-            .withUserName("Mariano")
-            .withUserLastName("Gomez")
+            .withUser(anyUser)
             .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true)
     }
 
     @Test
@@ -42,7 +53,7 @@ class TradeTest {
 
     @Test
     fun `change the crypto of a trade`() {
-        val anyCrypto = anyCrypto().withPrice(10.0).build()
+        val anyCrypto = anyCrypto().build()
 
         val trade = anyTrade().withCrypto(anyCrypto).build()
 
@@ -58,6 +69,24 @@ class TradeTest {
         val violations = validator.validate(trade)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The crypto cannot be null." })
+    }
+
+    @Test
+    fun `change the cryptoPrice of a trade`() {
+        val trade = anyTrade().withCryptoPrice(150.20).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the cryptoPrice of a trade to negative`() {
+        val trade = anyTrade().withCryptoPrice(-100.0).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The cryptoPrice cannot be negative." })
     }
 
     @Test
@@ -88,8 +117,19 @@ class TradeTest {
     }
 
     @Test
-    fun `change the amountARS of a trade`() {
-        val trade = anyTrade().withAmountARS(220.80).build()
+    fun `change the user of a trade`() {
+        val otherUser: User =
+            UserBuilder()
+                .withName("Jimena")
+                .withLastName("Lopez")
+                .withEmail("jimenalopez@gmail.com")
+                .withAddress("calle 43")
+                .withPassword("Password@4444")
+                .withCVU("4321567890123456781112")
+                .withWalletAddress("87651234")
+                .build()
+
+        val trade = anyTrade().withUser(otherUser).build()
 
         val violations = validator.validate(trade)
 
@@ -97,97 +137,12 @@ class TradeTest {
     }
 
     @Test
-    fun `a violation occurs when change the amountARS of a trade for null`() {
-        val trade = anyTrade().withAmountARS(null).build()
+    fun `a violation occurs when changing the user in a trade to null`() {
+        val trade = anyTrade().withUser(null).build()
 
         val violations = validator.validate(trade)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when change the amountARS of a trade to negative`() {
-        val trade = anyTrade().withAmountARS(-10.0).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount cannot be negative." })
-    }
-
-    @Test
-    fun `change the username of a trade`() {
-        val trade = anyTrade().withUserName("Marcos").build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user in a trade to null`() {
-        val trade = anyTrade().withUserName(null).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The username cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user with less than 3 characters`() {
-        val trade = anyTrade().withUserName("ma").build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the name of a user with more than 30 characters`() {
-        val trade = anyTrade().withUserName("Marcos Alberto Ramon Luis Gerardo").build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `change the user lastname of a trade`() {
-        val trade = anyTrade().withUserLastName("Gimenez").build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user in a trade to null`() {
-        val trade = anyTrade().withUserLastName(null).build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The user lastname cannot be null." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the lastname of a user with less than 3 characters`() {
-        val trade = anyTrade().withUserLastName("as").build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The last name must be between 3 and 30 characters long." })
-    }
-
-    @Test
-    fun `a violation occurs when changing the las name of a user with more than 30 characters`() {
-        val trade = anyTrade().withUserLastName("Taboada Gomez Lopez Perez Gimenez").build()
-
-        val violations = validator.validate(trade)
-
-        Assertions.assertEquals(1, violations.size)
-        Assertions.assertTrue(violations.any { v -> v.message == "The last name must be between 3 and 30 characters long." })
+        Assertions.assertTrue(violations.any { v -> v.message == "The user cannot be null." })
     }
 
     @Test
@@ -207,4 +162,43 @@ class TradeTest {
 
         Assertions.assertTrue(violations.any { v -> v.message == "The operation cannot be null." })
     }
+
+    @Test
+    fun `change the creation date of a trade`() {
+        val time = LocalDateTime.now()
+        val trade = anyTrade().withCreationDate(time).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the creationDate of a trade to null`() {
+        val trade = anyTrade().withCreationDate(null).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The creation date cannot be null." })
+    }
+
+    @Test
+    fun `change the isActive of a trade`() {
+        val trade = anyTrade().withIsActive(false).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the isActive of a trade to null`() {
+        val trade = anyTrade().withIsActive(null).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The isActive cannot be null." })
+    }
+
+    //TODO(Testear getAmountARS() con Mock?)
 }

@@ -1,31 +1,31 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
-import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDateTime
 
-class CryptoVolume {
+@Entity(name = "volumens")
+class Volume {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
     @Column(nullable = false)
-    @NotNull(message = "The time cannot be null.")
-    @DateTimeFormat
-    var timeRequest: LocalDateTime? = null
+    @NotNull(message = "The date cannot be null.")
+    var date: LocalDateTime? = null
 
     @Column(nullable = false)
-    @NotNull(message = "The amount USD cannot be null.")
+    @NotNull(message = "The amountUSD cannot be null.")
+    @DecimalMin(value = "0.0", message = "The amountUSD cannot be negative.")
     var amountUSD: Double? = null
 
     @Column(nullable = false)
-    @NotNull(message = "The amount ARS cannot be null.")
+    @NotNull(message = "The amountARS cannot be null.")
+    @DecimalMin(value = "0.0", message = "The amountARS cannot be negative.")
     var amountARS: Double? = null
 
-    @Column(nullable = false)
-    @NotNull(message = "The crypto name cannot be null.")
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany
     var cryptos: List<CryptoOperated>? = null
 }

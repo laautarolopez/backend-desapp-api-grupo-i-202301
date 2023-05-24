@@ -1,91 +1,46 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.ActionTransaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 
 class TransactionBuilder {
-    var crypto: CryptoName? = null
-    var quantity: Double? = null
-    var quotationCrypto: Double? = null
-    var amountOperation: Double? = null
-    var user: User? = null
-    var userName: String? = null
-    var userLastName: String? = null
-    var numberOperations: Int? = null
-    var reputation: Int? = null
-    var shippingAddress: String? = null
-    var action: ActionTransaction? = null
+    var idUserRequested: Long? = null
+    var buyer: User? = null
+    var seller: User? = null
+    var trade: Trade? =  null
+    var status: TransactionStatus = TransactionStatus.CREATED
 
     fun build(): Transaction {
         var transaction = Transaction()
-        transaction.crypto = this.crypto
-        transaction.quantity = this.quantity
-        transaction.quotationCrypto = this.quotationCrypto
-        transaction.amountOperation = this.amountOperation
-        transaction.user = this.user
-        transaction.userName = this.userName
-        transaction.userLastName = this.userLastName
-        transaction.numberOperations = this.numberOperations
-        transaction.reputation = this.reputation
-        transaction.shippingAddress = this.shippingAddress
-        transaction.action = this.action
+        transaction.idUserRequested = this.idUserRequested
+        transaction.buyer = this.buyer
+        transaction.trade = this.trade
+        transaction.seller = this.seller
+        transaction.status = this.status
         return transaction
     }
 
-    fun withCrypto(crypto: CryptoName?): TransactionBuilder {
-        this.crypto = crypto
+    fun withIdUserRequested(idUserRequested: Long?): TransactionBuilder {
+        this.idUserRequested = idUserRequested
         return this
     }
 
-    fun withQuantity(quantity: Double?): TransactionBuilder {
-        this.quantity = quantity
+    fun withBuyer(buyer: User?): TransactionBuilder {
+        this.buyer = buyer
         return this
     }
 
-    fun withQuotationCrypto(quotationCrypto: Double?): TransactionBuilder {
-        this.quotationCrypto = quotationCrypto
+    fun withSeller(seller: User?): TransactionBuilder {
+        this.seller = seller
         return this
     }
 
-    fun withAmountOperation(amountOperation: Double?): TransactionBuilder {
-        this.amountOperation = amountOperation
+    fun withTrade(trade: Trade?): TransactionBuilder {
+        this.trade = trade
         return this
     }
 
-    fun withUser(user: User?): TransactionBuilder {
-        this.user = user
-        return this
-    }
-
-    fun withUserName(userName: String?): TransactionBuilder {
-        this.userName = userName
-        return this
-    }
-
-    fun withUserLastName(userLastName: String?): TransactionBuilder {
-        this.userLastName = userLastName
-        return this
-    }
-
-    fun withNumberOperations(numberOperations: Int?): TransactionBuilder {
-        this.numberOperations = numberOperations
-        return this
-    }
-
-    fun withReputation(reputation: Int?): TransactionBuilder {
-        this.reputation = reputation
-        return this
-    }
-
-    fun withShippingAddress(shippingAddress: String?): TransactionBuilder {
-        this.shippingAddress = shippingAddress
-        return this
-    }
-
-    fun withAction(action: ActionTransaction?): TransactionBuilder {
-        this.action = action
+    fun withStatus(status: TransactionStatus): TransactionBuilder {
+        this.status = status
         return this
     }
 }
