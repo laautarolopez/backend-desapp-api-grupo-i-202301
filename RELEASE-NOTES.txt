@@ -35,10 +35,10 @@ ENTREGA 2 TAG 2.0
 ---------------------------------------------------------------------
 
 NEW FEATURES:
-* Added BinanceResponse to the REST Web Service binance api.
-* Added DolarResponse to the REST Web Service binance api.
-* Added BinanceService to the REST Web Service binance api.
-* Added DolarService to the REST Web Service binance api.
+* Added BinanceResponse to the REST Web Service external api.
+* Added DolarResponse to the REST Web Service external api.
+* Added BinanceService to the REST Web Service external api.
+* Added DolarService to the REST Web Service external api.
 * Added UserCreateDTO to REST Web Service.
 * Added UserResponseDTO to REST Web Service.
 * Added PriceDTO to REST Web Service.
@@ -53,13 +53,22 @@ NEW FEATURES:
 * Added TransactionController to REST Web Service.
 * Added TradeController to REST Web Service.
 * Added CryptoController to REST Web Service.
-* Added VolumenOperatedController to REST Web Service.
+* Added VolumeOperatedController to REST Web Service.
+* Swagger has been update for UserController
+* Swagger has been update for CryptoController
+* Swagger has been update for TradeController
+* Swagger has been update for TransactionController
+* Swagger has been update for VolumeOperatedController
+* Added aspects for the insertion of data.
+* Added Mockito to test api Binance.
+* Added Mockito to test api DolarSi.
+* GitHubActions is running successfully.
+* SonarCloud is running successfully.
 * Added functionality for listing crypto-asset quotes.
 * Functionality was added to allow a user to express their intent to buy/sell.
-* Added functionality to build a list showing active buying/selling intentions
-* Added functionality to process the transaction reported by a user
+* Added functionality to build a list showing active buying/selling intentions.
+* Added functionality to process the transaction reported by a user.
 
 NOTES:
 * Report to the user the traded volume of crypto-assets between two dates
 * Integral testing of 2 controllers (end-to-end)
-
