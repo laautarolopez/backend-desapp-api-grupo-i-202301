@@ -142,11 +142,39 @@ class TradeTest {
     }
 
     @Test
+    fun `change the creation date of a trade`() {
+        val time = LocalDateTime.now()
+        val trade = anyTrade().withCreationDate(time).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the creationDate of a trade to null`() {
+        val trade = anyTrade().withCreationDate(null).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The creation date cannot be null." })
+    }
+
+    @Test
     fun `change the isActive of a trade`() {
         val trade = anyTrade().withIsActive(false).build()
 
         val violations = validator.validate(trade)
 
         Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the isActive of a trade to null`() {
+        val trade = anyTrade().withIsActive(null).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The isActive cannot be null." })
     }
 }
