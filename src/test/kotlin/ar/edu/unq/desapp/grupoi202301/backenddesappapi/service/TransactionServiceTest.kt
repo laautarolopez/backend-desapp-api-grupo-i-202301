@@ -6,13 +6,11 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilde
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
 @SpringBootTest
-@TestInstance(PER_CLASS)
 class TransactionServiceTest {
     @Autowired
     lateinit var transactionService: TransactionService
@@ -38,6 +36,7 @@ class TransactionServiceTest {
             .withPassword("Password@1234")
             .withCVU("1234567890123456789012")
             .withWalletAddress("12345678")
+            .withOperations(0)
             .build()
 
     val otherUser: User =
@@ -49,6 +48,7 @@ class TransactionServiceTest {
             .withPassword("Password@1234")
             .withCVU("1234567890123456789012")
             .withWalletAddress("12345678")
+            .withOperations(0)
             .build()
 
     val anyCrypto: Crypto =
@@ -122,7 +122,7 @@ class TransactionServiceTest {
     var user1: User? = null
     var user2: User? = null
 
-    @BeforeAll
+    @BeforeEach
     fun setup() {
         cryptoService.create(anyCrypto)
         user1 = userService.create(anyUser)
@@ -238,7 +238,7 @@ class TransactionServiceTest {
 
     @Test
     fun `an exception occurs transfering when the transaction status is TRANSFERRED`() {
-            val status = TransactionStatus.TRANSFERRED
+        val status = TransactionStatus.TRANSFERRED
         val transaction = anyTransaction().withIdUserRequested(user2!!.id).withStatus(status).build()
         transactionService.create(transaction)
 
@@ -280,8 +280,6 @@ class TransactionServiceTest {
 
     @Test
     fun `a transaction changes status to canceled`() {
-        transactionService.clear()
-
         var userRecovered = userService.getUser(user2!!.id)
         userRecovered.addPoints(30)
         userRecovered.addOperation()
@@ -332,7 +330,6 @@ class TransactionServiceTest {
 
     @Test
     fun `a transaction changes status to confirmed`() {
-
         val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
         val idTransaction = transaction.id
 
@@ -345,6 +342,8 @@ class TransactionServiceTest {
         transactionRecovered.idUserRequested = user1!!.id
         transactionRecovered = transactionService.update(transactionRecovered)
 
+        println("operations: " + transactionRecovered.buyer!!.operations)
+        println("operations: " + transactionRecovered.seller!!.operations)
         Assertions.assertTrue(transactionRecovered.buyer!!.operations == 0)
         Assertions.assertEquals(transactionRecovered.buyer!!.getReputation(), "Without operations")
         Assertions.assertTrue(transactionRecovered.seller!!.operations == 0)
@@ -353,6 +352,8 @@ class TransactionServiceTest {
         var transactionTransfer = transactionService.confirm(transactionRecovered)
         Assertions.assertEquals( TransactionStatus.CONFIRMED, transactionTransfer.status)
 
+        println("operations: " + transactionRecovered.buyer!!.operations)
+        println("operations: " + transactionRecovered.seller!!.operations)
         Assertions.assertTrue(transactionTransfer.buyer!!.operations == 1)
         Assertions.assertTrue(transactionTransfer.buyer!!.getReputation().toInt() == 10)
         Assertions.assertTrue(transactionTransfer.seller!!.operations == 1)
@@ -435,7 +436,6 @@ class TransactionServiceTest {
 
     @Test
     fun `no transaction is recovered`() {
-        transactionService.clear()
         var transaction = transactionService.recoverAll()
 
         Assertions.assertTrue(transaction.isEmpty())
@@ -443,8 +443,6 @@ class TransactionServiceTest {
 
     @Test
     fun `5 transactions are successfully created and recovered`() {
-        transactionService.clear()
-
         var transactions = transactionService.recoverAll()
         Assertions.assertTrue(transactions.isEmpty())
 
@@ -460,10 +458,12 @@ class TransactionServiceTest {
         Assertions.assertTrue(transactions.size == 3)
     }
 
-    @AfterAll
+    @AfterEach
     fun cleanup() {
         transactionService.clear()
+        tradeService.clear()
         userService.clear()
+        cryptoService.clear()
     }
 
 }
