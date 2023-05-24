@@ -2,11 +2,12 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import jakarta.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -14,17 +15,23 @@ import org.springframework.validation.annotation.Validated
 @Validated
 @Transactional
 class CryptoServiceImp(
-    private val cryptoPersistence: CryptoPersistence
+    @Autowired
+    private val cryptoPersistence: CryptoPersistence,
+    @Autowired
+    private val binanceResponse: BinanceResponseInt
     ) : CryptoService {
 
     override fun create(crypto: Crypto): Crypto {
+        updatePrice(crypto)
         return cryptoPersistence.save(crypto)
     }
 
     override fun getCrypto(idCrypto: Long?): Crypto {
         validateId(idCrypto)
         try {
-            return cryptoPersistence.getReferenceById(idCrypto!!)
+            val crypto = cryptoPersistence.getReferenceById(idCrypto!!)
+            updatePrice(crypto)
+            return crypto
         } catch(e: RuntimeException) {
             throw CryptoNonExistent()
         }
@@ -38,7 +45,20 @@ class CryptoServiceImp(
 
     override fun getPrice(cryptoName: String): PriceResponse {
         val crypto = this.getCryptoByName(cryptoName)
-        return crypto.getPrice()
+        val priceResponse = updatePrice(crypto)
+        return priceResponse
+    }
+
+    private fun updatePrice(crypto: Crypto): PriceResponse {
+        val priceResponse = binanceResponse.getPrice(crypto.name.toString())
+        crypto.price = priceResponse.price
+        crypto.time = priceResponse.time
+        return priceResponse
+    }
+
+    private fun update(crypto: Crypto): Crypto {
+        getCrypto(crypto.id)
+        return cryptoPersistence.save(crypto)
     }
 
     private fun getCryptoByName(cryptoName: String): Crypto {
@@ -54,7 +74,7 @@ class CryptoServiceImp(
     }
 
     override fun getPrices(): List<PriceResponse> {
-        return BinanceResponse().getPrices()
+        return binanceResponse.getPrices()
     }
 
     override fun clear() {
