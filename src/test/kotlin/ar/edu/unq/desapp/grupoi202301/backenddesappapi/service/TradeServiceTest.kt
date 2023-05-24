@@ -6,13 +6,12 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilde
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TradeNonExistentException
 import org.junit.jupiter.api.*
-import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
 @SpringBootTest
-@TestInstance(PER_CLASS)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TradeServiceTest {
     @Autowired
     lateinit var tradeService: TradeService
@@ -346,4 +345,10 @@ class TradeServiceTest {
     }
 
     //TODO mockear crypto.getPrice()
+    @AfterAll
+    fun clear() {
+        tradeService.clear()
+        userService.clear()
+        cryptoService.clear()
+    }
 }
