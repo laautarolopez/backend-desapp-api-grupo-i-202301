@@ -10,6 +10,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS
 import org.junit.jupiter.api.TestInstance.Lifecycle.PER_METHOD
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 @TestInstance(PER_CLASS)
@@ -29,6 +30,11 @@ class TradeServiceTest {
             .withName(CryptoName.BTCUSDT)
             .build()
 
+    fun anyCrypto(): CryptoBuilder {
+        return CryptoBuilder()
+            .withName(CryptoName.ALICEUSDT)
+    }
+
     val anyUser: User =
         UserBuilder()
             .withName("Jorge")
@@ -41,39 +47,60 @@ class TradeServiceTest {
             .withOperations(1)
             .build()
 
+    fun anyUser(): UserBuilder {
+        return UserBuilder()
+            .withName("Jorge")
+            .withLastName("Sanchez")
+            .withEmail("jorgesanchez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .withOperations(1)
+    }
+
     fun anyTrade(): TradeBuilder {
         return TradeBuilder()
             .withCrypto(anyCrypto)
+            .withCryptoPrice(200.00)
             .withQuantity(200.50)
             .withUser(anyUser)
             .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
             .withIsActive(true)
     }
 
     fun otherTrade1(): TradeBuilder {
         return TradeBuilder()
             .withCrypto(anyCrypto)
+            .withCryptoPrice(250.00)
             .withQuantity(250.50)
             .withUser(anyUser)
             .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
             .withIsActive(true)
     }
 
     fun otherTrade2(): TradeBuilder {
         return TradeBuilder()
             .withCrypto(anyCrypto)
+            .withCryptoPrice(100.00)
             .withQuantity(150.0)
             .withUser(anyUser)
             .withOperation(buy)
+            .withCreationDate(LocalDateTime.now())
             .withIsActive(true)
     }
 
     fun otherTrade3(): TradeBuilder {
         return TradeBuilder()
             .withCrypto(anyCrypto)
+            .withCryptoPrice(300.00)
             .withQuantity(230.50)
             .withUser(anyUser)
             .withOperation(buy)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true)
     }
 
     fun otherTrade4(): TradeBuilder {
@@ -82,6 +109,8 @@ class TradeServiceTest {
             .withQuantity(150.50)
             .withUser(anyUser)
             .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true)
     }
 
     @BeforeAll
@@ -225,7 +254,53 @@ class TradeServiceTest {
     }
 
     @Test
-    fun `3 active user trades are recovered`() {
+    fun `an trade is getted`() {
+        val trade = tradeService.create(anyTrade().build())
+        val idTrade = trade.id
+
+        val tradeGetted = tradeService.getTrade(idTrade)
+
+        Assertions.assertEquals(trade, tradeGetted)
+    }
+
+    @Test
+    fun `an exception be thrown when an trade is not exist`() {
+        try {
+            tradeService.getTrade(55)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("The trade does not exist.", e.message)
+        }
+    }
+
+    @Test
+    fun `no trade is recovered`() {
+        tradeService.clear()
+        var trades = tradeService.recoverAll()
+
+        Assertions.assertTrue(trades.isEmpty())
+    }
+
+    @Test
+    fun `5 trades are successfully created and recovered`() {
+        tradeService.clear()
+        var trades = tradeService.recoverAll()
+        Assertions.assertTrue(trades.isEmpty())
+
+        tradeService.create(anyTrade().build())
+        tradeService.create(otherTrade1().build())
+        tradeService.create(otherTrade2().build())
+        tradeService.create(otherTrade3().build())
+        tradeService.create(otherTrade4().build())
+
+        trades = tradeService.recoverAll()
+
+        Assertions.assertTrue(trades.size == 5)
+    }
+
+    @Test
+    fun `3 active user trades are recovered successfully`() {
+        tradeService.clear()
         tradeService.create(anyTrade().build())
         tradeService.create(otherTrade1().build())
         tradeService.create(otherTrade2().build())
