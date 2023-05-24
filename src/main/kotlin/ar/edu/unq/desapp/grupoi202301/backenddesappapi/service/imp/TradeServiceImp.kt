@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TradeNonExistentException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TradePersistence
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
@@ -19,19 +20,35 @@ class TradeServiceImp(
     @Autowired
     private val cryptoService: CryptoService,
     @Autowired
-    private val userService: UserService
+    private val userService: UserService,
+    @Autowired
+    private val dolarResponse: DolarResponseInt
     ) : TradeService {
 
     override fun create(trade: Trade): Trade {
         recoverCrypto(trade)
         recoverUser(trade)
+        updateAmountARSInCreate(trade)
         return tradePersistence.save(trade)
+    }
+
+    private fun updateAmountARSInCreate(trade: Trade) {
+        val price = trade.quantity!! * trade.cryptoPrice!!
+        val dolarBlue = dolarResponse.getPrice()
+        trade.amountARS = price * dolarBlue.price
+    }
+
+    private fun updateAmountARS(trade: Trade) {
+        val price = trade.quantity!! * trade.cryptoPrice!!
+        val dolarBlue = dolarResponse.getPrice()
+        trade.amountARS = price * dolarBlue.price
+        update(trade)
     }
 
     private fun recoverCrypto(trade: Trade) {
         val crypto = cryptoService.getCrypto(trade.crypto!!.id)
         trade.crypto = crypto
-        trade.cryptoPrice = crypto.getPrice().price
+        trade.cryptoPrice = crypto.price
     }
 
     private fun recoverUser(trade: Trade) {
@@ -46,7 +63,9 @@ class TradeServiceImp(
     override fun getTrade(idTrade: Long?): Trade {
         validateId(idTrade)
         try {
-            return tradePersistence.getReferenceById(idTrade!!)
+            val trade = tradePersistence.getReferenceById(idTrade!!)
+            updateAmountARSInCreate(trade)
+            return trade
         } catch(e: RuntimeException) {
             throw TradeNonExistentException("trade", "The trade does not exist.")
         }
