@@ -10,7 +10,6 @@ class UserBuilder {
     private var password: String? = null
     private var cvuMercadoPago: String? = null
     private var walletAddress: String? = null
-    private var reputation: Int = 0
     private var operations: Int = 0
 
     fun build(): User {
@@ -59,11 +58,6 @@ class UserBuilder {
 
     fun withWalletAddress(walletAddress: String?): UserBuilder {
         this.walletAddress = walletAddress
-        return this
-    }
-
-    fun withReputation(reputation: Int) : UserBuilder {
-        this.reputation = reputation
         return this
     }
 
