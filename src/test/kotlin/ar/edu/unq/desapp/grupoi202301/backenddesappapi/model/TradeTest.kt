@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import java.time.LocalDateTime
 
 @SpringBootTest
 class TradeTest {
@@ -37,9 +38,12 @@ class TradeTest {
     fun anyTrade(): TradeBuilder {
         return TradeBuilder()
             .withCrypto(anyCrypto().build())
+            .withCryptoPrice(200.00)
             .withQuantity(200.50)
             .withUser(anyUser)
             .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true)
     }
 
     @Test
@@ -65,6 +69,24 @@ class TradeTest {
         val violations = validator.validate(trade)
 
         Assertions.assertTrue(violations.any { v -> v.message == "The crypto cannot be null." })
+    }
+
+    @Test
+    fun `change the cryptoPrice of a trade`() {
+        val trade = anyTrade().withCryptoPrice(150.20).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the cryptoPrice of a trade to negative`() {
+        val trade = anyTrade().withCryptoPrice(-100.0).build()
+
+        val violations = validator.validate(trade)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The cryptoPrice cannot be negative." })
     }
 
     @Test
