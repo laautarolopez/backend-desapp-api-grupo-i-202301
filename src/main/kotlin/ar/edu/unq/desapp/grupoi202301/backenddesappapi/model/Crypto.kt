@@ -1,14 +1,8 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponse
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponseInt
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
-import org.springframework.beans.factory.annotation.Autowired
-import java.time.LocalDateTime
 
 @Entity(name = "cryptos")
 class Crypto {

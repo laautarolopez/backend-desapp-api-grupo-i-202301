@@ -5,10 +5,10 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuild
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarBlueResponse
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponseInt
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.DolarBlueResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.DolarResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito

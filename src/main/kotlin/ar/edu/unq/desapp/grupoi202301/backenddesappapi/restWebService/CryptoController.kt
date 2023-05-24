@@ -2,7 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import io.swagger.v3.oas.annotations.Operation

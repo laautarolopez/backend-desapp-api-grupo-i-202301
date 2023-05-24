@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
-import java.time.LocalDateTime
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 
 class PriceDTO(
     var price: Double,

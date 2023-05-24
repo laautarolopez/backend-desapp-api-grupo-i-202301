@@ -142,4 +142,6 @@ class TransactionController(private val transactionService: TransactionService) 
         val transactionResponse = TransactionResponseDTO.fromModel(transaction)
         return ResponseEntity.ok().body(transactionResponse)
     }
+
+    // TODO: agregar metodo GET
 }
