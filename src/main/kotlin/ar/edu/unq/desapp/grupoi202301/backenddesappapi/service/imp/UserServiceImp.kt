@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.UserPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.UserNonExistent
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service

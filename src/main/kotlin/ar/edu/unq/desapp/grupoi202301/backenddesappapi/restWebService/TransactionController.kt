@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionCreateDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionRequestDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionResponseDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
 import io.swagger.v3.oas.annotations.Operation
@@ -13,11 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Transactional
