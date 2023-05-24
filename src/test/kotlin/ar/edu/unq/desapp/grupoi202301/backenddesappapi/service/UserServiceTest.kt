@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class UserServiceTest {
     @Autowired
-    lateinit var userService: UserServiceImp
+    lateinit var userService: UserService
 
     fun anyUser(): UserBuilder {
         return UserBuilder()
@@ -336,8 +336,6 @@ class UserServiceTest {
 
     @Test
     fun `3 users are successfully created and recovered`() {
-        userService.clear()
-
         userService.create(anyUser().build())
 
         var users = userService.recoverAll()
@@ -353,8 +351,6 @@ class UserServiceTest {
 
     @Test
     fun `no user is recovered`() {
-        userService.clear()
-
         var users = userService.recoverAll()
 
         println(users.size)
@@ -404,7 +400,8 @@ class UserServiceTest {
         }
     }
 
-
-
-
+    @AfterEach
+    fun clear() {
+        userService.clear()
+    }
 }
