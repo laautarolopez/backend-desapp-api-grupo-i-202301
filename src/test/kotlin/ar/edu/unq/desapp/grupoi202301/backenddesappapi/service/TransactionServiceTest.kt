@@ -5,12 +5,21 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuild
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.BinanceResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarBlueResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.DolarResponseInt
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.apiBinance.PriceResponse
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mockito
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import java.time.LocalDateTime
 
 @SpringBootTest
+@ExtendWith(MockitoExtension::class)
 class TransactionServiceTest {
     @Autowired
     lateinit var transactionService: TransactionService
@@ -23,6 +32,11 @@ class TransactionServiceTest {
 
     @Autowired
     lateinit var tradeService: TradeService
+
+    @MockBean
+    lateinit var dolarResponse: DolarResponseInt
+    @MockBean
+    lateinit var binanceResponse: BinanceResponseInt
 
     var sale: OperationType = OperationType.SALE
     var buy: OperationType = OperationType.BUY
@@ -124,6 +138,15 @@ class TransactionServiceTest {
 
     @BeforeEach
     fun setup() {
+        fun price(cryptoName: String) = PriceResponse(cryptoName, 1.123, LocalDateTime.now().toString())
+
+        CryptoName.values().forEach {
+                name -> Mockito.`when`(binanceResponse.getPrice(name.toString())).thenReturn(price(name.toString()))
+        }
+
+        val dolarBlue = DolarBlueResponse("Dolar Blue", 490.00)
+        Mockito.`when`(dolarResponse.getPrice()).thenReturn(dolarBlue)
+
         cryptoService.create(anyCrypto)
         user1 = userService.create(anyUser)
         user2 = userService.create(otherUser)
