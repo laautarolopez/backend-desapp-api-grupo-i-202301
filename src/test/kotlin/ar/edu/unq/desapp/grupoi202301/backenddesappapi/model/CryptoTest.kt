@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.time.LocalDateTime
 
 @SpringBootTest
 class CryptoTest {
@@ -44,6 +43,4 @@ class CryptoTest {
 
         Assertions.assertTrue(violations.any { v -> v.message == "The crypto name cannot be null." })
     }
-
-    //TODO(Testear getPrice() con Mock?)
 }
