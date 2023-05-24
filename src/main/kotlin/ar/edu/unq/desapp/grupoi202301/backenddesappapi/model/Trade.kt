@@ -25,11 +25,9 @@ class Trade {
     @DecimalMin(value = "0.0", message = "The quantity cannot be negative.")
     var quantity: Double? = null
 
-    fun getAmountARS(): Double {
-        val price = this.quantity!! * this.cryptoPrice!!
-        val DolarBlue = DolarResponse().getPrice()
-        return price * DolarBlue.price
-    }
+    @Column
+    @DecimalMin(value = "0.0", message = "The amountARS cannot be negative.")
+    var amountARS: Double? = null
 
     @ManyToOne
     @NotNull(message = "The user cannot be null.")
