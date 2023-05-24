@@ -62,7 +62,7 @@ class UserTest {
 
     @Test
     fun `change the last name of an user`() {
-        val user = anyUser().withName("Gomez").build()
+        val user = anyUser().withLastName("Gomez").build()
 
         val violations = validator.validate(user)
 
@@ -289,5 +289,14 @@ class UserTest {
         val violations = validator.validate(user)
 
         assertTrue(violations.any { v -> v.message == "The number must be equal to or greater than 0." })
+    }
+
+    @Test
+    fun `change the operations of an user and getReputation show without operations`() {
+        val user = anyUser().withOperations(0).build()
+
+        val reputation = user.getReputation()
+
+        assertEquals("Without operations", reputation)
     }
 }
