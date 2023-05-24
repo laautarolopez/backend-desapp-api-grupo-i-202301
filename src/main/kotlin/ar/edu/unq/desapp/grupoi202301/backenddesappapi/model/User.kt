@@ -77,4 +77,38 @@ class User {
     fun addOperation() {
         operations += 1
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as User
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (lastName != other.lastName) return false
+        if (email != other.email) return false
+        if (address != other.address) return false
+        if (password != other.password) return false
+        if (cvuMercadoPago != other.cvuMercadoPago) return false
+        if (walletAddress != other.walletAddress) return false
+        if (points != other.points) return false
+        return operations == other.operations
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + (name?.hashCode() ?: 0)
+        result = 31 * result + (lastName?.hashCode() ?: 0)
+        result = 31 * result + (email?.hashCode() ?: 0)
+        result = 31 * result + (address?.hashCode() ?: 0)
+        result = 31 * result + (password?.hashCode() ?: 0)
+        result = 31 * result + (cvuMercadoPago?.hashCode() ?: 0)
+        result = 31 * result + (walletAddress?.hashCode() ?: 0)
+        result = 31 * result + points
+        result = 31 * result + operations
+        return result
+    }
+
+
 }
