@@ -31,6 +31,22 @@ class Trade {
         return price * DolarBlue.price
     }
 
+    @ManyToOne
+    @NotNull(message = "The user cannot be null.")
+    var user: User? = null
+
+    @Column(nullable = false)
+    @NotNull(message = "The operation cannot be null.")
+    var operation: OperationType? = null
+
+    @Column(nullable = false)
+    @NotNull(message = "The creation date cannot be null.")
+    var creationDate: LocalDateTime? = null
+
+    @Column(nullable = false)
+    @NotNull(message = "The isActive cannot be null.")
+    var isActive: Boolean? = true
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -43,7 +59,7 @@ class Trade {
         if (quantity != other.quantity) return false
         if (user != other.user) return false
         if (operation != other.operation) return false
-        if (creationDate != other.creationDate) return false
+        if (creationDate!!.withNano(100) != other.creationDate!!.withNano(100)) return false
         return isActive == other.isActive
     }
 
@@ -58,22 +74,4 @@ class Trade {
         result = 31 * result + (isActive?.hashCode() ?: 0)
         return result
     }
-
-    @ManyToOne
-    @NotNull(message = "The user cannot be null.")
-    var user: User? = null
-
-    @Column(nullable = false)
-    @NotNull(message = "The operation cannot be null.")
-    var operation: OperationType? = null
-
-    @Column(nullable = false)
-    @NotNull(message = "The creation date cannot be null.")
-    var creationDate: LocalDateTime? = LocalDateTime.now()
-
-    @Column(nullable = false)
-    @NotNull(message = "The isActive cannot be null.")
-    var isActive: Boolean? = true
-
-
 }
