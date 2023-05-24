@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.BinanceServerException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorBinanceResponse
 import com.google.gson.Gson
+import org.springframework.stereotype.Service
 import retrofit2.Call
 
 data class DolarBlueResponse(val name: String, val price: Double)
@@ -12,8 +13,13 @@ data class DolarSiResponse(val casa: Casa)
 
 data class Casa(val nombre: String, val compra: String, val venta: String)
 
-class DolarResponse {
-    fun getPrice(): DolarBlueResponse {
+interface DolarResponseInt {
+    fun getPrice(): DolarBlueResponse
+}
+
+@Service
+class DolarResponse : DolarResponseInt {
+    override fun getPrice(): DolarBlueResponse {
         val dolarService = DolarService.create()
         val call = dolarService.getPrice("valoresprincipales")
 
