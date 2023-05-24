@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilde
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import jakarta.validation.Validator
-import net.bytebuddy.asm.Advice.Local
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -58,7 +57,7 @@ class TransactionTest {
             .withQuantity(200.50)
             .withUser(anyUser)
             .withOperation(sale)
-            .withCreatioDate(LocalDateTime.now()).build()
+            .withCreationDate(LocalDateTime.now()).build()
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
@@ -100,7 +99,7 @@ class TransactionTest {
                 .withQuantity(150.0)
                 .withUser(anyUser)
                 .withOperation(buy)
-                .withCreatioDate(LocalDateTime.now()).build()
+                .withCreationDate(LocalDateTime.now()).build()
 
 
         val transaction = anyTransaction().withTrade(otherTrade).build()
