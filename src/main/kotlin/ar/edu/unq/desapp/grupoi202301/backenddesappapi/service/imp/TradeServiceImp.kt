@@ -39,14 +39,21 @@ class TradeServiceImp(
     }
 
     override fun update(trade: Trade): Trade {
-        getTrade(trade.id!!)
+        getTrade(trade.id)
         return tradePersistence.save(trade)
     }
 
-    override fun getTrade(idTrade: Long): Trade {
+    override fun getTrade(idTrade: Long?): Trade {
+        validateId(idTrade)
         try {
-            return tradePersistence.getReferenceById(idTrade)
+            return tradePersistence.getReferenceById(idTrade!!)
         } catch(e: RuntimeException) {
+            throw TradeNonExistentException("trade", "The trade does not exist.")
+        }
+    }
+
+    private fun validateId(idTrade: Long?) {
+        if(idTrade == null) {
             throw TradeNonExistentException("trade", "The trade does not exist.")
         }
     }
