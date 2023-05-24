@@ -5,14 +5,23 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.BinanceServerException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorBinanceResponse
 import com.google.gson.Gson
+import jakarta.transaction.Transactional
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter
+import org.springframework.stereotype.Service
 import retrofit2.Call
 import java.time.LocalDateTime
 
 data class PriceResponse(val cryptoName: String, val price: Double, val time: String)
 
-class BinanceResponse {
-    fun getPrice(cryptoName: String): PriceResponse {
+interface BinanceResponseInt {
+    fun getPrice(cryptoName: String): PriceResponse
+
+    fun getPrices(): List<PriceResponse>
+}
+
+@Service
+class BinanceResponse : BinanceResponseInt {
+    override fun getPrice(cryptoName: String): PriceResponse {
         val binanceService = BinanceService.create()
         val call = binanceService.getPrice(cryptoName)
 
@@ -35,7 +44,7 @@ class BinanceResponse {
         }
     }
 
-    fun getPrices(): List<PriceResponse> {
+    override fun getPrices(): List<PriceResponse> {
         var list: List<PriceResponse> = listOf()
         val binanceService = BinanceService.create()
         var call: Call<PriceResponse>
