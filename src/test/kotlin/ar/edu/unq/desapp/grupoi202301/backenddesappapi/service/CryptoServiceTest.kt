@@ -52,5 +52,45 @@ class CryptoServiceTest {
         }
     }
 
-    // TODO: Testear getPrice() con Mock?
+    @Test
+    fun `a crypto is successfully getted`() {
+        val anyCrypto = anyCrypto().build()
+
+        val crypto = cryptoService.create(anyCrypto)
+        val idCrypto = crypto.id
+
+        val cryptoGetted = cryptoService.getCrypto(idCrypto!!)
+
+        Assertions.assertEquals(crypto, cryptoGetted)
+    }
+
+    @Test
+    fun `an exception be thrown when a crypto is not exist`() {
+        try {
+           cryptoService.getCrypto(55)
+            Assertions.fail("An exception must be throw.")
+        } catch(e: RuntimeException) {
+            Assertions.assertEquals("Crypto non-existent.", e.message)
+        }
+    }
+
+    @Test
+    fun `4 cryptos prices are recovered successfully`() {
+        cryptoService.create(anyCrypto().build())
+
+        //var prices = cryptoService.getPrices()
+
+        //Assertions.assertTrue(prices.size == 1)
+
+        cryptoService.create(otherCrypto1)
+        cryptoService.create(otherCrypto2)
+        cryptoService.create(otherCrypto3)
+
+        //prices = cryptoService.getPrices()
+
+        //Assertions.assertTrue(prices.size == 4)
+    }
+
+    //TODO(Testear getPrice() con Mock?)
+    //TODO(Testear getPrices() con Mock?)
 }
