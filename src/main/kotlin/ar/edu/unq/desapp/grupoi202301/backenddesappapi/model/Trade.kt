@@ -40,8 +40,10 @@ class Trade {
     var operation: OperationType? = null
 
     @Column(nullable = false)
+    @NotNull(message = "The creation date cannot be null.")
     var creationDate: LocalDateTime? = LocalDateTime.now()
 
     @Column(nullable = false)
+    @NotNull(message = "The isActive cannot be null.")
     var isActive: Boolean? = true
 }
