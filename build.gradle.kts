@@ -32,6 +32,7 @@ dependencies {
 //	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+	//testImplementation("io.mockk:mockk:1.4.1")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
 	implementation("com.squareup.retrofit2:retrofit:2.3.0")
 	implementation("com.squareup.retrofit2:converter-gson:2.3.0")

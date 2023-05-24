@@ -336,6 +336,8 @@ class UserServiceTest {
 
     @Test
     fun `3 users are successfully created and recovered`() {
+        userService.clear()
+
         userService.create(anyUser().build())
 
         var users = userService.recoverAll()
@@ -351,8 +353,11 @@ class UserServiceTest {
 
     @Test
     fun `no user is recovered`() {
+        userService.clear()
+
         var users = userService.recoverAll()
 
+        println(users.size)
         assertTrue(users.isEmpty())
     }
 
@@ -401,8 +406,5 @@ class UserServiceTest {
 
 
 
-    @AfterEach
-    fun cleanup() {
-        userService.clear()
-    }
+
 }

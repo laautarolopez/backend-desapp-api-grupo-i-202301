@@ -111,6 +111,14 @@ class TransactionServiceTest {
             .withTrade(otherTrade)
     }
 
+    fun otherTransaction3(): TransactionBuilder {
+        return TransactionBuilder()
+            .withIdUserRequested(2)
+            .withBuyer(otherUser)
+            .withSeller(anyUser)
+            .withTrade(anyTrade)
+    }
+
     var user1: User? = null
     var user2: User? = null
 
@@ -272,14 +280,26 @@ class TransactionServiceTest {
 
     @Test
     fun `a transaction changes status to canceled`() {
+        transactionService.clear()
+
+        var userRecovered = userService.getUser(user2!!.id)
+        userRecovered.addPoints(30)
+        userRecovered.addOperation()
+        userService.update(userRecovered)
+
         val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
         val idTransaction = transaction.id
 
+        println(transaction.seller!!.getReputation())
+        println(transaction.buyer!!.getReputation())
+
         var transactionRecovered = transactionService.getTransaction(idTransaction)
         Assertions.assertEquals(transactionRecovered.status, TransactionStatus.CREATED)
+        Assertions.assertEquals(transactionRecovered.buyer!!.getReputation().toInt(), 30)
 
         var transactionTransfer = transactionService.cancel(transaction)
         Assertions.assertEquals( TransactionStatus.CANCELED, transactionTransfer.status)
+        Assertions.assertEquals(transactionTransfer.buyer!!.getReputation().toInt(), 10)
     }
 
     @Test
@@ -312,6 +332,7 @@ class TransactionServiceTest {
 
     @Test
     fun `a transaction changes status to confirmed`() {
+
         val transaction = transactionService.create(anyTransaction().withIdUserRequested(user2!!.id).build())
         val idTransaction = transaction.id
 
@@ -324,8 +345,18 @@ class TransactionServiceTest {
         transactionRecovered.idUserRequested = user1!!.id
         transactionRecovered = transactionService.update(transactionRecovered)
 
+        Assertions.assertTrue(transactionRecovered.buyer!!.operations == 0)
+        Assertions.assertEquals(transactionRecovered.buyer!!.getReputation(), "Without operations")
+        Assertions.assertTrue(transactionRecovered.seller!!.operations == 0)
+        Assertions.assertTrue(transactionRecovered.seller!!.getReputation() == "Without operations")
+
         var transactionTransfer = transactionService.confirm(transactionRecovered)
         Assertions.assertEquals( TransactionStatus.CONFIRMED, transactionTransfer.status)
+
+        Assertions.assertTrue(transactionTransfer.buyer!!.operations == 1)
+        Assertions.assertTrue(transactionTransfer.buyer!!.getReputation().toInt() == 10)
+        Assertions.assertTrue(transactionTransfer.seller!!.operations == 1)
+        Assertions.assertTrue(transactionTransfer.seller!!.getReputation().toInt() == 10)
     }
 
     @Test
@@ -428,4 +459,11 @@ class TransactionServiceTest {
 
         Assertions.assertTrue(transactions.size == 3)
     }
+
+    @AfterAll
+    fun cleanup() {
+        transactionService.clear()
+        userService.clear()
+    }
+
 }
