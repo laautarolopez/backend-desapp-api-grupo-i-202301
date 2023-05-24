@@ -46,6 +46,17 @@ class TransactionServiceTest {
             .withName(CryptoName.BTCUSDT)
             .build()
 
+    fun anyTrade(): TradeBuilder {
+        return TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withCryptoPrice(200.00)
+            .withQuantity(200.50)
+            .withUser(anyUser)
+            .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true)
+    }
+
     val anyTrade: Trade =
         TradeBuilder()
             .withCrypto(anyCrypto)
@@ -80,7 +91,7 @@ class TransactionServiceTest {
 
     @Test
     fun `a transaction is successfully created when it has correct data`() {
-        val anyTransaction = anyTransaction().build()
+        val anyTransaction = anyTransaction().withIdUserRequested(user2!!.id).build()
 
         val transaction = transactionService.create(anyTransaction)
 
@@ -95,29 +106,8 @@ class TransactionServiceTest {
             transactionService.create(anyTransaction)
             Assertions.fail("An exception must be throw.")
         } catch (e: RuntimeException) {
-            Assertions.assertEquals("The shipping address must contain a CVU with 22 digits.", e.message)
+            Assertions.assertEquals("The trade does not exist.", e.message)
         }
-    }
-
-    @Test
-    fun `a violation occurs when creating a buy transaction with a wrong shipping address`() {
-        val anyTransaction = anyTransaction().withTrade(otherTrade).build()
-
-        try {
-            transactionService.create(anyTransaction)
-            Assertions.fail("An exception must be throw.")
-        } catch (e: RuntimeException) {
-            Assertions.assertEquals("The shipping address must contain a walletAddress with 8 digits.", e.message)
-        }
-    }
-
-    @Test
-    fun `change the amount operation of a transaction`() {
-        val transactionRequested = anyTransaction().withAmountOperation(55.86).build()
-
-        val transaction = transactionService.create(transactionRequested)
-
-        Assertions.assertTrue(transaction.id != null)
     }
 
     @Test
@@ -151,6 +141,19 @@ class TransactionServiceTest {
     }
 
     @Test
+    fun `an exception occurs when the user which creates the trade want to create a transaction`() {
+        val idUserTrade = user1!!.id
+        val anyTransaction = anyTransaction().withIdUserRequested(idUserTrade).withTrade(anyTrade).build()
+
+        try {
+            transactionService.create(anyTransaction)
+            Assertions.fail("An exception must be throw.")
+        } catch (e: RuntimeException) {
+            Assertions.assertEquals("The transaction cannot be created by this user", e.message)
+        }
+    }
+
+    @Test
     fun `change the trade of a transaction`() {
         val otherTrade: Trade =
             TradeBuilder()
@@ -158,10 +161,11 @@ class TransactionServiceTest {
                 .withQuantity(150.0)
                 .withUser(anyUser)
                 .withOperation(sale)
+                .withCreationDate(LocalDateTime.now())
                 .withIsActive(true).build()
         tradeService.create(otherTrade)
 
-        val transactionRequested = anyTransaction().withTrade(otherTrade).build()
+        val transactionRequested = anyTransaction().withIdUserRequested(user2!!.id).withTrade(otherTrade).build()
 
         val transaction = transactionService.create(transactionRequested)
 
