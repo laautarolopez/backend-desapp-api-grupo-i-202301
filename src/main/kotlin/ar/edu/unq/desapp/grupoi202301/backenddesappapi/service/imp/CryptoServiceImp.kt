@@ -22,7 +22,6 @@ class CryptoServiceImp(
     ) : CryptoService {
 
     override fun create(crypto: Crypto): Crypto {
-        updatePrice(crypto)
         return cryptoPersistence.save(crypto)
     }
 
