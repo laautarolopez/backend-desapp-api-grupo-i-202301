@@ -15,9 +15,11 @@ class TradeBuilder {
     fun build(): Trade {
         var trade = Trade()
         trade.crypto = this.crypto
+        trade.cryptoPrice = this.cryptoPrice
         trade.quantity = this.quantity
         trade.user = this.user
         trade.operation = this.operation
+        trade.creationDate = this.creationDate
         trade.isActive = this.isActive
         return trade
     }
@@ -26,6 +28,12 @@ class TradeBuilder {
         this.crypto = crypto
         return this
     }
+
+    fun withCryptoPrice(crypto: Double?): TradeBuilder {
+        this.cryptoPrice = crypto
+        return this
+    }
+
 
     fun withQuantity(quantity: Double?): TradeBuilder {
         this.quantity = quantity
@@ -39,6 +47,11 @@ class TradeBuilder {
 
     fun withOperation(operation: OperationType?): TradeBuilder {
         this.operation = operation
+        return this
+    }
+
+    fun withCreationDate(date: LocalDateTime?): TradeBuilder {
+        this.creationDate = date
         return this
     }
 
