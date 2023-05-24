@@ -35,7 +35,6 @@ class Crypto {
         other as Crypto
 
         if (id != other.id) return false
-        if (price != other.price) return false
         return name == other.name
     }
 
