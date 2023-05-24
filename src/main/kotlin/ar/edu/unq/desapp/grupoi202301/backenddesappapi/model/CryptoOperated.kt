@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
 
-@Entity(name = "CryptosOperated")
+@Entity(name = "cryptosOperated")
 class CryptoOperated {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
