@@ -29,13 +29,13 @@ class TradeServiceImp(
     }
 
     private fun recoverCrypto(trade: Trade) {
-        val crypto = cryptoService.getCrypto(trade.crypto!!.id!!)
+        val crypto = cryptoService.getCrypto(trade.crypto!!.id)
         trade.crypto = crypto
         trade.cryptoPrice = crypto.getPrice().price
     }
 
     private fun recoverUser(trade: Trade) {
-        trade.user = userService.getUser(trade.user!!.id!!)
+        trade.user = userService.getUser(trade.user!!.id)
     }
 
     override fun update(trade: Trade): Trade {
