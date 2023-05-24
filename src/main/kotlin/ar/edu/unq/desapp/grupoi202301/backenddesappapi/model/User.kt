@@ -64,7 +64,7 @@ class User {
 
     fun getReputation(): String {
         if (operations == 0) {
-            return "Sin operaciones"
+            return "Without operations"
         } else {
             return (points / operations).toString()
         }
