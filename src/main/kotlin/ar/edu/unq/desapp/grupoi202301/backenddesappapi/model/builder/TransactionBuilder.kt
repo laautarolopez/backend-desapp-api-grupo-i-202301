@@ -9,7 +9,11 @@ class TransactionBuilder {
 
     fun build(): Transaction {
         var transaction = Transaction()
+        transaction.idUserRequested = this.idUserRequested
+        transaction.buyer = this.buyer
         transaction.trade = this.trade
+        transaction.seller = this.seller
+        transaction.status = this.status
         return transaction
     }
 
