@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.CryptoServiceImp
@@ -14,13 +15,30 @@ class CryptoServiceTest {
     @Autowired
     lateinit var cryptoService: CryptoServiceImp
 
-    val btcusdt : CryptoName = CryptoName.BTCUSDT
     val aaveusdt : CryptoName = CryptoName.AAVEUSDT
+    val btcusdt : CryptoName = CryptoName.BTCUSDT
+    val aliceusdt : CryptoName = CryptoName.ALICEUSDT
+    val ethusdt : CryptoName = CryptoName.ETHUSDT
 
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(btcusdt)
     }
+
+    val otherCrypto1: Crypto =
+        CryptoBuilder()
+            .withName(aaveusdt)
+            .build()
+
+    val otherCrypto2: Crypto =
+        CryptoBuilder()
+            .withName(aliceusdt)
+            .build()
+
+    val otherCrypto3: Crypto =
+        CryptoBuilder()
+            .withName(ethusdt)
+            .build()
 
     @Test
     fun `a crypto is successfully created when it has correct data`() {
