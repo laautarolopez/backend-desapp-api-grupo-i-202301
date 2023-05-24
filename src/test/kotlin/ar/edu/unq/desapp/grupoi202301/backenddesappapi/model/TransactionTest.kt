@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilde
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import jakarta.validation.Validator
+import net.bytebuddy.asm.Advice.Local
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -17,11 +18,11 @@ class TransactionTest {
     @Autowired
     lateinit var validator: Validator
 
-    var aaveusdt : CryptoName = CryptoName.AAVEUSDT
-    var trxusdt : CryptoName = CryptoName.TRXUSDT
-    var confirm : ActionTransaction = ActionTransaction.CONFIRM
-    var make : ActionTransaction = ActionTransaction.MAKE
     var sale : OperationType = OperationType.SALE
+    var buy : OperationType = OperationType.BUY
+
+    var statusCreated: TransactionStatus = TransactionStatus.CREATED
+    var statusCanceled: TransactionStatus = TransactionStatus.CANCELED
 
     val anyUser: User =
                 UserBuilder()
@@ -34,6 +35,17 @@ class TransactionTest {
                 .withWalletAddress("12345678")
                 .build()
 
+    val otherUser: User =
+        UserBuilder()
+            .withName("Marcos")
+            .withLastName("Perez")
+            .withEmail("marcosperez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+
     fun anyCrypto(): CryptoBuilder {
         return CryptoBuilder()
             .withName(CryptoName.BTCUSDT)
@@ -42,16 +54,18 @@ class TransactionTest {
     val anyTrade: Trade =
             TradeBuilder()
             .withCrypto(anyCrypto().build())
+            .withCryptoPrice(200.00)
             .withQuantity(200.50)
             .withUser(anyUser)
-            .withOperation(sale).build()
+            .withOperation(sale)
+            .withCreatioDate(LocalDateTime.now()).build()
 
     fun anyTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withAmountOperation(200.4)
+            .withIdUserRequested(2)
+            .withBuyer(anyUser)
+            .withSeller(otherUser)
             .withTrade(anyTrade)
-            .withShippingAddress("1234567890123456789012")
-            .withAction(confirm)
     }
 
     @Test
@@ -78,41 +92,16 @@ class TransactionTest {
     }
 
     @Test
-    fun `change the amount operation of a transaction`() {
-        val transaction = anyTransaction().withAmountOperation(55.86).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.isEmpty())
-    }
-
-    @Test
-    fun `a violation occurs when change the amount operation of a transaction to negative`() {
-        val transaction = anyTransaction().withAmountOperation(-15.00).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount of operation cannot be negative." })
-    }
-
-
-    @Test
-    fun `a violation occurs when change the amount operation of a transaction for null`() {
-        val transaction = anyTransaction().withAmountOperation(null).build()
-
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The amount of operation cannot be null." })
-    }
-
-    @Test
     fun `change the trade of a transaction`() {
         val otherTrade: Trade =
             TradeBuilder()
                 .withCrypto(anyCrypto().build())
+                .withCryptoPrice(200.00)
                 .withQuantity(150.0)
                 .withUser(anyUser)
-                .withOperation(sale).build()
+                .withOperation(buy)
+                .withCreatioDate(LocalDateTime.now()).build()
+
 
         val transaction = anyTransaction().withTrade(otherTrade).build()
 
@@ -131,8 +120,9 @@ class TransactionTest {
     }
 
     @Test
-    fun `change the shipping address of a transaction`() {
-        val transaction = anyTransaction().withShippingAddress("2131267169283121567927").build()
+    fun `change the buyer of a transaction`() {
+
+        val transaction = anyTransaction().withBuyer(otherUser).build()
 
         val violations = validator.validate(transaction)
 
@@ -140,17 +130,9 @@ class TransactionTest {
     }
 
     @Test
-    fun `a violation occurs when changing the shipping address in a transaction to null`() {
-        val transaction = anyTransaction().withShippingAddress(null).build()
+    fun `change the seller of a transaction`() {
 
-        val violations = validator.validate(transaction)
-
-        Assertions.assertTrue(violations.any { v -> v.message == "The shipping address cannot be null." })
-    }
-
-    @Test
-    fun `change the action of a transaction`() {
-        val transaction = anyTransaction().withAction(make).build()
+        val transaction = anyTransaction().withBuyer(anyUser).build()
 
         val violations = validator.validate(transaction)
 
@@ -164,6 +146,6 @@ class TransactionTest {
 
         val violations = validator.validate(transaction)
 
-        Assertions.assertTrue(violations.any { v -> v.message == "The action cannot be null." })
+        Assertions.assertTrue(violations.isEmpty())
     }
 }

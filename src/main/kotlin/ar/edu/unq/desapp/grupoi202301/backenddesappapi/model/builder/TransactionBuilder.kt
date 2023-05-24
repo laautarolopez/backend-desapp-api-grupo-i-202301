@@ -3,9 +3,11 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 
 class TransactionBuilder {
-    var amountOperation: Double? = null
+    var idUserRequested: Long? = null
+    var buyer: User? = null
+    var seller: User? = null
     var trade: Trade? =  null
-    var shippingAddress: String? = null
+    var status: TransactionStatus = TransactionStatus.CREATED
 
     fun build(): Transaction {
         var transaction = Transaction()
@@ -17,8 +19,18 @@ class TransactionBuilder {
         return transaction
     }
 
-    fun withAmountOperation(amountOperation: Double?): TransactionBuilder {
-        this.amountOperation = amountOperation
+    fun withIdUserRequested(idUserRequested: Long?): TransactionBuilder {
+        this.idUserRequested = idUserRequested
+        return this
+    }
+
+    fun withBuyer(buyer: User?): TransactionBuilder {
+        this.buyer = buyer
+        return this
+    }
+
+    fun withSeller(seller: User?): TransactionBuilder {
+        this.seller = seller
         return this
     }
 
@@ -27,8 +39,8 @@ class TransactionBuilder {
         return this
     }
 
-    fun withShippingAddress(shippingAddress: String?): TransactionBuilder {
-        this.shippingAddress = shippingAddress
+    fun withStatus(status: TransactionStatus): TransactionBuilder {
+        this.status = status
         return this
     }
 }
