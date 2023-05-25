@@ -16,16 +16,21 @@ class VolumeOperatedServiceImp(
     @Autowired
     private val transactionService: TransactionService,
     @Autowired
-    private val userService: UserService
-    ) : VolumeOperatedService {
+    private val userService: UserService,
+) : VolumeOperatedService {
 
     override fun volumeOperatedByAUserBetweenDates(idUser: Long, firstDate: String, lastDate: String): Volume {
         val user = validateYRecoverUserRequest(idUser)
         val date1 = LocalDateTime.parse(firstDate)
         val date2 = LocalDateTime.parse(lastDate)
-        val transactions = transactionService.recoverAll()
+        val requestDateTime = LocalDateTime.now()
+        var totalAmountUSD: Double
+        var totalAmountARS: Double
+        val transactionsConfirmed = transactionService.recoverConfirmed()
+
 
         TODO("Not yet implemented")
+
     }
 
     private fun validateYRecoverUserRequest(idUser: Long?): User {
