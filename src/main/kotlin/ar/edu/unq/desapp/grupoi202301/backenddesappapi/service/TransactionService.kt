@@ -19,5 +19,7 @@ interface TransactionService {
 
     fun recoverAll(): List<Transaction>
 
+    fun recoverConfirmed(): List<Transaction>
+
     fun clear()
 }

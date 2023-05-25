@@ -25,7 +25,7 @@ class TransactionServiceImp(
     private val cryptoService: CryptoService,
     @Autowired
     private val userService: UserService
-    ) : TransactionService {
+) : TransactionService {
 
     override fun create(transaction: Transaction): Transaction {
         recoverTrade(transaction)
@@ -210,6 +210,14 @@ class TransactionServiceImp(
 
     override fun recoverAll(): List<Transaction> {
         return transactionPersistence.findAll()
+    }
+
+    override fun recoverConfirmed(): List<Transaction> {
+        var transactions = transactionPersistence.findAll()
+
+        var confirmed = transactions.filter{ transaction -> transaction.status == TransactionStatus.CONFIRMED }
+
+        return confirmed
     }
 
     override fun clear() {
