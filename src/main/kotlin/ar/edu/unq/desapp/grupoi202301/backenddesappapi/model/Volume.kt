@@ -13,6 +13,10 @@ class Volume {
     var id: Long? = null
 
     @Column(nullable = false)
+    @NotNull(message = "The idUser cannot be null.")
+    var idUser: Long? = null
+
+    @Column(nullable = false)
     @NotNull(message = "The date cannot be null.")
     var date: LocalDateTime? = null
 
