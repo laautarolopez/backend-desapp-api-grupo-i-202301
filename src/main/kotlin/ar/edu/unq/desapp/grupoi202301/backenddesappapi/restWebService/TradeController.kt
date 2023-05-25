@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeActiveDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeResponseDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
 import io.swagger.v3.oas.annotations.Operation
@@ -81,6 +82,37 @@ class TradeController(private val tradeService: TradeService) {
     fun getTradesActive(@PathVariable("idUser") idUser: Long): ResponseEntity<List<TradeActiveDTO>> {
         val trades = tradeService.recoverActives(idUser).map { trade -> TradeActiveDTO.fromModel(trade) }
         return ResponseEntity.ok().body(trades)
+    }
+
+    @Operation(summary = "Get a trade")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = TradeResponseDTO::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/{idTrade}")
+    fun getTrade(@PathVariable("idTrade") idTrade: Long): ResponseEntity<TradeResponseDTO> {
+        val trade = tradeService.getTrade(idTrade)
+        val tradeResponse = TradeResponseDTO.fromModel(trade)
+        return ResponseEntity.ok().body(tradeResponse)
     }
 
     @Operation(summary = "Get all trades")
