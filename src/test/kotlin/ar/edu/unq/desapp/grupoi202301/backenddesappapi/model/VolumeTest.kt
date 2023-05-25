@@ -16,6 +16,7 @@ class VolumeTest {
 
     fun anyVolumen(): VolumeBuilder {
         return VolumeBuilder()
+            .withIdUser(1)
             .withDate(LocalDateTime.now())
             .withAmountUSD(150.8)
             .withAmountARS(60.00)
@@ -25,6 +26,24 @@ class VolumeTest {
     @Test
     fun `a volumen is successfully created when it has correct data`() {
         assertDoesNotThrow { anyVolumen().build() }
+    }
+
+    @Test
+    fun `change the idUser of a volumen`() {
+        val volumen = anyVolumen().withIdUser(2).build()
+
+        val violations = validator.validate(volumen)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
+
+    @Test
+    fun `a violation occurs when change the idUser of a volumen for null`() {
+        val volumen = anyVolumen().withIdUser(null).build()
+
+        val violations = validator.validate(volumen)
+
+        Assertions.assertTrue(violations.any { v -> v.message == "The idUser cannot be null." })
     }
 
     @Test
