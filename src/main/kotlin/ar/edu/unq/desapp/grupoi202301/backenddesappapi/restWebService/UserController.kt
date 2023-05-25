@@ -77,7 +77,7 @@ class UserController(private val userService: UserService) {
         ]
     )
     @GetMapping()
-    fun getAll(): ResponseEntity<List<UserResponseDTO>> {
+    fun getUsers(): ResponseEntity<List<UserResponseDTO>> {
         val users = userService.recoverAll().map { user -> UserResponseDTO.fromModel(user) }
         return ResponseEntity.ok().body(users)
     }
