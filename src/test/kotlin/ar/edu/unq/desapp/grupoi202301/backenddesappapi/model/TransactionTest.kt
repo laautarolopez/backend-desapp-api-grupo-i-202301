@@ -147,4 +147,14 @@ class TransactionTest {
 
         Assertions.assertTrue(violations.isEmpty())
     }
+
+    @Test
+    fun `change the date of a transaction`() {
+        val time = LocalDateTime.now()
+        val transaction = anyTransaction().withDate(time).build()
+
+        val violations = validator.validate(transaction)
+
+        Assertions.assertTrue(violations.isEmpty())
+    }
 }
