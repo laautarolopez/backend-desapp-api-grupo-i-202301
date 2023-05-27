@@ -10,6 +10,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionServic
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 import java.time.LocalDateTime
@@ -83,6 +84,8 @@ class TransactionServiceImp(
 
             addOperationToUsers(transaction)
             addPointsToUsers(transaction)
+
+            transaction.date = LocalDateTime.now()
 
             return update(transaction)
         }
@@ -196,7 +199,7 @@ class TransactionServiceImp(
     override fun getTransaction(idTransaction: Long?): Transaction {
         validateId(idTransaction)
         try {
-            return transactionPersistence.getReferenceById(idTransaction!!)
+            return transactionPersistence.findByIdOrNull(idTransaction!!)!!
         } catch(e: RuntimeException) {
             throw TransactionException("transaction", "The transaction does not exist.")
         }
@@ -209,15 +212,11 @@ class TransactionServiceImp(
     }
 
     override fun recoverAll(): List<Transaction> {
-        return transactionPersistence.findAll()
+        return transactionPersistence.findAll().toList()
     }
 
-    override fun recoverConfirmed(): List<Transaction> {
-        var transactions = transactionPersistence.findAll()
-
-        var confirmed = transactions.filter{ transaction -> transaction.status == TransactionStatus.CONFIRMED }
-
-        return confirmed
+    override fun recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime, status: TransactionStatus): List<Transaction> {
+        return transactionPersistence.getConfirmedTransactionsFromUserBetweenTwoDates(idUser, firstDate, lastDate, TransactionStatus.CONFIRMED)
     }
 
     override fun clear() {

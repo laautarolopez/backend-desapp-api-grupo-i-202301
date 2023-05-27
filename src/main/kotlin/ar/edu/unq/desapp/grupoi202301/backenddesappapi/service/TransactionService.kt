@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.TransactionStatus
 import jakarta.validation.Valid
+import java.time.LocalDateTime
 
 interface TransactionService {
 
@@ -19,7 +21,7 @@ interface TransactionService {
 
     fun recoverAll(): List<Transaction>
 
-    fun recoverConfirmed(): List<Transaction>
+    fun recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime, status: TransactionStatus): List<Transaction>
 
     fun clear()
 }
