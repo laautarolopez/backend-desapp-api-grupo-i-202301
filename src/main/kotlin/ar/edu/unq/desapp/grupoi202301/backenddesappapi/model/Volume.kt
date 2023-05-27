@@ -32,4 +32,14 @@ class Volume {
 
     @OneToMany
     var cryptos: List<CryptoOperated>? = null
+
+    constructor(idUser: Long, date: LocalDateTime, amountUSD: Double, amountARS: Double, cryptos: List<CryptoOperated>) {
+        this.idUser = idUser
+        this.date = date
+        this.amountUSD = amountUSD
+        this.amountARS = amountARS
+        this.cryptos = cryptos
+    }
+
+    constructor() {}
 }
