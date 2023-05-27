@@ -43,7 +43,7 @@ class VolumeOperatedController(private val volumeOperatedService: VolumeOperated
             )
         ]
     )
-    @GetMapping("/{idUser}/{firstDate}/{LastDate}")
+    @GetMapping("/{idUser}/{firstDate}/{lastDate}")
     fun getVolumeOperatedCryptos(@PathVariable("idUser") idUser: Long, @PathVariable("firstDate") firstDate: String, @PathVariable("lastDate") lastDate: String ): ResponseEntity<VolumeOperatedResponseDTO> {
           var volumenOperateds = volumeOperatedService.volumeOperatedByAUserBetweenDates(idUser, firstDate, lastDate)
           var response = VolumeOperatedResponseDTO.fromModel(volumenOperateds)
