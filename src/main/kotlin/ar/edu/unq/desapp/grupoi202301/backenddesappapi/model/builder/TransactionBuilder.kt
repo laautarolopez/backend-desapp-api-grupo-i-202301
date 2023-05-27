@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
+import java.time.LocalDateTime
 
 class TransactionBuilder {
     var idUserRequested: Long? = null
@@ -8,6 +9,7 @@ class TransactionBuilder {
     var seller: User? = null
     var trade: Trade? =  null
     var status: TransactionStatus = TransactionStatus.CREATED
+    var date: LocalDateTime? = null
 
     fun build(): Transaction {
         var transaction = Transaction()
@@ -16,6 +18,7 @@ class TransactionBuilder {
         transaction.trade = this.trade
         transaction.seller = this.seller
         transaction.status = this.status
+        transaction.date = this.date
         return transaction
     }
 
@@ -41,6 +44,11 @@ class TransactionBuilder {
 
     fun withStatus(status: TransactionStatus): TransactionBuilder {
         this.status = status
+        return this
+    }
+
+    fun withDate(date: LocalDateTime?): TransactionBuilder {
+        this.date = date
         return this
     }
 }

@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
+import java.time.LocalDateTime
 
 @Entity(name = "transactions")
 class Transaction {
@@ -32,6 +33,9 @@ class Transaction {
     @Column(nullable = false)
     @NotNull(message = "The status cannot be null.")
     var status: TransactionStatus = TransactionStatus.CREATED
+
+    @Column
+    var date: LocalDateTime? = null
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
