@@ -21,14 +21,12 @@ class VolumeOperatedServiceImp(
     private val userService: UserService,
 ) : VolumeOperatedService {
 
-    override fun volumeOperatedByAUserBetweenDates(idUser: Long, firstDate: String, lastDate: String): Volume {
+    override fun volumeOperatedByAUserBetweenDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime): Volume {
         validateYRecoverUserRequest(idUser)
-        val date1 = LocalDateTime.parse(firstDate)
-        val date2 = LocalDateTime.parse(lastDate)
         val requestDateTime = LocalDateTime.now()
         var totalAmountUSD: Double = 0.0
         var totalAmountARS: Double = 0.0
-        val transactionsConfirmed = transactionService.recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser, date1, date2, TransactionStatus.CONFIRMED)
+        val transactionsConfirmed = transactionService.recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser, firstDate, lastDate, TransactionStatus.CONFIRMED)
 
         transactionsConfirmed.forEach { transaction -> totalAmountUSD += transaction.getAmountUSD()!! }
         transactionsConfirmed.forEach { transaction -> totalAmountARS += transaction.trade!!.amountARS!! }
