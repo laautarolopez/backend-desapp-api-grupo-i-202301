@@ -12,11 +12,12 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 
 @RestController
 @Transactional
-@Tag(name = "volumeOperated")
-@RequestMapping("volumeOperated")
+@Tag(name = "volume")
+@RequestMapping("volume")
 class VolumeOperatedController(private val volumeOperatedService: VolumeOperatedService) {
 
     @Operation(summary = "Get the volume operated of a user between two active crypto dates.")
@@ -44,9 +45,9 @@ class VolumeOperatedController(private val volumeOperatedService: VolumeOperated
         ]
     )
     @GetMapping("/{idUser}/{firstDate}/{lastDate}")
-    fun getVolumeOperatedCryptos(@PathVariable("idUser") idUser: Long, @PathVariable("firstDate") firstDate: String, @PathVariable("lastDate") lastDate: String ): ResponseEntity<VolumeOperatedResponseDTO> {
-          var volumenOperateds = volumeOperatedService.volumeOperatedByAUserBetweenDates(idUser, firstDate, lastDate)
-          var response = VolumeOperatedResponseDTO.fromModel(volumenOperateds)
+    fun getVolumeOperatedCryptos(@PathVariable("idUser") idUser: Long, @PathVariable("firstDate") firstDate: LocalDateTime, @PathVariable("lastDate") lastDate: LocalDateTime): ResponseEntity<VolumeOperatedResponseDTO> {
+        var volume = volumeOperatedService.volumeOperatedByAUserBetweenDates(idUser, firstDate, lastDate)
+        var response = VolumeOperatedResponseDTO.fromModel(volume)
         return ResponseEntity.ok().body(response)
     }
 }
