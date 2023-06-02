@@ -35,6 +35,7 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
 	implementation("com.squareup.retrofit2:retrofit:2.3.0")
 	implementation("com.squareup.retrofit2:converter-gson:2.3.0")
+	testImplementation("com.tngtech.archunit:archunit-junit4:1.0.1")
 }
 
 tasks.withType<KotlinCompile> {
