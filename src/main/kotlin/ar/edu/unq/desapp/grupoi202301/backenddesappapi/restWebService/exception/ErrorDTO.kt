@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception
 
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import jakarta.validation.ConstraintViolation
 
 data class ErrorDTO(
