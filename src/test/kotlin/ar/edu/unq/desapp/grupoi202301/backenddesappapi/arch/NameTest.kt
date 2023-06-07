@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class DependecyTest {
+class NameTest {
     lateinit private var baseClasses: JavaClasses
 
     @BeforeAll
