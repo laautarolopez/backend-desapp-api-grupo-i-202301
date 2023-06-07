@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoi202301.backenddesappapi
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.aspect
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
