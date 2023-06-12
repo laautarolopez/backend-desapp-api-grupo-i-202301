@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import jakarta.validation.constraints.*
 import jakarta.validation.constraints.Email
@@ -62,6 +63,7 @@ class User {
         }
     }
 
+    @JsonIgnore
     fun getReputation(): String {
         if (operations == 0) {
             return "Without operations"
