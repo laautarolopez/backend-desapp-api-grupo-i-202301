@@ -2,9 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

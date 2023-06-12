@@ -15,6 +15,8 @@ data class ErrorDTO(
             )
         }
     }
+
+    constructor() : this("", "")
 }
 
 data class ErrorResponseDTO(val errors: List<ErrorDTO>)
