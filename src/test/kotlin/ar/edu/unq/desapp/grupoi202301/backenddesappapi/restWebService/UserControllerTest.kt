@@ -52,6 +52,7 @@ class UserControllerTest {
 
         val responseJson = ObjectMapper().readValue(responseEntity.body, User::class.java)
 
+        assertEquals(HttpStatus.OK, responseEntity.statusCode)
         assertEquals("Lautaro", responseJson.name)
         assertEquals("López", responseJson.lastName)
         assertEquals("email@gmail.com", responseJson.email)

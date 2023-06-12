@@ -2,6 +2,9 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.UserResponseDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -10,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
+import org.springframework.http.*
 import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(SpringRunner::class)
@@ -46,7 +46,22 @@ class CryptoControllerTest {
 
         val cryptoResponse = ObjectMapper().readValue(responseEntity.body, CryptoSimpleDTO::class.java)
 
+        assertEquals(HttpStatus.OK, responseEntity.statusCode)
         assertNotNull(cryptoResponse.id)
         assertEquals(CryptoName.ALICEUSDT, cryptoResponse.name)
+    }
+
+    @Test
+    fun getPriceOfALICEUSDT() {
+        val url = HTTP_LOCALHOST + port + "/cryptos/prices/ALICEUSDT"
+
+        val responseEntity = testRestTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
+
+        val cryptoResponse = ObjectMapper().readValue(responseEntity.body, PriceResponse::class.java)
+
+        assertEquals(HttpStatus.OK, responseEntity.statusCode)
+        assertEquals("ALICEUSDT", cryptoResponse.cryptoName)
+        assertTrue(cryptoResponse.price >= 0.0)
+        assertTrue(cryptoResponse.time != "")
     }
 }

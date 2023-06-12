@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service
 import retrofit2.Call
 import java.time.LocalDateTime
 
-data class PriceResponse(val cryptoName: String, val price: Double, val time: String)
+data class PriceResponse(val cryptoName: String, val price: Double, val time: String) {
+    constructor() : this("", 0.0, "")
+}
 
 interface BinanceResponseInt {
     fun getPrice(cryptoName: String): PriceResponse
