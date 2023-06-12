@@ -64,4 +64,13 @@ class CryptoControllerTest {
         assertTrue(cryptoResponse.price >= 0.0)
         assertTrue(cryptoResponse.time != "")
     }
+
+    @Test
+    fun badRequestInGetPrices() {
+        val url = HTTP_LOCALHOST + port + "/cryptos/prices/errorName"
+
+        val responseEntity = testRestTemplate.exchange(url, HttpMethod.GET, null, String::class.java)
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.statusCode)
+    }
 }
