@@ -2,19 +2,27 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.runner.RunWith
+import org.mockito.Mockito
+import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.*
 import org.springframework.test.context.junit4.SpringRunner
+import java.time.LocalDateTime
 
 @RunWith(SpringRunner::class)
+@ExtendWith(MockitoExtension::class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CryptoControllerTest {
     val HTTP_LOCALHOST = "http://localhost:"
@@ -24,6 +32,21 @@ class CryptoControllerTest {
 
     @Autowired
     lateinit var testRestTemplate: TestRestTemplate
+
+    @MockBean
+    lateinit var binanceResponse: BinanceResponseInt
+
+    @BeforeEach
+    fun setup() {
+        fun price(cryptoName: String) = PriceResponse(cryptoName, 1.123, LocalDateTime.now().toString())
+        val list = listOf(price("BTCUSDT"), price("AAVEUSDT"), price("ALICEUSDT"), price("ETHUSDT"))
+
+        CryptoName.values().forEach {
+                name -> Mockito.`when`(binanceResponse.getPrice(name.toString())).thenReturn(price(name.toString()))
+        }
+
+        Mockito.`when`(binanceResponse.getPrices()).thenReturn(list)
+    }
 
     @Test
     fun createCrypto() {
