@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.aspect
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.stereotype.Component
-import java.time.LocalDateTime
 
 @Component
 class Aspect(
@@ -41,8 +38,8 @@ class Aspect(
     private fun insertData() {
         saveCryptos()
         saveUsers()
-        saveTrades()
-        saveTransactions()
+//        saveTrades()
+//        saveTransactions()
     }
 
 
@@ -76,26 +73,26 @@ class Aspect(
         userService.create(user2)
     }
 
-    private fun saveTrades() {
-        trade = TradeBuilder()
-            .withCrypto(aliceusdt)
-            .withCryptoPrice(200.00)
-            .withQuantity(200.50)
-            .withUser(user1)
-            .withOperation(OperationType.SALE)
-            .withCreationDate(LocalDateTime.now())
-            .withIsActive(true)
-            .build()
-        tradeService.create(trade)
-    }
-
-    private fun saveTransactions() {
-        transaction = TransactionBuilder()
-            .withIdUserRequested(user2.id)
-            .withBuyer(user2)
-            .withSeller(user1)
-            .withTrade(trade)
-            .build()
-        transactionService.create(transaction)
-    }
+//    private fun saveTrades() {
+//        trade = TradeBuilder()
+//            .withCrypto(aliceusdt)
+//            .withCryptoPrice(200.00)
+//            .withQuantity(200.50)
+//            .withUser(user1)
+//            .withOperation(OperationType.SALE)
+//            .withCreationDate(LocalDateTime.now())
+//            .withIsActive(true)
+//            .build()
+//        tradeService.create(trade)
+//    }
+//
+//    private fun saveTransactions() {
+//        transaction = TransactionBuilder()
+//            .withIdUserRequested(user2.id)
+//            .withBuyer(user2)
+//            .withSeller(user1)
+//            .withTrade(trade)
+//            .build()
+//        transactionService.create(transaction)
+//    }
 }
