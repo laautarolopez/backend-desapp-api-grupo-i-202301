@@ -5,5 +5,5 @@ import java.time.LocalDateTime
 
 interface VolumeOperatedService {
 
-    fun volumeOperatedByAUserBetweenDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime): Volume
+    fun volumeOperatedByAUserBetweenDates(idUser: Long, firstDate: String, lastDate: String): Volume
 }
