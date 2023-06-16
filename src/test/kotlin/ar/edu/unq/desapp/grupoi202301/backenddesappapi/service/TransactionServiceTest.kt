@@ -125,14 +125,6 @@ class TransactionServiceTest {
             .withTrade(otherTrade)
     }
 
-    fun otherTransaction3(): TransactionBuilder {
-        return TransactionBuilder()
-            .withIdUserRequested(2)
-            .withBuyer(otherUser)
-            .withSeller(anyUser)
-            .withTrade(anyTrade)
-    }
-
     var user1: User? = null
     var user2: User? = null
 
@@ -365,8 +357,6 @@ class TransactionServiceTest {
         transactionRecovered.idUserRequested = user1!!.id
         transactionRecovered = transactionService.update(transactionRecovered)
 
-        println("operations: " + transactionRecovered.buyer!!.operations)
-        println("operations: " + transactionRecovered.seller!!.operations)
         Assertions.assertTrue(transactionRecovered.buyer!!.operations == 0)
         Assertions.assertEquals(transactionRecovered.buyer!!.getReputation(), "Without operations")
         Assertions.assertTrue(transactionRecovered.seller!!.operations == 0)
@@ -375,8 +365,6 @@ class TransactionServiceTest {
         var transactionTransfer = transactionService.confirm(transactionRecovered)
         Assertions.assertEquals( TransactionStatus.CONFIRMED, transactionTransfer.status)
 
-        println("operations: " + transactionRecovered.buyer!!.operations)
-        println("operations: " + transactionRecovered.seller!!.operations)
         Assertions.assertTrue(transactionTransfer.buyer!!.operations == 1)
         Assertions.assertTrue(transactionTransfer.buyer!!.getReputation().toInt() == 10)
         Assertions.assertTrue(transactionTransfer.seller!!.operations == 1)
@@ -488,5 +476,4 @@ class TransactionServiceTest {
         userService.clear()
         cryptoService.clear()
     }
-
 }
