@@ -30,7 +30,8 @@ class CryptoOperated {
     @DecimalMin(value = "0.0", message = "The amount ARS cannot be negative.")
     var amountARS: Double? = null
 
-    constructor(crypto: CryptoName, quantity: Double, price: Double, amountARS: Double) {
+    constructor(id: Long, crypto: CryptoName, quantity: Double, price: Double, amountARS: Double) {
+        this.id = id
         this.cryptoName = crypto
         this.quantity = quantity
         this.price = price
