@@ -215,8 +215,8 @@ class TransactionServiceImp(
         return transactionPersistence.findAll().toList()
     }
 
-    override fun recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime, status: TransactionStatus): List<Transaction> {
-        return transactionPersistence.getConfirmedTransactionsFromUserBetweenTwoDates(idUser, firstDate, lastDate, TransactionStatus.CONFIRMED)
+    override fun recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime): List<Transaction> {
+        return transactionPersistence.getConfirmedTransactionsFromUserBetweenTwoDates(idUser, firstDate, lastDate, 2)
     }
 
     override fun clear() {

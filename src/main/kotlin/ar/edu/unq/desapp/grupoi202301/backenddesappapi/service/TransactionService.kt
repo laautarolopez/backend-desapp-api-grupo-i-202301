@@ -21,7 +21,7 @@ interface TransactionService {
 
     fun recoverAll(): List<Transaction>
 
-    fun recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime, status: TransactionStatus): List<Transaction>
+    fun recoverConfirmedTransactionsFromUserBetweenTwoDates(idUser: Long, firstDate: LocalDateTime, lastDate: LocalDateTime): List<Transaction>
 
     fun clear()
 }
