@@ -21,11 +21,11 @@ class Transaction {
     var idUserRequested: Long? = null
 
     @ManyToOne
-//    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
+    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     var buyer: User? = null
 
     @ManyToOne
-//    @JoinColumn(name = "seller_id", referencedColumnName = "id")
+    @JoinColumn(name = "seller_id", referencedColumnName = "id")
     var seller: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
