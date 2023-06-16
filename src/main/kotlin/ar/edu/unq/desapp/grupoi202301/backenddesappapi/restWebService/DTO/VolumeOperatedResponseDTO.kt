@@ -14,7 +14,7 @@ class VolumeOperatedResponseDTO(
     companion object {
         fun fromModel(volume: Volume) =
             VolumeOperatedResponseDTO(
-                id = volume.id,
+                id = volume.idUser,
                 date = LocalDateTime.now().toString(),
                 amountUSD = volume.amountUSD,
                 amountARS = volume.amountARS,
