@@ -5,17 +5,17 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.CryptoBuild
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TradeBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.DolarBlueResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.DolarResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import java.time.LocalDateTime
 
 @SpringBootTest
@@ -32,6 +32,11 @@ class VolumeOperatedServiceTest {
     @Autowired
     lateinit var cryptoService: CryptoService
 
+    @MockBean
+    lateinit var dolarResponse: DolarResponseInt
+    @MockBean
+    lateinit var binanceResponse: BinanceResponseInt
+
     var user: User? = null
     var user2: User? = null
     var user3: User? = null
@@ -45,84 +50,96 @@ class VolumeOperatedServiceTest {
     var sale: OperationType = OperationType.SALE
     var buy: OperationType = OperationType.BUY
 
+    val anyUser: User =
+        UserBuilder()
+            .withName("Jorge")
+            .withLastName("Sanchez")
+            .withEmail("jorgesanchez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .withOperations(0)
+            .build()
+
+    val otherUser: User =
+        UserBuilder()
+            .withName("Marcos")
+            .withLastName("Perez")
+            .withEmail("marcosperez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .withOperations(0)
+            .build()
+
+    val otherUser2: User =
+        UserBuilder()
+            .withName("Fiama")
+            .withLastName("Lopez")
+            .withEmail("fiamalopez@gmail.com")
+            .withAddress("calle falsa 123")
+            .withPassword("Password@1234")
+            .withCVU("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .withOperations(0)
+            .build()
+
+    val anyCrypto: Crypto =
+        CryptoBuilder()
+            .withName(CryptoName.BTCUSDT)
+            .build()
+
+    val anyTrade: Trade =
+        TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withCryptoPrice(200.00)
+            .withQuantity(200.50)
+            .withUser(anyUser)
+            .withOperation(sale)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true).build()
+
+    val otherTrade: Trade =
+        TradeBuilder()
+            .withCrypto(anyCrypto)
+            .withCryptoPrice(100.00)
+            .withQuantity(300.0)
+            .withUser(otherUser2)
+            .withOperation(buy)
+            .withCreationDate(LocalDateTime.now())
+            .withIsActive(true).build()
+
+    fun anyTransaction(): TransactionBuilder {
+        return TransactionBuilder()
+            .withIdUserRequested(null)
+            .withBuyer(otherUser)
+            .withSeller(anyUser)
+            .withTrade(anyTrade)
+    }
+
+    fun otherTransaction1(): TransactionBuilder {
+        return TransactionBuilder()
+            .withIdUserRequested(null)
+            .withBuyer(otherUser2)
+            .withSeller(otherUser)
+            .withTrade(otherTrade)
+    }
+
     @BeforeEach
     fun setup() {
-        val anyUser: User =
-            UserBuilder()
-                .withName("Jorge")
-                .withLastName("Sanchez")
-                .withEmail("jorgesanchez@gmail.com")
-                .withAddress("calle falsa 123")
-                .withPassword("Password@1234")
-                .withCVU("1234567890123456789012")
-                .withWalletAddress("12345678")
-                .withOperations(0)
-                .build()
+        fun price(cryptoName: String) = PriceResponse(cryptoName, 1.123, LocalDateTime.now().toString())
+        val list = listOf(price("BTCUSDT"), price("AAVEUSDT"), price("ALICEUSDT"), price("ETHUSDT"))
 
-        val otherUser: User =
-            UserBuilder()
-                .withName("Marcos")
-                .withLastName("Perez")
-                .withEmail("marcosperez@gmail.com")
-                .withAddress("calle falsa 123")
-                .withPassword("Password@1234")
-                .withCVU("1234567890123456789012")
-                .withWalletAddress("12345678")
-                .withOperations(0)
-                .build()
-
-        val otherUser2: User =
-            UserBuilder()
-                .withName("Fiama")
-                .withLastName("Lopez")
-                .withEmail("fiamalopez@gmail.com")
-                .withAddress("calle falsa 123")
-                .withPassword("Password@1234")
-                .withCVU("1234567890123456789012")
-                .withWalletAddress("12345678")
-                .withOperations(0)
-                .build()
-
-        val anyCrypto: Crypto =
-            CryptoBuilder()
-                .withName(CryptoName.BTCUSDT)
-                .build()
-
-        val anyTrade: Trade =
-            TradeBuilder()
-                .withCrypto(anyCrypto)
-                .withCryptoPrice(200.00)
-                .withQuantity(200.50)
-                .withUser(anyUser)
-                .withOperation(sale)
-                .withCreationDate(LocalDateTime.now())
-                .withIsActive(true).build()
-
-        val otherTrade: Trade =
-            TradeBuilder()
-                .withCrypto(anyCrypto)
-                .withCryptoPrice(100.00)
-                .withQuantity(300.0)
-                .withUser(otherUser2)
-                .withOperation(buy)
-                .withCreationDate(LocalDateTime.now())
-                .withIsActive(true).build()
-
-        fun anyTransaction(): TransactionBuilder {
-            return TransactionBuilder()
-                .withIdUserRequested(1)
-                .withBuyer(otherUser)
-                .withSeller(anyUser)
-                .withTrade(anyTrade)
+        CryptoName.values().forEach {
+                name -> Mockito.`when`(binanceResponse.getPrice(name.toString())).thenReturn(price(name.toString()))
         }
 
-        fun otherTransaction1(): TransactionBuilder {
-            return TransactionBuilder()
-                .withIdUserRequested(2)
-                .withBuyer(otherUser2)
-                .withSeller(otherUser)
-                .withTrade(otherTrade)
-        }
+        Mockito.`when`(binanceResponse.getPrices()).thenReturn(list)
+
+        val dolarBlue = DolarBlueResponse("Dolar Blue", 490.00)
+        Mockito.`when`(dolarResponse.getPrice()).thenReturn(dolarBlue)
 
         user = userService.create(anyUser)
         user2 = userService.create(otherUser)
@@ -132,8 +149,8 @@ class VolumeOperatedServiceTest {
         tradeService.create(anyTrade)
         tradeService.create(otherTrade)
 
-        transaction1 = transactionService.create(anyTransaction().build())
-        transaction2 = transactionService.create(otherTransaction1().build())
+        transaction1 = transactionService.create(anyTransaction().withIdUserRequested(otherUser.id).build())
+        transaction2 = transactionService.create(otherTransaction1().withIdUserRequested(otherUser.id).build())
     }
 
     @Test
@@ -175,7 +192,7 @@ class VolumeOperatedServiceTest {
     @Test
     fun `an exception occurs when a non-existing user is passed in`() {
         try {
-            volumeOperatedService.volumeOperatedByAUserBetweenDates(55, date1, date2)
+            volumeOperatedService.volumeOperatedByAUserBetweenDates(999, date1, date2)
             Assertions.fail("An exception must be throw.")
         } catch(e: RuntimeException) {
             Assertions.assertEquals("User non-existent.", e.message)
@@ -185,7 +202,7 @@ class VolumeOperatedServiceTest {
     @Test
     fun `an exception occurs when an invalid date is entered`() {
         try {
-            volumeOperatedService.volumeOperatedByAUserBetweenDates(1, date1, "")
+            volumeOperatedService.volumeOperatedByAUserBetweenDates(otherUser.id!!, date1, "")
             Assertions.fail("An exception must be throw.")
         } catch(e: RuntimeException) {
             Assertions.assertEquals("At least one date is invalid.", e.message)
