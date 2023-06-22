@@ -27,6 +27,7 @@ class Aspect(
     var aliceusdt: Crypto = Crypto()
     var user1: User = User()
     var user2: User = User()
+    var user3: User = User()
     var trade: Trade = Trade()
     var transaction: Transaction = Transaction()
 
@@ -76,11 +77,23 @@ class Aspect(
                 .withCVU("1234567890123456789012")
                 .withWalletAddress("12345678")
         }
+        fun anyUser3(): UserBuilder {
+            return UserBuilder()
+                    .withName("Nicolas")
+                    .withLastName("Gomez")
+                    .withEmail("admin@admin.com")
+                    .withAddress("calle falsa 123")
+                    .withPassword("Password@1234")
+                    .withCVU("1234567890123456789012")
+                    .withWalletAddress("12345678")
+        }
         user1 = anyUser().withName("Lautaro").build()
         user2 = anyUser2().withName("Fabricio").build()
+        user3 = anyUser3().build()
 
         userService.create(user1)
         userService.create(user2)
+        userService.create(user3)
     }
 
 //    private fun saveTrades() {
