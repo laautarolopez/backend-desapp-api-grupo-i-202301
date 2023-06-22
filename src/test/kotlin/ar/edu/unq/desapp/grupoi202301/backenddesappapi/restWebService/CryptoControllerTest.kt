@@ -50,6 +50,7 @@ class CryptoControllerTest {
 
     @Test
     fun createCrypto() {
+        val token = loginUser("admin@admin.com")
         val url = HTTP_LOCALHOST + port + "/cryptos/create"
 
         val newCrypto = """
@@ -60,6 +61,7 @@ class CryptoControllerTest {
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
+        headers.add("Authorization", token)
 
         val requestEntity = HttpEntity(newCrypto, headers)
 
@@ -70,6 +72,25 @@ class CryptoControllerTest {
         assertEquals(HttpStatus.OK, responseEntity.statusCode)
         assertNotNull(cryptoResponse.id)
         assertEquals(CryptoName.ALICEUSDT, cryptoResponse.name)
+    }
+
+    private fun loginUser(email: String): String {
+        val loginUrl = HTTP_LOCALHOST + port + "/login"
+
+        val userRequested = """
+            {
+                "email": "${email}",
+                "password": "Password@1234"         
+            }
+        """.trimIndent()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val requestEntity = HttpEntity(userRequested, headers)
+        val loginResponse = testRestTemplate.exchange(loginUrl, HttpMethod.POST, requestEntity, String::class.java)
+
+        val token = "Bearer " + loginResponse.headers.get("Authorization")!!.get(0)
+
+        return token
     }
 
     @Test
