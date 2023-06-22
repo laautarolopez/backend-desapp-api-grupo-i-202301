@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -143,5 +144,64 @@ class TransactionController(private val transactionService: TransactionService) 
         return ResponseEntity.ok().body(transactionResponse)
     }
 
-    // TODO: agregar metodo GET
+    @Operation(summary = "Get all transactions")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = TransactionResponseDTO::class))
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping
+    fun getTransactions(): ResponseEntity<List<TransactionResponseDTO>> {
+        val transaction = transactionService.recoverAll().map { transaction -> TransactionResponseDTO.fromModel(transaction) }
+        return ResponseEntity.ok().body(transaction)
+    }
+
+    @Operation(summary = "Get a transaction")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = TransactionResponseDTO::class)
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/{idTransaction}")
+    fun getTransaction(@PathVariable("idTransaction") idTransaction: Long): ResponseEntity<TransactionResponseDTO> {
+        val transaction = transactionService.getTransaction(idTransaction)
+        val transactionResponse = TransactionResponseDTO.fromModel(transaction)
+        return ResponseEntity.ok().body(transactionResponse)
+    }
 }

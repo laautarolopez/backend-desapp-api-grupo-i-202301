@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository
 interface UserPersistence : JpaRepository<User, Long> {
 
     override fun findAll(): List<User>
+
+    fun findByEmail(email: String): User?
 }

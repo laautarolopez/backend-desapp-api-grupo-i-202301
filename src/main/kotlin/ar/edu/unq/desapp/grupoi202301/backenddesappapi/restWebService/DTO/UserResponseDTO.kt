@@ -29,4 +29,6 @@ class UserResponseDTO(
                 reputation = user.getReputation()
             )
     }
+
+    constructor() : this(null, null, null, null, null)
 }

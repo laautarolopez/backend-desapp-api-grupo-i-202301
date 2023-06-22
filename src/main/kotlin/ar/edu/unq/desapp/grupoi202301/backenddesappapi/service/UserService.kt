@@ -11,6 +11,8 @@ interface UserService {
 
     fun update(user: User): User
 
+    fun getByEmail(email: String): User?
+
     fun recoverAll(): List<User>
 
     fun clear()

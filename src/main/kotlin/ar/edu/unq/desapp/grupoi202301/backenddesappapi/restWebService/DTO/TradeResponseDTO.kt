@@ -2,9 +2,11 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
-class TradeResponseDTO(
+class TradeResponseDTO (
     var id: Long?,
     var crypto: CryptoSimpleDTO,
     var cryptoPrice: Double?,
@@ -12,7 +14,7 @@ class TradeResponseDTO(
     var amountARS: Double?,
     var user: UserSimpleDTO?,
     var operation: OperationType?,
-    var isActive: Boolean?
+    var active: Boolean?
 ) {
 
     companion object {
@@ -25,7 +27,9 @@ class TradeResponseDTO(
                 amountARS = trade.amountARS,
                 user = UserSimpleDTO(trade.user!!.id, trade.user!!.name, trade.user!!.lastName),
                 operation = trade.operation,
-                isActive = trade.isActive
+                active = trade.isActive
             )
     }
+
+    constructor(): this(null, CryptoSimpleDTO(), null, null, null, null, null, null)
 }

@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
+import java.time.LocalDateTime
 
 @Entity(name = "cryptosOperated")
 class CryptoOperated {
@@ -28,4 +29,14 @@ class CryptoOperated {
     @NotNull(message = "The amount ARS cannot be null.")
     @DecimalMin(value = "0.0", message = "The amount ARS cannot be negative.")
     var amountARS: Double? = null
+
+    constructor(id: Long, crypto: CryptoName, quantity: Double, price: Double, amountARS: Double) {
+        this.id = id
+        this.cryptoName = crypto
+        this.quantity = quantity
+        this.price = price
+        this.amountARS = amountARS
+    }
+
+    constructor() {}
 }

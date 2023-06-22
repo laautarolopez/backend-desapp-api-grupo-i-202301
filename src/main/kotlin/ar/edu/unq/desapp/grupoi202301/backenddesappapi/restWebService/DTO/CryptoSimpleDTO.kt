@@ -22,4 +22,6 @@ class CryptoSimpleDTO(
                 name = crypto.name
             )
     }
+
+    constructor() : this(null, null)
 }

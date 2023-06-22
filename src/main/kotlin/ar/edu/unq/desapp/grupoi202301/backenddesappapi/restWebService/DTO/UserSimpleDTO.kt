@@ -24,4 +24,6 @@ class UserSimpleDTO(
                 lastName = user.lastName
             )
     }
+
+    constructor() : this(null, null, null)
 }

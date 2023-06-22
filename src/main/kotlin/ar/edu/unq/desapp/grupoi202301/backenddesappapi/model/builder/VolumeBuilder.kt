@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Volume
 import java.time.LocalDateTime
 
 class VolumeBuilder {
+    var idUser: Long? = null
     var date: LocalDateTime? = null
     var amountUSD: Double? = null
     var amountARS: Double? = null
@@ -12,11 +13,17 @@ class VolumeBuilder {
 
     fun build(): Volume {
         var volume = Volume()
+        volume.idUser = this.idUser
         volume.date = this.date
         volume.amountUSD = this.amountUSD
         volume.amountARS = this.amountARS
         volume.cryptos = this.cryptos
         return volume
+    }
+
+    fun withIdUser(id: Long?): VolumeBuilder {
+        this.idUser = id
+        return this
     }
 
     fun withDate(date: LocalDateTime?): VolumeBuilder {

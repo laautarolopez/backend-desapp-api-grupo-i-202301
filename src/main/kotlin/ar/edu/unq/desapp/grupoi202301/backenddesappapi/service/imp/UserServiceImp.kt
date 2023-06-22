@@ -39,6 +39,10 @@ class UserServiceImp(
         }
     }
 
+    override fun getByEmail(email: String): User? {
+        return userPersistence.findByEmail(email)
+    }
+
     override fun recoverAll(): List<User> {
         return userPersistence.findAll()
     }

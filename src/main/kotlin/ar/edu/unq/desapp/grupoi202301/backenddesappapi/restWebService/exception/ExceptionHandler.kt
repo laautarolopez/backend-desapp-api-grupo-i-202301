@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEmptyException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.OperationEmptyException
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.UnauthorizedException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ViolationException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.UserNonExistent
@@ -80,6 +81,13 @@ class ExceptionHandler {
     @ExceptionHandler(ViolationException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleParserException(ex: ViolationException): ResponseEntity<*> {
+        val body = ErrorDTO(ex.attribute, ex.message!!)
+        return ResponseEntity.badRequest().body(body)
+    }
+
+    @ExceptionHandler(UnauthorizedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun handleParserException(ex: UnauthorizedException): ResponseEntity<*> {
         val body = ErrorDTO(ex.attribute, ex.message!!)
         return ResponseEntity.badRequest().body(body)
     }
