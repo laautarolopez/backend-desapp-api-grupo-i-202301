@@ -52,6 +52,8 @@ class TradeControllerTest {
 
     @Test
     fun createTrade() {
+        val token = loginUser("jorgesanchez@gmail.com")
+
         val url = HTTP_LOCALHOST + port + "/trades/create"
 
         val newTrade = """
@@ -65,6 +67,7 @@ class TradeControllerTest {
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
+        headers.add("Authorization", token)
 
         val requestEntity = HttpEntity(newTrade, headers)
 
@@ -83,6 +86,8 @@ class TradeControllerTest {
 
     @Test
     fun getTrade() {
+        val token = loginUser("lautarosanchez@gmail.com")
+
         val createUrl = HTTP_LOCALHOST + port + "/trades/create"
         val newTrade = """
             {
@@ -94,6 +99,7 @@ class TradeControllerTest {
         """.trimIndent()
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
+        headers.add("Authorization", token)
         val requestEntity = HttpEntity(newTrade, headers)
         val createResponseEntity = testRestTemplate.exchange(createUrl, HttpMethod.POST, requestEntity, String::class.java)
         val tradeCreateResponse = ObjectMapper().readValue(createResponseEntity.body, TradeResponseDTO::class.java)
@@ -113,6 +119,25 @@ class TradeControllerTest {
         assertEquals("Fabricio", tradeResponse.user!!.name)
         assertEquals(OperationType.BUY, tradeResponse.operation)
         assertTrue(tradeResponse.active!!)
+    }
+
+    private fun loginUser(email: String): String {
+        val loginUrl = HTTP_LOCALHOST + port + "/login"
+
+        val userRequested = """
+            {
+                "email": "${email}",
+                "password": "Password@1234"         
+            }
+        """.trimIndent()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val requestEntity = HttpEntity(userRequested, headers)
+        val loginResponse = testRestTemplate.exchange(loginUrl, HttpMethod.POST, requestEntity, String::class.java)
+
+        val token = "Bearer " + loginResponse.headers.get("Authorization")!!.get(0)
+
+        return token
     }
 
     @Test
