@@ -59,8 +59,8 @@ class AuthController {
     fun login(@RequestBody login: LoginDTO, response: HttpServletResponse) : ResponseEntity<String> {
         val user = userService.getByEmail(login.email!!)
 
-        if (jwtUtil.isPasswordOnExistingUser(user!!, login)) {
-            val token = jwtUtil.generateToken(user.email!!)
+        if (jwtUtil.isPasswordOnExistingUser(user, login)) {
+            val token = jwtUtil.generateToken(user!!.email!!)
             response.addHeader("Authorization", token)
             return ResponseEntity.ok().body("Login successful")
         } else {
