@@ -16,5 +16,8 @@ class WebMvcConfig : WebMvcConfigurer {
         registry.addInterceptor(jwtInterceptor)
             .addPathPatterns("/trades/create")
             .addPathPatterns("/transactions/create")
+            .addPathPatterns("/transactions/transfer")
+            .addPathPatterns("/transactions/confirm")
+            .addPathPatterns("/transactions/cancel")
     }
 }
