@@ -5,3 +5,5 @@ open class ViolationException(val attribute: String, message: String) : RuntimeE
 class TransactionException(attribute: String, message: String) : ViolationException(attribute, message)
 
 class TradeNonExistentException(attribute: String, message: String) : ViolationException(attribute, message)
+
+class UnauthorizedException(val attribute: String, message: String): RuntimeException(message)
