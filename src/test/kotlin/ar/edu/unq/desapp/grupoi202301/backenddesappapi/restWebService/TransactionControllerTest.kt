@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.TransactionStatus
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TradeResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.TransactionResponseDTO
@@ -54,6 +52,7 @@ class TransactionControllerTest {
     }
 
     private fun createTrade(): Long {
+        val token = loginUser("jorgesanchez@gmail.com")
         val url = HTTP_LOCALHOST + port + "/trades/create"
 
         val newTrade = """
@@ -67,6 +66,7 @@ class TransactionControllerTest {
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
+        headers.add("Authorization", token)
 
         val requestEntity = HttpEntity(newTrade, headers)
 
@@ -79,6 +79,7 @@ class TransactionControllerTest {
 
     @Test
     fun createTransaction() {
+        val token = loginUser("lautarosanchez@gmail.com")
         val idTrade = createTrade()
 
         val url = HTTP_LOCALHOST + port + "/transactions/create"
@@ -92,6 +93,7 @@ class TransactionControllerTest {
 
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
+        headers.add("Authorization", token)
 
         val requestEntity = HttpEntity(newTransaction, headers)
 
@@ -107,6 +109,7 @@ class TransactionControllerTest {
 
     @Test
     fun getTransaction() {
+        val token = loginUser("lautarosanchez@gmail.com")
         val idTrade = createTrade()
         val createUrl = HTTP_LOCALHOST + port + "/transactions/create"
         val newTransaction = """
@@ -117,6 +120,7 @@ class TransactionControllerTest {
         """.trimIndent()
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
+        headers.add("Authorization", token)
         val requestEntity = HttpEntity(newTransaction, headers)
         val createResponseEntity = testRestTemplate.exchange(createUrl, HttpMethod.POST, requestEntity, String::class.java)
         val transactionCreateResponse = ObjectMapper().readValue(createResponseEntity.body, TransactionResponseDTO::class.java)
@@ -134,6 +138,25 @@ class TransactionControllerTest {
         Assertions.assertEquals(idTrade, transactionResponse.trade!!.id)
         Assertions.assertEquals("Fabricio", transactionResponse.buyer!!.name)
         Assertions.assertEquals(TransactionStatus.CREATED, transactionResponse.status)
+    }
+
+    private fun loginUser(email: String): String {
+        val loginUrl = HTTP_LOCALHOST + port + "/login"
+
+        val userRequested = """
+            {
+                "email": "${email}",
+                "password": "Password@1234"         
+            }
+        """.trimIndent()
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val requestEntity = HttpEntity(userRequested, headers)
+        val loginResponse = testRestTemplate.exchange(loginUrl, HttpMethod.POST, requestEntity, String::class.java)
+
+        val token = "Bearer " + loginResponse.headers.get("Authorization")!!.get(0)
+
+        return token
     }
 
     @Test
