@@ -1,0 +1,4 @@
+name: backend-app
+
+start:
+  command: ./gradlew bootRun
