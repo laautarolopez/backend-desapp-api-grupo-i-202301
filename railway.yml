@@ -1,4 +1,8 @@
-name: backend-app
+version: 2
+name: mi-aplicacion
 
-start:
-  command: ./gradlew bootRun
+services:
+  - name: mi-servicio
+    command: ./gradlew run
+    env:
+      - PORT: 8080
