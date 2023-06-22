@@ -66,8 +66,18 @@ class Aspect(
                 .withCVU("1234567890123456789012")
                 .withWalletAddress("12345678")
         }
+        fun anyUser2(): UserBuilder {
+            return UserBuilder()
+                .withName("Lautaro")
+                .withLastName("Sanchez")
+                .withEmail("lautarosanchez@gmail.com")
+                .withAddress("calle falsa 123")
+                .withPassword("Password@1234")
+                .withCVU("1234567890123456789012")
+                .withWalletAddress("12345678")
+        }
         user1 = anyUser().withName("Lautaro").build()
-        user2 = anyUser().withName("Fabricio").build()
+        user2 = anyUser2().withName("Fabricio").build()
 
         userService.create(user1)
         userService.create(user2)
