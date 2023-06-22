@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @Transactional
-@Tag(name = "Auth")
+@Tag(name = "auth")
 @RequestMapping
 class AuthController {
     @Autowired
