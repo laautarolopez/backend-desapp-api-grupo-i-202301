@@ -8,6 +8,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
 
@@ -72,6 +73,7 @@ class CryptoServiceImp(
         }
     }
 
+    @Cacheable("cryptoGetPrices")
     override fun getPrices(): List<PriceResponse> {
         return binanceResponse.getPrices()
     }
