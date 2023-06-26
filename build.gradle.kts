@@ -40,7 +40,7 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.11.2")
 	implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
 	implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
-	implementation("org.ehcache:ehcache:3.1.0")
+	implementation("com.github.ben-manes.caffeine:caffeine:2.9.0")
 }
 
 tasks.withType<KotlinCompile> {
