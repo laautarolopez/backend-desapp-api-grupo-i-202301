@@ -1,8 +1,11 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.QuoteNonExistentException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.QuotePersistence
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.QuoteService
 import jakarta.annotation.PostConstruct
 import jakarta.transaction.Transactional
@@ -19,8 +22,10 @@ class QuoteServiceImp(
     @Autowired
     private val quotesPersistence: QuotePersistence,
     @Autowired
-    private val updateQuotesList: UpdateQuotesList
+    private val cryptoService: CryptoService
     ): QuoteService {
+
+    private val updateQuotesList: UpdateQuotesListServiceImp = UpdateQuotesListServiceImp(this, cryptoService)
 
     @PostConstruct
     override fun updateQuotesList() {
@@ -53,8 +58,12 @@ class QuoteServiceImp(
         }
     }
 
-    override fun getQuotesList(): String {
-        TODO("Not yet implemented")
+    override fun findByCryptoName(cryptoName: CryptoName): Quote {
+        return quotesPersistence.findByCryptoName(cryptoName)
+    }
+
+    override fun getQuotesList(): List<Quote> {
+        return quotesPersistence.findAll()
     }
 
     override fun clear() {
@@ -63,13 +72,42 @@ class QuoteServiceImp(
 }
 
 @Component
-class UpdateQuotesList : Runnable {
+class UpdateQuotesListServiceImp(
+    private val quoteService: QuoteService,
+    private val cryptoService: CryptoService
+    ) : Runnable {
+
     override fun run() {
+        var prices = cryptoService.getPrices()
+        createQuotes(prices, quoteService)
         while (true) {
-            println("-------------------------------")
-            println("updateQuotesList")
-            println("-------------------------------")
-            sleep(2000)
+            sleep(600000)
+            prices = cryptoService.getPrices()
+            updateQuotes(prices, quoteService)
+        }
+    }
+
+    private fun createQuotes(prices: List<PriceResponse>, quoteService: QuoteService) {
+        prices.forEach {
+            priceResponse -> val newQuote = Quote()
+            newQuote.cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
+            newQuote.price = priceResponse.price
+            newQuote.time = priceResponse.time
+            quoteService.create(newQuote)
+        }
+    }
+
+    private fun updateQuotes(prices: List<PriceResponse>, quoteService: QuoteService) {
+        prices.forEach {
+            priceResponse -> val cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
+            try {
+                val quote = quoteService.findByCryptoName(cryptoName)
+                quote.price = priceResponse.price
+                quote.time = priceResponse.time
+                quoteService.update(quote)
+            } catch(e: RuntimeException) {
+                throw QuoteNonExistentException("quote", "The quote does not exist.")
+            }
         }
     }
 }
