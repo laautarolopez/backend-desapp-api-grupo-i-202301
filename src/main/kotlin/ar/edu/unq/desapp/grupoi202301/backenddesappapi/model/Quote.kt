@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.NotNull
 class Quote {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     var id: Long? = null
 
     @Column(nullable = false)
