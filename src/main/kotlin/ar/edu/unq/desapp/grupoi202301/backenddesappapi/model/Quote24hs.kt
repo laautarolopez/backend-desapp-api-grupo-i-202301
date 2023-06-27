@@ -17,6 +17,7 @@ class Quote24hs {
     var cryptoName: CryptoName? = null
 
     @Column
+    @NotNull
     @DecimalMin(value = "0.0", message = "The price cannot be negative.")
     var price: Double? = null
 
