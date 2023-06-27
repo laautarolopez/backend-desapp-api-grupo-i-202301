@@ -25,6 +25,15 @@ class Crypto {
     @OneToMany(fetch = FetchType.LAZY)
     var quotes24hs: MutableList<Quote24hs> = mutableListOf()
 
+    fun addQuote(quote: Quote24hs) {
+        quotes24hs.add(quote)
+    }
+
+    fun removeQuote(quote: Quote24hs) {
+        val index = quotes24hs.indexOf(quote)
+        quotes24hs.removeAt(index)
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
