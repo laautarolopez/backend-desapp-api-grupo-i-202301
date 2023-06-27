@@ -84,16 +84,17 @@ class UpdateQuotesListServiceImp(
 
     override fun run() {
         var prices = cryptoService.getPrices()
-        createQuotes(prices, quoteService)
-        createQuotes24hs(prices, quote24hsService, cryptoService)
+        createQuotes(prices)
+        createQuotes24hs(prices)
         while (true) {
             sleep(600000)
             prices = cryptoService.getPrices()
-            updateQuotes(prices, quoteService)
+            updateQuotes(prices)
+            updateQuotes24(prices)
         }
     }
 
-    private fun createQuotes(prices: List<PriceResponse>, quoteService: QuoteService) {
+    private fun createQuotes(prices: List<PriceResponse>) {
         prices.forEach {
             priceResponse -> val newQuote = Quote()
             newQuote.cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
@@ -103,7 +104,7 @@ class UpdateQuotesListServiceImp(
         }
     }
 
-    private fun createQuotes24hs(prices: List<PriceResponse>, quote24hsService: Quote24hsService, cryptoService: CryptoService) {
+    private fun createQuotes24hs(prices: List<PriceResponse>) {
         prices.forEach {
                 priceResponse -> val newQuote24hs = Quote24hs()
             newQuote24hs.cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
@@ -118,7 +119,7 @@ class UpdateQuotesListServiceImp(
         }
     }
 
-    private fun updateQuotes(prices: List<PriceResponse>, quoteService: QuoteService) {
+    private fun updateQuotes(prices: List<PriceResponse>) {
         prices.forEach {
             priceResponse -> val cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
             try {
@@ -129,6 +130,22 @@ class UpdateQuotesListServiceImp(
             } catch(e: RuntimeException) {
                 throw QuoteNonExistentException("quote", "The quote does not exist.")
             }
+        }
+    }
+
+    private fun updateQuotes24(prices: List<PriceResponse>) {
+        prices.forEach {
+                priceResponse -> val cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
+                val crypto = cryptoService.findByName(cryptoName)
+                val quote24 = quote24hsService.findByCryptoName(cryptoName)
+                quote24.price = priceResponse.price
+                quote24.time = priceResponse.time
+                quote24hsService.update(quote24)
+
+                cryptoService.updateQuotes24hs(crypto)
+
+                crypto.addQuote(quote24)
+                cryptoService.update(crypto)
         }
     }
 }
