@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
@@ -56,7 +57,7 @@ class CryptoServiceImp(
         return priceResponse
     }
 
-    private fun update(crypto: Crypto): Crypto {
+    override fun update(crypto: Crypto): Crypto {
         getCrypto(crypto.id)
         return cryptoPersistence.save(crypto)
     }
@@ -76,6 +77,10 @@ class CryptoServiceImp(
     @Cacheable("cryptoGetPrices")
     override fun getPrices(): List<PriceResponse> {
         return binanceResponse.getPrices()
+    }
+
+    override fun findByName(name: CryptoName): Crypto {
+        return cryptoPersistence.findByName(name)
     }
 
     override fun clear() {

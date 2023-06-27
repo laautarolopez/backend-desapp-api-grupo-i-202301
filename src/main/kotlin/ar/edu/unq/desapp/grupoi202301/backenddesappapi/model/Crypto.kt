@@ -22,6 +22,9 @@ class Crypto {
     @Column
     var time: String? = null
 
+    @OneToMany(fetch = FetchType.LAZY)
+    var quotes24hs: MutableList<Quote24hs> = mutableListOf()
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

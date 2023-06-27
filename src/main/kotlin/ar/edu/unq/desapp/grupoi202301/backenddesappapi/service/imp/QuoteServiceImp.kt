@@ -2,10 +2,12 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote24hs
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.QuoteNonExistentException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.QuotePersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.Quote24hsService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.QuoteService
 import jakarta.annotation.PostConstruct
 import jakarta.transaction.Transactional
@@ -22,10 +24,12 @@ class QuoteServiceImp(
     @Autowired
     private val quotesPersistence: QuotePersistence,
     @Autowired
-    private val cryptoService: CryptoService
+    private val cryptoService: CryptoService,
+    @Autowired
+    private val quote24hsService: Quote24hsService
     ): QuoteService {
 
-    private val updateQuotesList: UpdateQuotesListServiceImp = UpdateQuotesListServiceImp(this, cryptoService)
+    private val updateQuotesList: UpdateQuotesListServiceImp = UpdateQuotesListServiceImp(this, cryptoService, quote24hsService)
 
     @PostConstruct
     override fun updateQuotesList() {
@@ -74,12 +78,14 @@ class QuoteServiceImp(
 @Component
 class UpdateQuotesListServiceImp(
     private val quoteService: QuoteService,
-    private val cryptoService: CryptoService
+    private val cryptoService: CryptoService,
+    private val quote24hsService: Quote24hsService
     ) : Runnable {
 
     override fun run() {
         var prices = cryptoService.getPrices()
         createQuotes(prices, quoteService)
+        createQuotes24hs(prices, quote24hsService, cryptoService)
         while (true) {
             sleep(600000)
             prices = cryptoService.getPrices()
@@ -94,6 +100,21 @@ class UpdateQuotesListServiceImp(
             newQuote.price = priceResponse.price
             newQuote.time = priceResponse.time
             quoteService.create(newQuote)
+        }
+    }
+
+    private fun createQuotes24hs(prices: List<PriceResponse>, quote24hsService: Quote24hsService, cryptoService: CryptoService) {
+        prices.forEach {
+                priceResponse -> val newQuote24hs = Quote24hs()
+            newQuote24hs.cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
+            newQuote24hs.price = priceResponse.price
+            newQuote24hs.time = priceResponse.time
+            quote24hsService.create(newQuote24hs)
+            val crypto = cryptoService.findByName(newQuote24hs.cryptoName!!)
+            crypto.quotes24hs = mutableListOf(newQuote24hs)
+            cryptoService.update(crypto)
+            println(crypto.name)
+            println(crypto.quotes24hs.size)
         }
     }
 
