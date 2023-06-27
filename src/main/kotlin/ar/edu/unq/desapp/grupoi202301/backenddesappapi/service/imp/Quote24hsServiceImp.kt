@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote24hs
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.QuoteNonExistentException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.Quote24hsPersistence
@@ -28,6 +29,10 @@ class Quote24hsServiceImp(
 
     override fun delete(quote24hs: Quote24hs) {
         quote24hsPersistence.delete(quote24hs)
+    }
+
+    override fun findByCryptoName(cryptoName: CryptoName): Quote24hs {
+        return quote24hsPersistence.findByCryptoName(cryptoName)
     }
 
     override fun getQuote24hs(idQuote24hs: Long?): Quote24hs {
