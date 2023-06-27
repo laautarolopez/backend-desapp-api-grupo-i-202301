@@ -13,4 +13,8 @@ interface QuotePersistence: JpaRepository<Quote, Long> {
 }
 
 @Repository
-interface Quote24hsPersistence: JpaRepository<Quote24hs, Long>
+interface Quote24hsPersistence: JpaRepository<Quote24hs, Long> {
+
+    fun findByCryptoName(cryptoName: CryptoName): Quote24hs
+}
+
