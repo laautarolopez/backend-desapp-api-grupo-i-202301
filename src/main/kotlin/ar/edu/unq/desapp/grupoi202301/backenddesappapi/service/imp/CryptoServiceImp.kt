@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Crypto
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote24hs
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import org.springframework.validation.annotation.Validated
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
 @Validated
@@ -79,8 +82,30 @@ class CryptoServiceImp(
         return binanceResponse.getPrices()
     }
 
+    override fun getQuotes24hs(cryptoName: String): List<Quote24hs> {
+        val crypto = getCryptoByName(cryptoName)
+        return crypto.quotes24hs
+    }
+
     override fun findByName(name: CryptoName): Crypto {
         return cryptoPersistence.findByName(name)
+    }
+
+    override fun updateQuotes24hs(crypto: Crypto) {
+        val formatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+        val timeNow = LocalDateTime.now()
+        val timeAfter24hs = timeNow.minusHours(24)
+
+        crypto.quotes24hs.forEach{ quote24 ->
+            val quoteTime = LocalDateTime.parse(quote24.time, formatter)
+            if(!between(quoteTime, timeAfter24hs, timeNow)) {
+                crypto.removeQuote(quote24)
+            }
+        }
+    }
+
+    private fun <LocalDateTime : Comparable<LocalDateTime>> between(dateQuote: LocalDateTime, firstDate: LocalDateTime, lastDate: LocalDateTime): Boolean {
+        return dateQuote in firstDate..lastDate
     }
 
     override fun clear() {

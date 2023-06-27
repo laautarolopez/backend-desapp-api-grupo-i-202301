@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote24hs
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
@@ -80,6 +81,37 @@ class CryptoController(private val cryptoService: CryptoService) {
     fun getPrice(@PathVariable("cryptoName") cryptoName: String): ResponseEntity<PriceResponse> {
         val price = cryptoService.getPrice(cryptoName)
         return ResponseEntity.ok().body(price)
+    }
+
+    @Operation(summary = "Get price of a crypto")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        array = ArraySchema(schema = Schema(implementation = PriceResponse::class))
+                    )
+                ]
+            ),
+            ApiResponse(
+                responseCode = "400",
+                description = "Bad Request",
+                content = [
+                    Content(
+                        mediaType = "application/json",
+                        schema = Schema(implementation = ErrorResponseDTO::class)
+                    )
+                ]
+            )
+        ]
+    )
+    @GetMapping("/quotes/{cryptoName}")
+    fun getPrices24hs(@PathVariable("cryptoName") cryptoName: String): ResponseEntity<List<Quote24hs>> {
+        val quotes24hs = cryptoService.getQuotes24hs(cryptoName)
+//        val quotes24Response = quotes24hs.map{ quote24hs -> Quote24DTO.fromModel(quote24hs) }
+        return ResponseEntity.ok().body(quotes24hs)
     }
 
     @Operation(summary = "Get prices of cryptos")
