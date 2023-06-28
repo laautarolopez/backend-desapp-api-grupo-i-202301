@@ -87,10 +87,11 @@ class UpdateQuotesListServiceImp(
         createQuotes(prices)
         createQuotes24hs(prices)
         while (true) {
-            sleep(600000)
+//            sleep(600000)
+            sleep(30000)
             prices = cryptoService.getPrices()
             updateQuotes(prices)
-            updateQuotes24(prices)
+            updateQuotes24hs(prices)
         }
     }
 
@@ -114,38 +115,31 @@ class UpdateQuotesListServiceImp(
             val crypto = cryptoService.findByName(newQuote24hs.cryptoName!!)
             crypto.quotes24hs = mutableListOf(newQuote24hs)
             cryptoService.update(crypto)
-            println(crypto.name)
-            println(crypto.quotes24hs.size)
         }
     }
 
     private fun updateQuotes(prices: List<PriceResponse>) {
         prices.forEach {
-            priceResponse -> val cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
-            try {
-                val quote = quoteService.findByCryptoName(cryptoName)
-                quote.price = priceResponse.price
-                quote.time = priceResponse.time
-                quoteService.update(quote)
-            } catch(e: RuntimeException) {
-                throw QuoteNonExistentException("quote", "The quote does not exist.")
-            }
+                priceResponse -> val cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
+            val quote = quoteService.findByCryptoName(cryptoName)
+            quote.price = priceResponse.price
+            quote.time = priceResponse.time
+            quoteService.update(quote)
         }
     }
 
-    private fun updateQuotes24(prices: List<PriceResponse>) {
+    private fun updateQuotes24hs(prices: List<PriceResponse>) {
         prices.forEach {
-                priceResponse -> val cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
-                val crypto = cryptoService.findByName(cryptoName)
-                val quote24 = quote24hsService.findByCryptoName(cryptoName)
-                quote24.price = priceResponse.price
-                quote24.time = priceResponse.time
-                quote24hsService.update(quote24)
+                priceResponse -> val newQuote24hs = Quote24hs()
+            newQuote24hs.cryptoName = enumValueOf<CryptoName>(priceResponse.cryptoName)
+            newQuote24hs.price = priceResponse.price
+            newQuote24hs.time = priceResponse.time
+            quote24hsService.create(newQuote24hs)
+            var crypto = cryptoService.findByName(newQuote24hs.cryptoName!!)
+            crypto.addQuote(newQuote24hs)
+            cryptoService.update(crypto)
 
-                cryptoService.updateQuotes24hs(crypto)
-
-                crypto.addQuote(quote24)
-                cryptoService.update(crypto)
+            cryptoService.updateQuotes24hs(crypto)
         }
     }
 }

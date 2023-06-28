@@ -12,7 +12,7 @@ interface Quote24hsService {
 
     fun delete(quote24hs: Quote24hs)
 
-    fun findByCryptoName(cryptoName: CryptoName): Quote24hs
+    fun findByCryptoName(cryptoName: CryptoName): List<Quote24hs>
 
     fun getQuote24hs(idQuote: Long?): Quote24hs
 

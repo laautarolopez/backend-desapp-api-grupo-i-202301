@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.CryptoPersist
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.BinanceResponseInt
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.externalApi.PriceResponse
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.Quote24hsService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp.exception.CryptoNonExistent
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +24,9 @@ class CryptoServiceImp(
     @Autowired
     private val cryptoPersistence: CryptoPersistence,
     @Autowired
-    private val binanceResponse: BinanceResponseInt
+    private val binanceResponse: BinanceResponseInt,
+    @Autowired
+    private val quote24hsService: Quote24hsService
     ) : CryptoService {
 
     override fun create(crypto: Crypto): Crypto {
@@ -96,10 +99,11 @@ class CryptoServiceImp(
         val timeNow = LocalDateTime.now()
         val timeAfter24hs = timeNow.minusHours(24)
 
-        crypto.quotes24hs.forEach{ quote24 ->
-            val quoteTime = LocalDateTime.parse(quote24.time, formatter)
+        crypto.quotes24hs.forEach{ quote24hs ->
+            val quoteTime = LocalDateTime.parse(quote24hs.time, formatter)
             if(!between(quoteTime, timeAfter24hs, timeNow)) {
-                crypto.removeQuote(quote24)
+                crypto.removeQuote(quote24hs)
+                quote24hsService.delete(quote24hs)
             }
         }
     }

@@ -83,7 +83,7 @@ class CryptoController(private val cryptoService: CryptoService) {
         return ResponseEntity.ok().body(price)
     }
 
-    @Operation(summary = "Get price of a crypto")
+    @Operation(summary = "Get prices of the last 24 hours of a crypto")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -91,7 +91,7 @@ class CryptoController(private val cryptoService: CryptoService) {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        array = ArraySchema(schema = Schema(implementation = PriceResponse::class))
+                        array = ArraySchema(schema = Schema(implementation = Quote24hs::class))
                     )
                 ]
             ),
@@ -107,10 +107,9 @@ class CryptoController(private val cryptoService: CryptoService) {
             )
         ]
     )
-    @GetMapping("/quotes/{cryptoName}")
+    @GetMapping("/prices24hs/{cryptoName}")
     fun getPrices24hs(@PathVariable("cryptoName") cryptoName: String): ResponseEntity<List<Quote24hs>> {
         val quotes24hs = cryptoService.getQuotes24hs(cryptoName)
-//        val quotes24Response = quotes24hs.map{ quote24hs -> Quote24DTO.fromModel(quote24hs) }
         return ResponseEntity.ok().body(quotes24hs)
     }
 

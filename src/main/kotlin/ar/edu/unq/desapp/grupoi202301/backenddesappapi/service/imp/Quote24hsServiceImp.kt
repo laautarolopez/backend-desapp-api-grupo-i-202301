@@ -31,7 +31,7 @@ class Quote24hsServiceImp(
         quote24hsPersistence.delete(quote24hs)
     }
 
-    override fun findByCryptoName(cryptoName: CryptoName): Quote24hs {
+    override fun findByCryptoName(cryptoName: CryptoName): List<Quote24hs> {
         return quote24hsPersistence.findByCryptoName(cryptoName)
     }
 

@@ -22,16 +22,15 @@ class Crypto {
     @Column
     var time: String? = null
 
-    @OneToMany(fetch = FetchType.LAZY)
-    var quotes24hs: MutableList<Quote24hs> = mutableListOf()
+    @OneToMany
+    var quotes24hs: List<Quote24hs> = emptyList()
 
     fun addQuote(quote: Quote24hs) {
-        quotes24hs.add(quote)
+        quotes24hs += quote
     }
 
     fun removeQuote(quote: Quote24hs) {
-        val index = quotes24hs.indexOf(quote)
-        quotes24hs.removeAt(index)
+        quotes24hs -= quote
     }
 
     override fun equals(other: Any?): Boolean {
