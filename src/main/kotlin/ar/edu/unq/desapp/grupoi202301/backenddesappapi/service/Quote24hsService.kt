@@ -16,5 +16,7 @@ interface Quote24hsService {
 
     fun getQuote24hs(idQuote: Long?): Quote24hs
 
+    fun recoverAll(): List<Quote24hs>
+
     fun clear()
 }

@@ -51,6 +51,10 @@ class Quote24hsServiceImp(
         }
     }
 
+    override fun recoverAll(): List<Quote24hs> {
+        return quote24hsPersistence.findAll()
+    }
+
     override fun clear() {
         quote24hsPersistence.deleteAll()
     }
