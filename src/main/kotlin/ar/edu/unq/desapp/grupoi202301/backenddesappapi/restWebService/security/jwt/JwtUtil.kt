@@ -15,12 +15,25 @@ class JwtUtil {
     private val secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256)
 
     fun generateToken(email: String): String {
+        if(email == "admin@admin.com") {
+            return generateAdminToken(email)
+        }
         val expirationTime = Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME)
         return Jwts.builder()
             .setSubject(email)
             .setExpiration(expirationTime)
             .signWith(secretKey)
             .compact()
+    }
+
+    private fun generateAdminToken(email: String): String {
+        val expirationTime = Date(System.currentTimeMillis() + TOKEN_EXPIRATION_TIME)
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("role", "ADMIN")
+                .setExpiration(expirationTime)
+                .signWith(secretKey)
+                .compact()
     }
 
     fun validateToken(token: String): Boolean {
@@ -49,7 +62,20 @@ class JwtUtil {
         }
     }
 
-    fun isPasswordOnExistingUser(user: User, login: LoginDTO): Boolean {
+    fun getRoleFromToken(token: String): String? {
+        return try {
+            val claims: Claims = Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token)
+                    .body
+            claims.get("role", String::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun isPasswordOnExistingUser(user: User?, login: LoginDTO): Boolean {
         return user != null && user.password == login.password
     }
 

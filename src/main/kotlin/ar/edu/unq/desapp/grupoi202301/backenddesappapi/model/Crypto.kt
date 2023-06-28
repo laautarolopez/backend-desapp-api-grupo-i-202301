@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
@@ -21,6 +22,18 @@ class Crypto {
 
     @Column
     var time: String? = null
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    var quotes24hs: List<Quote24hs> = emptyList()
+
+    fun addQuote(quote: Quote24hs) {
+        quotes24hs += quote
+    }
+
+    fun removeQuote(quote: Quote24hs) {
+        quotes24hs -= quote
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

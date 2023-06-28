@@ -11,10 +11,18 @@ class WebMvcConfig : WebMvcConfigurer {
     @Autowired
     private lateinit var jwtInterceptor: JwtInterceptor
 
+    @Autowired
+    private lateinit var roleInterceptor: RoleInterceptor
+
     override fun addInterceptors(registry: InterceptorRegistry) {
-        // Aplica el interceptor a los endpoints deseados
+        registry.addInterceptor(roleInterceptor)
+                .addPathPatterns("/cryptos/create")
+
         registry.addInterceptor(jwtInterceptor)
             .addPathPatterns("/trades/create")
             .addPathPatterns("/transactions/create")
+            .addPathPatterns("/transactions/transfer")
+            .addPathPatterns("/transactions/confirm")
+            .addPathPatterns("/transactions/cancel")
     }
 }
