@@ -135,7 +135,7 @@ class UpdateQuotesListServiceImp(
             newQuote24hs.price = priceResponse.price
             newQuote24hs.time = priceResponse.time
             quote24hsService.create(newQuote24hs)
-            var crypto = cryptoService.findByName(newQuote24hs.cryptoName!!)
+            val crypto = cryptoService.findByName(newQuote24hs.cryptoName!!)
             crypto.addQuote(newQuote24hs)
             cryptoService.update(crypto)
 
