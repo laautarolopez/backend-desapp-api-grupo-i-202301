@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ActionEmptyException
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.CryptoEmptyException
 
 class TransactionResponseDTO(
     var id: Long?,

@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model
 import jakarta.persistence.*
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.NotNull
-import java.time.LocalDateTime
 
 @Entity(name = "cryptosOperated")
 class CryptoOperated {

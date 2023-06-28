@@ -38,13 +38,6 @@ class TradeServiceImp(
         trade.amountARS = price * dolarBlue.price
     }
 
-    private fun updateAmountARS(trade: Trade) {
-        val price = trade.quantity!! * trade.cryptoPrice!!
-        val dolarBlue = dolarResponse.getPrice()
-        trade.amountARS = price * dolarBlue.price
-        update(trade)
-    }
-
     private fun recoverCrypto(trade: Trade) {
         val crypto = cryptoService.getCrypto(trade.crypto!!.id)
         trade.crypto = crypto

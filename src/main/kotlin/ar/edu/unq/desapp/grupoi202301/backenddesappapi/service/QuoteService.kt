@@ -18,5 +18,7 @@ interface QuoteService {
 
     fun updateQuotesList()
 
+    fun recoverAll(): List<Quote>
+
     fun clear()
 }
