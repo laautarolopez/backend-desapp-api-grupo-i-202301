@@ -87,8 +87,7 @@ class UpdateQuotesListServiceImp(
         createQuotes(prices)
         createQuotes24hs(prices)
         while (true) {
-//            sleep(600000)
-            sleep(30000)
+            sleep(600000)
             prices = cryptoService.getPrices()
             updateQuotes(prices)
             updateQuotes24hs(prices)
