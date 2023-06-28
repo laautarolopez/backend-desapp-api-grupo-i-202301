@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.aspect.LogExecutionTime
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.exception.ErrorResponseDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.QuoteService
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("quotes")
 class QuoteController(private val quoteService: QuoteService) {
 
+    @LogExecutionTime
     @Operation(summary = "Get the list of quotes (updated every 10 minutes)")
     @ApiResponses(
         value = [

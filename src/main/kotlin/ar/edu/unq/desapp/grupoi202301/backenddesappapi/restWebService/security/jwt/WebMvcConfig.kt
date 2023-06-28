@@ -24,5 +24,6 @@ class WebMvcConfig : WebMvcConfigurer {
             .addPathPatterns("/transactions/transfer")
             .addPathPatterns("/transactions/confirm")
             .addPathPatterns("/transactions/cancel")
+            .addPathPatterns("/volume/**")
     }
 }
