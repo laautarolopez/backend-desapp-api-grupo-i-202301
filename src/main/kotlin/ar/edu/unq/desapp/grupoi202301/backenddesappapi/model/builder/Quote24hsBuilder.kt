@@ -1,0 +1,33 @@
+package ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder
+
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.CryptoName
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote24hs
+
+class Quote24hsBuilder {
+    var name: CryptoName? = null
+    var price: Double? = null
+    var time: String? = null
+
+    fun build(): Quote24hs {
+        var quote = Quote24hs()
+        quote.cryptoName = this.name
+        quote.price = this.price
+        quote.time = this.time
+        return quote
+    }
+
+    fun withName(name: CryptoName?): Quote24hsBuilder {
+        this.name = name
+        return this
+    }
+
+    fun withPrice(price: Double?): Quote24hsBuilder {
+        this.price = price
+        return this
+    }
+
+    fun withTime(time: String?): Quote24hsBuilder {
+        this.time = time
+        return this
+    }
+}
