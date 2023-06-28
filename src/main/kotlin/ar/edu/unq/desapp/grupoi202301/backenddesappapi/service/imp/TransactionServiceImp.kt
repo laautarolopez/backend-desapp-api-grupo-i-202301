@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.imp
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.TransactionException
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.exceptions.ViolationException
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence.TransactionPersistence
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService

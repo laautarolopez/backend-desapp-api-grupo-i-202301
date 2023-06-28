@@ -18,10 +18,6 @@ class Aspect(
     private val cryptoService: CryptoService,
     @Autowired
     private val userService: UserService,
-    @Autowired
-    private val tradeService: TradeService,
-    @Autowired
-    private val transactionService: TransactionService,
 ) : ApplicationRunner {
 
     var aliceusdt: Crypto = Crypto()
@@ -39,8 +35,6 @@ class Aspect(
     private fun insertData() {
         saveCryptos()
         saveUsers()
-//        saveTrades()
-//        saveTransactions()
     }
 
 
@@ -95,27 +89,4 @@ class Aspect(
         userService.create(user2)
         userService.create(user3)
     }
-
-//    private fun saveTrades() {
-//        trade = TradeBuilder()
-//            .withCrypto(aliceusdt)
-//            .withCryptoPrice(200.00)
-//            .withQuantity(200.50)
-//            .withUser(user1)
-//            .withOperation(OperationType.SALE)
-//            .withCreationDate(LocalDateTime.now())
-//            .withIsActive(true)
-//            .build()
-//        tradeService.create(trade)
-//    }
-//
-//    private fun saveTransactions() {
-//        transaction = TransactionBuilder()
-//            .withIdUserRequested(user2.id)
-//            .withBuyer(user2)
-//            .withSeller(user1)
-//            .withTrade(trade)
-//            .build()
-//        transactionService.create(transaction)
-//    }
 }

@@ -2,9 +2,6 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.OperationType
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Trade
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.LocalDateTime
 
 class TradeResponseDTO (
     var id: Long?,
