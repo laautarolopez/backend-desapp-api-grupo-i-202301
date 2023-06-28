@@ -50,6 +50,4 @@ class Crypto {
         result = 31 * result + (name?.hashCode() ?: 0)
         return result
     }
-
-
 }
