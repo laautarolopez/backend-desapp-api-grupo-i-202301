@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService
 
+import ar.edu.unq.desapp.grupoi202301.backenddesappapi.aspect.LogExecutionTime
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Quote24hs
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoCreateDTO
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.restWebService.DTO.CryptoSimpleDTO
@@ -113,6 +114,7 @@ class CryptoController(private val cryptoService: CryptoService) {
         return ResponseEntity.ok().body(quotes24hs)
     }
 
+    @LogExecutionTime
     @Operation(summary = "Get prices of cryptos")
     @ApiResponses(
         value = [
