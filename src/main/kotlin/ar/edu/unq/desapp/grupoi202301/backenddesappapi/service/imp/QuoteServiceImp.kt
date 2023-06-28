@@ -22,7 +22,7 @@ import java.lang.Thread.sleep
 @Transactional
 class QuoteServiceImp(
     @Autowired
-    private val quotesPersistence: QuotePersistence,
+    private val quotePersistence: QuotePersistence,
     @Autowired
     private val cryptoService: CryptoService,
     @Autowired
@@ -38,18 +38,18 @@ class QuoteServiceImp(
     }
 
     override fun create(quote: Quote): Quote {
-        return quotesPersistence.save(quote)
+        return quotePersistence.save(quote)
     }
 
     override fun update(quote: Quote): Quote {
         getQuote(quote.id)
-        return quotesPersistence.save(quote)
+        return quotePersistence.save(quote)
     }
 
     override fun getQuote(idQuote: Long?): Quote {
         validateId(idQuote)
         try {
-            val quote = quotesPersistence.getReferenceById(idQuote!!)
+            val quote = quotePersistence.getReferenceById(idQuote!!)
             return quote
         } catch(e: RuntimeException) {
             throw QuoteNonExistentException("quote", "The quote does not exist.")
@@ -63,15 +63,19 @@ class QuoteServiceImp(
     }
 
     override fun findByCryptoName(cryptoName: CryptoName): Quote {
-        return quotesPersistence.findByCryptoName(cryptoName)
+        return quotePersistence.findByCryptoName(cryptoName)
     }
 
     override fun getQuotesList(): List<Quote> {
-        return quotesPersistence.findAll()
+        return quotePersistence.findAll()
+    }
+
+    override fun recoverAll(): List<Quote> {
+        return quotePersistence.findAll()
     }
 
     override fun clear() {
-        quotesPersistence.deleteAll()
+        quotePersistence.deleteAll()
     }
 }
 
@@ -87,8 +91,7 @@ class UpdateQuotesListServiceImp(
         createQuotes(prices)
         createQuotes24hs(prices)
         while (true) {
-//            sleep(600000)
-            sleep(30000)
+            sleep(600000)
             prices = cryptoService.getPrices()
             updateQuotes(prices)
             updateQuotes24hs(prices)
