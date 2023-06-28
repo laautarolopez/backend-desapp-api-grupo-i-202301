@@ -54,7 +54,7 @@ class Aspect(
                 .withName("Jorge")
                 .withLastName("Sanchez")
                 .withEmail("jorgesanchez@gmail.com")
-                .withAddress("calle falsaa 123")
+                .withAddress("calle falsa 123")
                 .withPassword("Password@1234")
                 .withCVU("1234567890123456789012")
                 .withWalletAddress("12345678")
@@ -65,7 +65,7 @@ class Aspect(
                 .withLastName("Sanchez")
                 .withEmail("lautarosanchez@gmail.com")
                 .withAddress("calle falsa 123")
-                .withPassword("Passwoord@1234")
+                .withPassword("Password@1234")
                 .withCVU("1234567890123456789012")
                 .withWalletAddress("12345678")
         }
@@ -74,8 +74,8 @@ class Aspect(
                     .withName("Nicolas")
                     .withLastName("Gomez")
                     .withEmail("admin@admin.com")
-                    .withAddress("calle falsaaa 123")
-                    .withPassword("Paassword@1234")
+                    .withAddress("calle falsa 123")
+                    .withPassword("Password@1234")
                     .withCVU("1234567890123456789012")
                     .withWalletAddress("12345678")
         }
