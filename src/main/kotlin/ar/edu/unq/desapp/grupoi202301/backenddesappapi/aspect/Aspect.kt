@@ -3,8 +3,6 @@ package ar.edu.unq.desapp.grupoi202301.backenddesappapi.aspect
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.*
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.CryptoService
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TradeService
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.TransactionService
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.service.UserService
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
