@@ -90,6 +90,8 @@ NEW FEATURES:
 * Added security functionality for API access (JWT)
 * Added functionality to display the last 24hs quotes for a given crypto active.
 * Cache("cryptoGetPrices") is implemented when quotes are obtained.
+* Add Logger for execution time of '/cryptos/prices' using Log4j/logback
+* Add Logger for execution time of '/quotes/quoteList' using Log4j/logback
 * Architecture test is created
 * End-to-end tests were implemented
 * Added functionality to report the user of the traded volume of crypto-assets between two dates.
