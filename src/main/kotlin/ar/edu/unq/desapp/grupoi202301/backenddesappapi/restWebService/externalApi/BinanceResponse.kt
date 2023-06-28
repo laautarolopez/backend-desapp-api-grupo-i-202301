@@ -48,7 +48,6 @@ class BinanceResponse : BinanceResponseInt {
         var list: List<PriceResponse> = listOf()
         val binanceService = BinanceService.create()
         var call: Call<PriceResponse>
-        var body: PriceResponse?
         var priceResponse: PriceResponse
         CryptoName.values().forEach { cryptoName ->
             call = binanceService.getPrice(cryptoName.toString())

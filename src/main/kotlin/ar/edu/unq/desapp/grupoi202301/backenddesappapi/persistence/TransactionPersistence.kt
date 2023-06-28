@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoi202301.backenddesappapi.persistence
 
 import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.Transaction
-import ar.edu.unq.desapp.grupoi202301.backenddesappapi.model.TransactionStatus
-import org.hibernate.type.descriptor.jdbc.SmallIntJdbcType
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
