@@ -199,6 +199,4 @@ class TradeTest {
 
         Assertions.assertTrue(violations.any { v -> v.message == "The isActive cannot be null." })
     }
-
-    //TODO(Testear getAmountARS() con Mock?)
 }
